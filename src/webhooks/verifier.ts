@@ -33,7 +33,7 @@ async function computeWithSubtle(
   secretKey: string,
   payload: string | Uint8Array,
 ): Promise<string> {
-  const cryptoObj: Crypto | undefined = (globalThis as any).crypto
+  const cryptoObj = (globalThis as { crypto?: Crypto }).crypto
 
   if (!cryptoObj?.subtle) {
     throw new Error("subtle crypto not available")
@@ -41,14 +41,14 @@ async function computeWithSubtle(
 
   const encoder = new TextEncoder()
   const keyData = encoder.encode(secretKey)
-  const data =
+  const data: ArrayBufferLike =
     typeof payload === "string"
-      ? encoder.encode(payload)
-      : payload
+      ? encoder.encode(payload).buffer
+      : payload.buffer
 
   const key = await cryptoObj.subtle.importKey(
     "raw",
-    keyData as any,
+    keyData,
     {
       name: "HMAC",
       hash: "SHA-512",
@@ -57,7 +57,7 @@ async function computeWithSubtle(
     ["sign"],
   )
 
-  const signature = await cryptoObj.subtle.sign("HMAC", key, data as any)
+  const signature = await cryptoObj.subtle.sign("HMAC", key, data as ArrayBuffer)
   return toHex(new Uint8Array(signature))
 }
 

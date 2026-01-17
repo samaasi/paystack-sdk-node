@@ -1,16 +1,16 @@
 import type { StatusSummaryResponse } from "./status.types"
 
 export interface StatusResourceOptions {
-  fetchImpl?: (input: string, init?: RequestInit) => Promise<any>
+  fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
   baseUrl?: string
 }
 
 export class StatusResource {
-  private readonly fetchImpl: (input: string, init?: RequestInit) => Promise<any>
+  private readonly fetchImpl: (input: string, init?: RequestInit) => Promise<Response>
   private readonly baseUrl: string
 
   constructor(options: StatusResourceOptions = {}) {
-    const globalFetch: typeof fetch | undefined = (globalThis as any).fetch
+    const globalFetch: typeof fetch | undefined = (globalThis as { fetch?: typeof fetch }).fetch
     const impl = options.fetchImpl ?? globalFetch
 
     if (!impl) {
@@ -28,11 +28,10 @@ export class StatusResource {
       method: "GET",
     })
 
-    if (!response || typeof (response as any).json !== "function") {
+    if (!response || typeof response.json !== "function") {
       throw new Error("Invalid response from Paystack status endpoint")
     }
 
-    return (await (response as any).json()) as StatusSummaryResponse
+    return (await response.json()) as StatusSummaryResponse
   }
 }
-

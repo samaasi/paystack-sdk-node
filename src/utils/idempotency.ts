@@ -1,8 +1,8 @@
 export function generateIdempotencyKey(): string {
-  const globalCrypto: Crypto | undefined = (globalThis as any).crypto
+  const globalCrypto = (globalThis as { crypto?: Crypto }).crypto
 
-  if (globalCrypto && typeof (globalCrypto as any).randomUUID === "function") {
-    return (globalCrypto as any).randomUUID()
+  if (globalCrypto && typeof globalCrypto.randomUUID === "function") {
+    return globalCrypto.randomUUID()
   }
 
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789"

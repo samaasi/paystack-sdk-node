@@ -2,20 +2,21 @@ import {
   PaystackError,
   mapNetworkError,
   mapPaystackHttpError,
+  type PaystackErrorResponse,
 } from "./error-handler"
 import { executeWithRetry, type RetryOptions } from "./retry-strategy"
 
 export interface ApiClientOptions {
   apiKey: string
   baseUrl?: string
-  fetchImpl?: (input: string, init?: RequestInit) => Promise<any>
+  fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
   retry?: RetryOptions
 }
 
 export class ApiClient {
   private apiKey: string
   private baseUrl: string
-  private fetchImpl?: (input: string, init?: RequestInit) => Promise<any>
+  private fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
   private retryOptions?: RetryOptions
 
   constructor(options: ApiClientOptions) {
@@ -36,29 +37,39 @@ export class ApiClient {
 
     const operation = async () => {
       try {
+        const extraHeaders =
+          init.headers &&
+          !(init.headers instanceof Headers) &&
+          !Array.isArray(init.headers)
+            ? init.headers
+            : undefined
+
         const response = await fetchFn(url, {
           ...init,
           headers: {
             Authorization: `Bearer ${this.apiKey}`,
             "Content-Type": "application/json",
-            ...(init.headers as any),
+            ...(extraHeaders ?? {}),
           },
         } as RequestInit)
 
-        if (!(response as any).ok) {
-          const status = (response as any).status as number
+        if (!response.ok) {
+          const status = response.status
           let body: unknown
 
           try {
-            body = await (response as any).json()
+            body = await response.json()
           } catch {
             body = undefined
           }
 
-          throw mapPaystackHttpError(status, body as any)
+          throw mapPaystackHttpError(
+            status,
+            body as PaystackErrorResponse | null | undefined,
+          )
         }
 
-        const data = await (response as any).json()
+        const data = await response.json()
         return data as T
       } catch (error) {
         if (error instanceof PaystackError) {

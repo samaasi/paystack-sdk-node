@@ -1,10 +1,16 @@
-import type { CanActivate, ExecutionContext } from "@nestjs/common"
-import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { verifyPaystackSignature } from "../webhooks/verifier"
+import { Injectable, UnauthorizedException } from "@nestjs/common"
+import type { CanActivate, ExecutionContext } from "@nestjs/common"
 
 export interface NestPaystackWebhookOptions {
   secretKey: string
   headerName?: string
+}
+
+export interface NestHttpRequest {
+  rawBody?: string | Uint8Array
+  body?: unknown
+  headers?: Record<string, unknown>
 }
 
 function getHeader(
@@ -12,7 +18,8 @@ function getHeader(
   name: string,
 ): string | undefined {
   const lower = name.toLowerCase()
-  const value = (headers as any)[lower] ?? (headers as any)[name]
+  const indexed = headers as Record<string, unknown>
+  const value = indexed[lower] ?? indexed[name]
 
   if (Array.isArray(value)) {
     return value[0]
@@ -21,8 +28,8 @@ function getHeader(
   return value as string | undefined
 }
 
-function getRawBody(req: any): string | undefined {
-  const raw = (req as any).rawBody
+function getRawBody(req: NestHttpRequest): string | undefined {
+  const raw = req.rawBody
 
   if (typeof raw === "string") {
     return raw
@@ -55,7 +62,7 @@ export class PaystackWebhookGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const http = context.switchToHttp()
-    const req = http.getRequest<any>()
+    const req = http.getRequest<NestHttpRequest>()
 
     const rawBody = getRawBody(req)
 

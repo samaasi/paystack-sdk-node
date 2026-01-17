@@ -29,11 +29,11 @@ export interface PaystackClientConfig {
   apiKey: string
   baseUrl?: string
   maxRetries?: number
-  fetchImpl?: (input: string, init?: RequestInit) => Promise<any>
+  fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
 }
 
 export interface PaystackEnvOptions extends LoadConfigOptions {
-  fetchImpl?: (input: string, init?: RequestInit) => Promise<any>
+  fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
 }
 
 export class PaystackClient {

@@ -12,8 +12,15 @@ export interface LoadConfigOptions {
 
 type EnvRecord = Record<string, string | undefined>
 
+interface GlobalWithBun {
+  Bun?: {
+    env?: EnvRecord
+    file?: (path: string) => { text(): Promise<string> }
+  }
+}
+
 function readEnvFromRuntime(): EnvRecord {
-  const bunEnv = (globalThis as any).Bun?.env as EnvRecord | undefined
+  const bunEnv = (globalThis as GlobalWithBun).Bun?.env
 
   if (bunEnv) {
     return bunEnv
@@ -29,7 +36,7 @@ function readEnvFromRuntime(): EnvRecord {
 async function readEnvFile(path: string): Promise<EnvRecord> {
   let content: string | undefined
 
-  const bunFile = (globalThis as any).Bun?.file
+  const bunFile = (globalThis as GlobalWithBun).Bun?.file
 
   if (typeof bunFile === "function") {
     try {

@@ -5,12 +5,28 @@ export interface ExpressWebhookOptions {
   headerName?: string
 }
 
+export interface ExpressLikeRequest {
+  rawBody?: string | Uint8Array
+  body?: unknown
+  headers?: Record<string, unknown>
+  paystackEvent?: unknown
+  [key: string]: unknown
+}
+
+export interface ExpressLikeResponse {
+  status(code: number): ExpressLikeResponse
+  send(body: string): void
+}
+
+export type NextFunction = (err?: unknown) => void
+
 function getHeader(
   headers: Record<string, unknown>,
   name: string,
 ): string | undefined {
   const lower = name.toLowerCase()
-  const value = (headers as any)[lower] ?? (headers as any)[name]
+  const indexed = headers as Record<string, unknown>
+  const value = indexed[lower] ?? indexed[name]
 
   if (Array.isArray(value)) {
     return value[0]
@@ -19,8 +35,8 @@ function getHeader(
   return value as string | undefined
 }
 
-function getRawBody(req: any): string | undefined {
-  const raw = (req as any).rawBody
+function getRawBody(req: ExpressLikeRequest): string | undefined {
+  const raw = req.rawBody
 
   if (typeof raw === "string") {
     return raw
@@ -47,9 +63,9 @@ export function createPaystackExpressMiddleware(
   const headerName = (options.headerName ?? "x-paystack-signature").toLowerCase()
 
   return async function paystackWebhookMiddleware(
-    req: any,
-    res: any,
-    next: (err?: unknown) => void,
+    req: ExpressLikeRequest,
+    res: ExpressLikeResponse,
+    next: NextFunction,
   ) {
     const rawBody = getRawBody(req)
 
@@ -71,12 +87,12 @@ export function createPaystackExpressMiddleware(
     }
 
     try {
-      ;(req as any).paystackEvent =
+      req.paystackEvent =
         req.body && typeof req.body === "object"
           ? req.body
           : JSON.parse(rawBody)
     } catch {
-      ;(req as any).paystackEvent = req.body ?? rawBody
+      req.paystackEvent = req.body ?? rawBody
     }
 
     next()
