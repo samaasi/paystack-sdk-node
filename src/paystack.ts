@@ -5,6 +5,7 @@ import { StatusResource } from "./resources/status/status"
 import { ChargesResource } from "./resources/charges/charges"
 import { DisputesResource } from "./resources/disputes/disputes"
 import { TerminalResource } from "./resources/terminal/terminal"
+import { ProductsResource } from "./resources/products/products"
 import { CustomersResource } from "./resources/customers/customers"
 import { TransfersResource } from "./resources/transfers/transfers"
 import type { PaystackConfig, LoadConfigOptions } from "./core/config"
@@ -51,6 +52,7 @@ export class PaystackClient {
   readonly bulkCharges: BulkChargesResource
   readonly paymentPages: PaymentPagesResource
   readonly paymentRequests: PaymentRequestsResource
+  readonly products: ProductsResource
 
   constructor(config: PaystackClientConfig) {
     const normalized: PaystackConfig = {
@@ -92,6 +94,7 @@ export class PaystackClient {
     this.bulkCharges = new BulkChargesResource(resourceOptions)
     this.paymentPages = new PaymentPagesResource(resourceOptions)
     this.paymentRequests = new PaymentRequestsResource(resourceOptions)
+    this.products = new ProductsResource(resourceOptions)
   }
 }
 

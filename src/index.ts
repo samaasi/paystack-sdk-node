@@ -121,6 +121,12 @@ export {
 export * from "./resources/payment-requests/payment-requests.types"
 
 export {
+  ProductsResource,
+} from "./resources/products/products"
+
+export * from "./resources/products/products.types"
+
+export {
   SubscriptionsResource,
 } from "./resources/subscriptions/subscriptions"
 
