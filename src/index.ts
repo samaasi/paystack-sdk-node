@@ -109,6 +109,18 @@ export {
 export * from "./resources/bulk-charges/bulk-charges.types"
 
 export {
+  PaymentPagesResource,
+} from "./resources/payment-pages/payment-pages"
+
+export * from "./resources/payment-pages/payment-pages.types"
+
+export {
+  PaymentRequestsResource,
+} from "./resources/payment-requests/payment-requests"
+
+export * from "./resources/payment-requests/payment-requests.types"
+
+export {
   SubscriptionsResource,
 } from "./resources/subscriptions/subscriptions"
 
