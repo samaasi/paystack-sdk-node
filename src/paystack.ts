@@ -1,8 +1,6 @@
 import { loadPaystackConfig } from "./core/config"
-import { MiscResource } from "./resources/misc/misc"
 import { RequestExecutor } from "./core/request-executor"
 import { StatusResource } from "./resources/status/status"
-import { ChargesResource } from "./resources/charges/charges"
 import { DisputesResource } from "./resources/disputes/disputes"
 import { TerminalResource } from "./resources/terminal/terminal"
 import { CustomersResource } from "./resources/customers/customers"
@@ -10,13 +8,17 @@ import { TransfersResource } from "./resources/transfers/transfers"
 import type { PaystackConfig, LoadConfigOptions } from "./core/config"
 import { SubaccountsResource } from "./resources/subaccounts/subaccounts"
 import { IntegrationResource } from "./resources/integration/integration"
-import { BulkChargesResource } from "./resources/bulk-charges/bulk-charges"
 import { TransactionsResource } from "./resources/transactions/transactions"
 import { VerificationResource } from "./resources/verification/verification"
 import { SubscriptionsResource } from "./resources/subscriptions/subscriptions"
 import { VirtualAccountsResource } from "./resources/virtual-accounts/virtual-accounts"
 import { TransferRecipientsResource } from "./resources/transfer-recipients/recipients"
 import { TransferControlResource } from "./resources/transfer-control/transfer-control"
+import { MiscResource } from "./resources/misc/misc"
+import { ChargesResource } from "./resources/charges/charges"
+import { BulkChargesResource } from "./resources/bulk-charges/bulk-charges"
+import { PaymentPagesResource } from "./resources/payment-pages/payment-pages"
+import { PaymentRequestsResource } from "./resources/payment-requests/payment-requests"
 
 export interface PaystackClientConfig {
   apiKey: string
@@ -47,6 +49,8 @@ export class PaystackClient {
   readonly disputes: DisputesResource
   readonly charges: ChargesResource
   readonly bulkCharges: BulkChargesResource
+  readonly paymentPages: PaymentPagesResource
+  readonly paymentRequests: PaymentRequestsResource
 
   constructor(config: PaystackClientConfig) {
     const normalized: PaystackConfig = {
@@ -86,6 +90,8 @@ export class PaystackClient {
     this.disputes = new DisputesResource(resourceOptions)
     this.charges = new ChargesResource(resourceOptions)
     this.bulkCharges = new BulkChargesResource(resourceOptions)
+    this.paymentPages = new PaymentPagesResource(resourceOptions)
+    this.paymentRequests = new PaymentRequestsResource(resourceOptions)
   }
 }
 
