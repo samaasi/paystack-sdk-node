@@ -1,14 +1,14 @@
-import { BaseResource } from "../base"
 import type {
-  DisputeStatus,
-  GetDisputeApiResponse,
-  GetUploadUrlApiResponse,
-  ListDisputesApiResponse,
-  ListDisputesQuery,
-  ListTransactionDisputesApiResponse,
-  SubmitEvidenceApiResponse,
-  SubmitEvidenceRequest,
+    DisputeStatus,
+    ListDisputesQuery,
+    SubmitEvidenceRequest,
+    GetDisputeApiResponse,
+    GetUploadUrlApiResponse,
+    ListDisputesApiResponse,
+    SubmitEvidenceApiResponse,
+    ListTransactionDisputesApiResponse,
 } from "./disputes.types"
+import { BaseResource } from "../base"
 
 export class DisputesResource extends BaseResource {
   private readonly basePath = "/dispute"
