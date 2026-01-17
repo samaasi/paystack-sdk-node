@@ -24,6 +24,7 @@ import { VirtualAccountsResource } from "./resources/virtual-accounts/virtual-ac
 import { TransferRecipientsResource } from "./resources/transfer-recipients/recipients"
 import { TransferControlResource } from "./resources/transfer-control/transfer-control"
 import { PaymentRequestsResource } from "./resources/payment-requests/payment-requests"
+import { ApplePayResource } from "./resources/apple-pay/apple-pay"
 
 export interface PaystackClientConfig {
   apiKey: string
@@ -61,6 +62,7 @@ export class PaystackClient {
   readonly refunds: RefundsResource
   readonly settlements: SettlementsResource
   readonly splits: SplitsResource
+  readonly applePay: ApplePayResource
 
   constructor(config: PaystackClientConfig) {
     const normalized: PaystackConfig = {
@@ -107,6 +109,7 @@ export class PaystackClient {
     this.refunds = new RefundsResource(resourceOptions)
     this.settlements = new SettlementsResource(resourceOptions)
     this.splits = new SplitsResource(resourceOptions)
+    this.applePay = new ApplePayResource(resourceOptions)
   }
 }
 

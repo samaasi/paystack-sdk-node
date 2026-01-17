@@ -151,6 +151,12 @@ export {
 export * from "./resources/splits/splits.types"
 
 export {
+  ApplePayResource,
+} from "./resources/apple-pay/apple-pay"
+
+export * from "./resources/apple-pay/apple-pay.types"
+
+export {
   SubscriptionsResource,
 } from "./resources/subscriptions/subscriptions"
 
