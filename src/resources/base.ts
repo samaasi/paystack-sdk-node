@@ -1,4 +1,4 @@
-import { RequestExecutor } from "../core/request-executor";
+import type { RequestExecutor } from "../core/request-executor";
 
 export interface BaseResourceOptions {
   executor: RequestExecutor
