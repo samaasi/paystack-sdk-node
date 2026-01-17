@@ -1,0 +1,67 @@
+{
+  "name": "paystack-sdk",
+  "version": "1.0.0",
+  "module": "src/index.ts",
+  "type": "module",
+  "author": "Benson Samaasi <dev.bensonsamaasi@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:samaasi/paystack-sdk-node.git"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "bun test",
+    "lint": "eslint src/**/*.ts"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "eslint": "^9.39.2",
+    "express": "^4.18.2",
+    "tsup": "latest",
+    "typescript": "latest"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./express": {
+      "import": "./dist/express.js",
+      "require": "./dist/express.cjs",
+      "types": "./dist/express.d.ts"
+    },
+    "./nestjs": {
+      "import": "./dist/nestjs.js",
+      "require": "./dist/nestjs.cjs",
+      "types": "./dist/nestjs.d.ts"
+    },
+    "./webhooks": {
+      "import": "./dist/webhooks.js",
+      "require": "./dist/webhooks.cjs",
+      "types": "./dist/webhooks.d.ts"
+    },
+    "./nextjs": {
+      "import": "./dist/nextjs.js",
+      "require": "./dist/nextjs.cjs",
+      "types": "./dist/nextjs.d.ts"
+    }
+  },
+  "peerDependencies": {
+    "express": ">=4",
+    "@nestjs/common": ">=10",
+    "typescript": "^5"
+  },
+  "peerDependenciesMeta": {
+    "express": {
+      "optional": true
+    },
+    "@nestjs/common": {
+      "optional": true
+    }
+  }
+}

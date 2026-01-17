@@ -1,0 +1,1 @@
+// Exports Fastify hook
