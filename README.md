@@ -2,7 +2,7 @@
 
 Type-safe, modern TypeScript SDK for the [Paystack](https://paystack.com) API.
 
-This package helps you talk to Paystack from Node.js or Bun, with:
+This package helps you talk to Paystack from Node.js, with:
 
 - A `PaystackClient` that wraps the core REST API
 - First-class resource classes (customers, transactions, transfers, DVAs, etc.)
