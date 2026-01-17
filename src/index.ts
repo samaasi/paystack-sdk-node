@@ -43,6 +43,12 @@ export {
 export * from "./resources/transfers/transfers.types"
 
 export {
+  DisputesResource,
+} from "./resources/disputes/disputes"
+
+export * from "./resources/disputes/disputes.types"
+
+export {
   MiscResource,
 } from "./resources/misc/misc"
 
