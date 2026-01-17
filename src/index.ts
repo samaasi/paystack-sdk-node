@@ -49,6 +49,12 @@ export {
 export * from "./resources/integration/integration.types"
 
 export {
+  StatusResource,
+} from "./resources/status/status"
+
+export * from "./resources/status/status.types"
+
+export {
   VerificationResource,
 } from "./resources/verification/verification"
 

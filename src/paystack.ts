@@ -1,5 +1,6 @@
 import { loadPaystackConfig } from "./core/config"
 import { RequestExecutor } from "./core/request-executor"
+import { StatusResource } from "./resources/status/status"
 import { TerminalResource } from "./resources/terminal/terminal"
 import { CustomersResource } from "./resources/customers/customers"
 import { TransfersResource } from "./resources/transfers/transfers"
@@ -37,6 +38,7 @@ export class PaystackClient {
   readonly subaccounts: SubaccountsResource
   readonly subscriptions: SubscriptionsResource
   readonly integration: IntegrationResource
+  readonly status: StatusResource
 
   constructor(config: PaystackClientConfig) {
     const normalized: PaystackConfig = {
@@ -69,6 +71,9 @@ export class PaystackClient {
     this.subaccounts = new SubaccountsResource(resourceOptions)
     this.subscriptions = new SubscriptionsResource(resourceOptions)
     this.integration = new IntegrationResource(resourceOptions)
+    this.status = new StatusResource({
+      fetchImpl: config.fetchImpl,
+    })
   }
 }
 
