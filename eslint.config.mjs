@@ -1,5 +1,6 @@
 import js from "@eslint/js"
 import tsParser from "@typescript-eslint/parser"
+import tseslint from "@typescript-eslint/eslint-plugin"
 
 export default [
   {
@@ -32,9 +33,14 @@ export default [
         Buffer: "readonly",
       },
     },
+    plugins: {
+      "@typescript-eslint": tseslint,
+    },
     rules: {
       "no-unused-vars": "off",
       "no-empty": "off",
+      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
 ]
