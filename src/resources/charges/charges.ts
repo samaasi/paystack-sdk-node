@@ -1,19 +1,19 @@
-import { BaseResource } from "../base"
 import type {
-  CheckPendingChargeApiResponse,
-  CreateChargeApiResponse,
-  CreateChargeRequest,
-  SubmitAddressApiResponse,
-  SubmitAddressRequest,
-  SubmitBirthdayApiResponse,
-  SubmitBirthdayRequest,
-  SubmitOtpApiResponse,
-  SubmitOtpRequest,
-  SubmitPhoneApiResponse,
-  SubmitPhoneRequest,
-  SubmitPinApiResponse,
-  SubmitPinRequest,
+    SubmitPinRequest,
+    SubmitOtpRequest,
+    SubmitPhoneRequest,
+    CreateChargeRequest,
+    SubmitOtpApiResponse,
+    SubmitPinApiResponse,
+    SubmitAddressRequest,
+    SubmitBirthdayRequest,
+    SubmitPhoneApiResponse,
+    CreateChargeApiResponse,
+    SubmitAddressApiResponse,
+    SubmitBirthdayApiResponse,
+    CheckPendingChargeApiResponse,
 } from "./charges.types"
+import { BaseResource } from "../base"
 
 export class ChargesResource extends BaseResource {
   private readonly basePath = "/charge"

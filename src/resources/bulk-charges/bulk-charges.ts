@@ -1,11 +1,11 @@
 import type {
-  ListBulkChargeItemsQuery,
     CreateBulkChargeRequest,
-  ListBulkChargeBatchesQuery,
-  GetBulkChargeBatchApiResponse,
+    ListBulkChargeItemsQuery,
+    ListBulkChargeBatchesQuery,
     CreateBulkChargeApiResponse,
-  ListBulkChargeItemsApiResponse,
-  ListBulkChargeBatchesApiResponse,
+    GetBulkChargeBatchApiResponse,
+    ListBulkChargeItemsApiResponse,
+    ListBulkChargeBatchesApiResponse,
 } from "./bulk-charges.types"
 import { BaseResource } from "../base"
 
