@@ -127,6 +127,30 @@ export {
 export * from "./resources/products/products.types"
 
 export {
+  PlansResource,
+} from "./resources/plans/plans"
+
+export * from "./resources/plans/plans.types"
+
+export {
+  RefundsResource,
+} from "./resources/refunds/refunds"
+
+export * from "./resources/refunds/refunds.types"
+
+export {
+  SettlementsResource,
+} from "./resources/settlements/settlements"
+
+export * from "./resources/settlements/settlements.types"
+
+export {
+  SplitsResource,
+} from "./resources/splits/splits"
+
+export * from "./resources/splits/splits.types"
+
+export {
   SubscriptionsResource,
 } from "./resources/subscriptions/subscriptions"
 

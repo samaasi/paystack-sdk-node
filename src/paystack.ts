@@ -1,8 +1,11 @@
 import { loadPaystackConfig } from "./core/config"
 import { MiscResource } from "./resources/misc/misc"
+import { PlansResource } from "./resources/plans/plans"
 import { RequestExecutor } from "./core/request-executor"
+import { SplitsResource } from "./resources/splits/splits"
 import { StatusResource } from "./resources/status/status"
 import { ChargesResource } from "./resources/charges/charges"
+import { RefundsResource } from "./resources/refunds/refunds"
 import { DisputesResource } from "./resources/disputes/disputes"
 import { TerminalResource } from "./resources/terminal/terminal"
 import { ProductsResource } from "./resources/products/products"
@@ -11,6 +14,7 @@ import { TransfersResource } from "./resources/transfers/transfers"
 import type { PaystackConfig, LoadConfigOptions } from "./core/config"
 import { SubaccountsResource } from "./resources/subaccounts/subaccounts"
 import { IntegrationResource } from "./resources/integration/integration"
+import { SettlementsResource } from "./resources/settlements/settlements"
 import { BulkChargesResource } from "./resources/bulk-charges/bulk-charges"
 import { TransactionsResource } from "./resources/transactions/transactions"
 import { VerificationResource } from "./resources/verification/verification"
@@ -53,6 +57,10 @@ export class PaystackClient {
   readonly paymentPages: PaymentPagesResource
   readonly paymentRequests: PaymentRequestsResource
   readonly products: ProductsResource
+  readonly plans: PlansResource
+  readonly refunds: RefundsResource
+  readonly settlements: SettlementsResource
+  readonly splits: SplitsResource
 
   constructor(config: PaystackClientConfig) {
     const normalized: PaystackConfig = {
@@ -95,6 +103,10 @@ export class PaystackClient {
     this.paymentPages = new PaymentPagesResource(resourceOptions)
     this.paymentRequests = new PaymentRequestsResource(resourceOptions)
     this.products = new ProductsResource(resourceOptions)
+    this.plans = new PlansResource(resourceOptions)
+    this.refunds = new RefundsResource(resourceOptions)
+    this.settlements = new SettlementsResource(resourceOptions)
+    this.splits = new SplitsResource(resourceOptions)
   }
 }
 
