@@ -13,6 +13,7 @@ import { SubscriptionsResource } from "./resources/subscriptions/subscriptions"
 import { VirtualAccountsResource } from "./resources/virtual-accounts/virtual-accounts"
 import { TransferRecipientsResource } from "./resources/transfer-recipients/recipients"
 import { TransferControlResource } from "./resources/transfer-control/transfer-control"
+import { MiscResource } from "./resources/misc/misc"
 
 export interface PaystackClientConfig {
   apiKey: string
@@ -39,6 +40,7 @@ export class PaystackClient {
   readonly subscriptions: SubscriptionsResource
   readonly integration: IntegrationResource
   readonly status: StatusResource
+  readonly misc: MiscResource
 
   constructor(config: PaystackClientConfig) {
     const normalized: PaystackConfig = {
@@ -74,6 +76,7 @@ export class PaystackClient {
     this.status = new StatusResource({
       fetchImpl: config.fetchImpl,
     })
+    this.misc = new MiscResource(resourceOptions)
   }
 }
 

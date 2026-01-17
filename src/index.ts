@@ -43,6 +43,12 @@ export {
 export * from "./resources/transfers/transfers.types"
 
 export {
+  MiscResource,
+} from "./resources/misc/misc"
+
+export * from "./resources/misc/misc.types"
+
+export {
   IntegrationResource,
 } from "./resources/integration/integration"
 

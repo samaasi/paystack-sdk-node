@@ -1,9 +1,9 @@
-import { BaseResource } from "../base"
 import type {
   GetPaymentSessionTimeoutResponse,
   UpdatePaymentSessionTimeoutRequest,
   UpdatePaymentSessionTimeoutResponse,
 } from "./integration.types"
+import { BaseResource } from "../base"
 
 export class IntegrationResource extends BaseResource {
   private readonly basePath = "/integration"
