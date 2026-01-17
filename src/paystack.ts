@@ -1,6 +1,10 @@
 import { loadPaystackConfig } from "./core/config"
+import { MiscResource } from "./resources/misc/misc"
+import { ChargesResource } from "./resources/charges/charges"
+import { BulkChargesResource } from "./resources/bulk-charges/bulk-charges"
 import { RequestExecutor } from "./core/request-executor"
 import { StatusResource } from "./resources/status/status"
+import { DisputesResource } from "./resources/disputes/disputes"
 import { TerminalResource } from "./resources/terminal/terminal"
 import { CustomersResource } from "./resources/customers/customers"
 import { TransfersResource } from "./resources/transfers/transfers"
@@ -13,8 +17,6 @@ import { SubscriptionsResource } from "./resources/subscriptions/subscriptions"
 import { VirtualAccountsResource } from "./resources/virtual-accounts/virtual-accounts"
 import { TransferRecipientsResource } from "./resources/transfer-recipients/recipients"
 import { TransferControlResource } from "./resources/transfer-control/transfer-control"
-import { DisputesResource } from "./resources/disputes/disputes"
-import { MiscResource } from "./resources/misc/misc"
 
 export interface PaystackClientConfig {
   apiKey: string
@@ -43,6 +45,8 @@ export class PaystackClient {
   readonly status: StatusResource
   readonly misc: MiscResource
   readonly disputes: DisputesResource
+  readonly charges: ChargesResource
+  readonly bulkCharges: BulkChargesResource
 
   constructor(config: PaystackClientConfig) {
     const normalized: PaystackConfig = {
@@ -80,6 +84,8 @@ export class PaystackClient {
     })
     this.misc = new MiscResource(resourceOptions)
     this.disputes = new DisputesResource(resourceOptions)
+    this.charges = new ChargesResource(resourceOptions)
+    this.bulkCharges = new BulkChargesResource(resourceOptions)
   }
 }
 

@@ -97,6 +97,18 @@ export {
 export * from "./resources/subaccounts/subaccounts.types"
 
 export {
+  ChargesResource,
+} from "./resources/charges/charges"
+
+export * from "./resources/charges/charges.types"
+
+export {
+  BulkChargesResource,
+} from "./resources/bulk-charges/bulk-charges"
+
+export * from "./resources/bulk-charges/bulk-charges.types"
+
+export {
   SubscriptionsResource,
 } from "./resources/subscriptions/subscriptions"
 
