@@ -2,7 +2,7 @@ import { describe, expect, test, mock, beforeEach } from "bun:test"
 import { PaystackClient } from "../src/index"
 
 describe("PaystackClient", () => {
-  const mockFetch = mock(() => Promise.resolve(new Response(JSON.stringify({
+  const mockFetch = mock((url: any, init: any) => Promise.resolve(new Response(JSON.stringify({
     status: true,
     message: "Success",
     data: { id: 1, domain_name: "example.com" }
@@ -27,7 +27,7 @@ describe("PaystackClient", () => {
     await client.applePay.listDomains()
 
     expect(mockFetch).toHaveBeenCalledTimes(1)
-    const [url, init] = mockFetch.mock.calls[0]
+    const [url, init] = mockFetch.mock.calls[0]!
     
     expect(url).toContain("/apple-pay/domain")
     expect(init.method).toBe("GET")
@@ -46,7 +46,7 @@ describe("PaystackClient", () => {
 
     await client.applePay.listDomains()
     
-    const [url] = mockFetch.mock.calls[0]
+    const [url] = mockFetch.mock.calls[0]!
     expect(url).toContain("https://custom-api.paystack.co")
   })
 })
