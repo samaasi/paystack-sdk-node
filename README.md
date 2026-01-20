@@ -97,6 +97,87 @@ const tx = await client.transactions.initialize({
 const verified = await client.transactions.verify(tx.data.reference)
 ```
 
+### Apple Pay
+
+Manage Apple Pay domains for your integration.
+
+```ts
+// Register a domain
+await client.applePay.registerDomain({
+  domainName: "example.com"
+})
+
+// List registered domains
+const domains = await client.applePay.listDomains()
+
+// Unregister a domain
+await client.applePay.unregisterDomain({
+  domainName: "example.com"
+})
+```
+
+### Webhooks
+
+The SDK provides helper functions and an event enum to make handling webhooks type-safe and secure.
+
+```ts
+import { PaystackEvent } from "paystack-sdk/enums"
+
+// Check if an event string matches a known Paystack event
+if (event === PaystackEvent.ChargeSuccess) {
+  // Handle successful charge
+}
+```
+
+#### Framework Integrations
+
+**Express**
+
+```ts
+import { createPaystackExpressMiddleware } from "paystack-sdk/express"
+
+app.post(
+  "/webhook", 
+  createPaystackExpressMiddleware({ secretKey: process.env.PAYSTACK_SECRET_KEY! }), 
+  (req, res) => {
+    const event = req.paystackEvent
+    // Handle event...
+    res.sendStatus(200)
+  }
+)
+```
+
+**Next.js (App Router)**
+
+```ts
+import { verifyPaystackNextjsRequest } from "paystack-sdk/nextjs"
+
+export async function POST(req: Request) {
+  const { valid, event } = await verifyPaystackNextjsRequest(req, {
+    secretKey: process.env.PAYSTACK_SECRET_KEY!
+  })
+
+  if (!valid) return new Response("Invalid signature", { status: 401 })
+
+  // Handle event...
+  return new Response("OK", { status: 200 })
+}
+```
+
+**Fastify**
+
+```ts
+import { createPaystackFastifyHook } from "paystack-sdk/fastify"
+
+fastify.post("/webhook", {
+  preValidation: createPaystackFastifyHook({ secretKey: process.env.PAYSTACK_SECRET_KEY! })
+}, async (req, reply) => {
+  const event = req.paystackEvent
+  // Handle event...
+  return { status: "success" }
+})
+```
+
 ### Transfers and recipients
 
 ```ts
