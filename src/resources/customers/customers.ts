@@ -17,7 +17,10 @@ export class CustomersResource extends BaseResource {
 
   /**
    * Create a customer on your integration.
-   *
+   * 
+   * @param payload - The customer creation details (email, first name, last name, etc.)
+   * @param options - Optional configuration including idempotency key
+   * @returns A promise resolving to the created customer details
    * @see https://paystack.com/docs/api/customer/#create
    */
   create(
@@ -64,6 +67,9 @@ export class CustomersResource extends BaseResource {
   /**
    * Update a customer's details on your integration.
    *
+   * @param customerCodeOrEmail - The customer's code or email address
+   * @param payload - The fields to update
+   * @returns A promise resolving to the updated customer details
    * @see https://paystack.com/docs/api/customer/#update
    */
   update(
