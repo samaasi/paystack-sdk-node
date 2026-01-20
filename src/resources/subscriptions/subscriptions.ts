@@ -1,13 +1,13 @@
-import { BaseResource } from "../base"
+import { BaseResource } from '../base'
 import type {
   CreateSubscriptionRequest,
   CreateSubscriptionResponse,
   FetchSubscriptionResponse,
   ListSubscriptionsResponse,
-} from "./subscriptions.types"
+} from './subscriptions.types'
 
 export class SubscriptionsResource extends BaseResource {
-  private readonly basePath = "/subscription"
+  private readonly basePath = '/subscription'
 
   /**
    * Create a subscription.
@@ -20,7 +20,7 @@ export class SubscriptionsResource extends BaseResource {
     payload: CreateSubscriptionRequest,
   ): Promise<CreateSubscriptionResponse> {
     return this.executor.execute<CreateSubscriptionResponse>(this.basePath, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }
@@ -33,7 +33,7 @@ export class SubscriptionsResource extends BaseResource {
    */
   list(): Promise<ListSubscriptionsResponse> {
     return this.executor.execute<ListSubscriptionsResponse>(this.basePath, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -50,7 +50,7 @@ export class SubscriptionsResource extends BaseResource {
     return this.executor.execute<FetchSubscriptionResponse>(
       `${this.basePath}/${encodeURIComponent(id)}`,
       {
-        method: "GET",
+        method: 'GET',
       },
     )
   }
@@ -69,7 +69,7 @@ export class SubscriptionsResource extends BaseResource {
     return this.executor.execute<FetchSubscriptionResponse>(
       `${this.basePath}/disable`,
       {
-        method: "POST",
+        method: 'POST',
         body,
       },
     )

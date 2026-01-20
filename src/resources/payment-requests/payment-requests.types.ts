@@ -1,11 +1,11 @@
-import type { ApiResponse, PaginationMetadata } from "../base"
+import type { ApiResponse, PaginationMetadata } from '../base'
 
 export type PaymentRequestStatus =
-  | "pending"
-  | "paid"
-  | "cancelled"
-  | "overdue"
-  | "archived"
+  | 'pending'
+  | 'paid'
+  | 'cancelled'
+  | 'overdue'
+  | 'archived'
 
 export interface PaymentRequest {
   id: number

@@ -1,11 +1,11 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
 export type RefundStatus =
-  | "pending"
-  | "processing"
-  | "processed"
-  | "failed"
-  | "needs-attention"
+  | 'pending'
+  | 'processing'
+  | 'processed'
+  | 'failed'
+  | 'needs-attention'
 
 export interface Refund {
   id: number

@@ -1,12 +1,12 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
-export type SplitType = "percentage" | "flat"
+export type SplitType = 'percentage' | 'flat'
 
 export type SplitBearerType =
-  | "subaccount"
-  | "account"
-  | "all-proportional"
-  | "all"
+  | 'subaccount'
+  | 'account'
+  | 'all-proportional'
+  | 'all'
 
 export interface SplitSubaccount {
   subaccount:
@@ -69,7 +69,7 @@ export interface UpdateSplitRequest {
 export interface ListSplitsQuery {
   name?: string
   active?: boolean
-  sort_by?: "name" | "createdAt"
+  sort_by?: 'name' | 'createdAt'
   perPage?: number
   page?: number
   from?: string

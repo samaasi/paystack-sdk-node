@@ -1,4 +1,4 @@
-import { BaseResource } from "../base"
+import { BaseResource } from '../base'
 import type {
   CreateSubaccountRequest,
   CreateSubaccountResponse,
@@ -6,10 +6,10 @@ import type {
   ListSubaccountsResponse,
   UpdateSubaccountRequest,
   UpdateSubaccountResponse,
-} from "./subaccounts.types"
+} from './subaccounts.types'
 
 export class SubaccountsResource extends BaseResource {
-  private readonly basePath = "/subaccount"
+  private readonly basePath = '/subaccount'
 
   /**
    * Create a subaccount.
@@ -18,11 +18,9 @@ export class SubaccountsResource extends BaseResource {
    * @returns A promise resolving to the created subaccount
    * @see https://paystack.com/docs/api/subaccount/#create
    */
-  create(
-    payload: CreateSubaccountRequest,
-  ): Promise<CreateSubaccountResponse> {
+  create(payload: CreateSubaccountRequest): Promise<CreateSubaccountResponse> {
     return this.executor.execute<CreateSubaccountResponse>(this.basePath, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }
@@ -35,7 +33,7 @@ export class SubaccountsResource extends BaseResource {
    */
   list(): Promise<ListSubaccountsResponse> {
     return this.executor.execute<ListSubaccountsResponse>(this.basePath, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -52,7 +50,7 @@ export class SubaccountsResource extends BaseResource {
     return this.executor.execute<FetchSubaccountResponse>(
       `${this.basePath}/${encodeURIComponent(id)}`,
       {
-        method: "GET",
+        method: 'GET',
       },
     )
   }
@@ -72,7 +70,7 @@ export class SubaccountsResource extends BaseResource {
     return this.executor.execute<UpdateSubaccountResponse>(
       `${this.basePath}/${encodeURIComponent(code)}`,
       {
-        method: "PUT",
+        method: 'PUT',
         body: JSON.stringify(payload),
       },
     )

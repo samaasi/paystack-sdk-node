@@ -1,11 +1,11 @@
-import type { ApiResponse, PaginationMetadata } from "../base"
+import type { ApiResponse, PaginationMetadata } from '../base'
 
 export type BulkChargeStatus =
-  | "pending"
-  | "processing"
-  | "completed"
-  | "failed"
-  | "paused"
+  | 'pending'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'paused'
 
 export interface BulkChargeItem {
   id: number

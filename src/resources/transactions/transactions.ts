@@ -3,16 +3,16 @@ import type {
   VerifyTransactionApiResponse,
   RequeryTransactionApiResponse,
   InitializeTransactionApiResponse,
-} from "./transactions.types"
-import { BaseResource } from "../base"
-import { withIdempotencyKey } from "../../utils/idempotency"
+} from './transactions.types'
+import { BaseResource } from '../base'
+import { withIdempotencyKey } from '../../utils/idempotency'
 
 export interface InitializeOptions {
   idempotencyKey?: string
 }
 
 export class TransactionsResource extends BaseResource {
-  private readonly basePath = "/transaction"
+  private readonly basePath = '/transaction'
 
   /**
    * Initialize a transaction.
@@ -28,7 +28,7 @@ export class TransactionsResource extends BaseResource {
   ): Promise<InitializeTransactionApiResponse> {
     const init = withIdempotencyKey(
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(payload),
       },
       options.idempotencyKey,
@@ -51,7 +51,7 @@ export class TransactionsResource extends BaseResource {
     return this.executor.execute<VerifyTransactionApiResponse>(
       `${this.basePath}/verify/${encodeURIComponent(reference)}`,
       {
-        method: "GET",
+        method: 'GET',
       },
     )
   }
@@ -67,7 +67,7 @@ export class TransactionsResource extends BaseResource {
     return this.executor.execute<RequeryTransactionApiResponse>(
       `${this.basePath}/${id}`,
       {
-        method: "GET",
+        method: 'GET',
       },
     )
   }

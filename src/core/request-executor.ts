@@ -1,4 +1,4 @@
-import { ApiClient, type ApiClientOptions } from "./api-client";
+import { ApiClient, type ApiClientOptions } from './api-client'
 
 export interface RequestExecutorOptions extends ApiClientOptions {}
 

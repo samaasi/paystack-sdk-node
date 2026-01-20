@@ -1,4 +1,4 @@
-import { verifyPaystackSignature } from "../webhooks/verifier"
+import { verifyPaystackSignature } from '../webhooks/verifier'
 
 export interface ExpressWebhookOptions {
   secretKey: string
@@ -38,19 +38,19 @@ function getHeader(
 function getRawBody(req: ExpressLikeRequest): string | undefined {
   const raw = req.rawBody
 
-  if (typeof raw === "string") {
+  if (typeof raw === 'string') {
     return raw
   }
 
   if (raw instanceof Uint8Array) {
-    return Buffer.from(raw).toString("utf8")
+    return Buffer.from(raw).toString('utf8')
   }
 
-  if (typeof req.body === "string") {
+  if (typeof req.body === 'string') {
     return req.body
   }
 
-  if (req.body && typeof req.body === "object") {
+  if (req.body && typeof req.body === 'object') {
     return JSON.stringify(req.body)
   }
 
@@ -60,7 +60,9 @@ function getRawBody(req: ExpressLikeRequest): string | undefined {
 export function createPaystackExpressMiddleware(
   options: ExpressWebhookOptions,
 ) {
-  const headerName = (options.headerName ?? "x-paystack-signature").toLowerCase()
+  const headerName = (
+    options.headerName ?? 'x-paystack-signature'
+  ).toLowerCase()
 
   return async function paystackWebhookMiddleware(
     req: ExpressLikeRequest,
@@ -70,7 +72,9 @@ export function createPaystackExpressMiddleware(
     const rawBody = getRawBody(req)
 
     if (rawBody === undefined) {
-      res.status(400).send("Missing raw request body for Paystack webhook verification")
+      res
+        .status(400)
+        .send('Missing raw request body for Paystack webhook verification')
       return
     }
 
@@ -82,13 +86,13 @@ export function createPaystackExpressMiddleware(
     })
 
     if (!valid) {
-      res.status(401).send("Invalid Paystack signature")
+      res.status(401).send('Invalid Paystack signature')
       return
     }
 
     try {
       req.paystackEvent =
-        req.body && typeof req.body === "object"
+        req.body && typeof req.body === 'object'
           ? req.body
           : JSON.parse(rawBody)
     } catch {

@@ -1,7 +1,7 @@
-import type { ApiResponse } from "../base"
-import type { Transaction } from "../transactions/transactions.types"
+import type { ApiResponse } from '../base'
+import type { Transaction } from '../transactions/transactions.types'
 
-export type SettlementStatus = "success" | "processing" | "pending" | "failed"
+export type SettlementStatus = 'success' | 'processing' | 'pending' | 'failed'
 
 export interface Settlement {
   id: number

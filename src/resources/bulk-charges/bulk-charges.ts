@@ -1,16 +1,16 @@
 import type {
-    CreateBulkChargeRequest,
-    ListBulkChargeItemsQuery,
-    ListBulkChargeBatchesQuery,
-    CreateBulkChargeApiResponse,
-    GetBulkChargeBatchApiResponse,
-    ListBulkChargeItemsApiResponse,
-    ListBulkChargeBatchesApiResponse,
-} from "./bulk-charges.types"
-import { BaseResource } from "../base"
+  CreateBulkChargeRequest,
+  ListBulkChargeItemsQuery,
+  ListBulkChargeBatchesQuery,
+  CreateBulkChargeApiResponse,
+  GetBulkChargeBatchApiResponse,
+  ListBulkChargeItemsApiResponse,
+  ListBulkChargeBatchesApiResponse,
+} from './bulk-charges.types'
+import { BaseResource } from '../base'
 
 export class BulkChargesResource extends BaseResource {
-  private readonly basePath = "/bulkcharge"
+  private readonly basePath = '/bulkcharge'
 
   /**
    * Create a bulk charge.
@@ -19,9 +19,11 @@ export class BulkChargesResource extends BaseResource {
    * @returns A promise resolving to the created bulk charge details
    * @see https://paystack.com/docs/api/bulk-charge/#initiate
    */
-  create(payload: CreateBulkChargeRequest): Promise<CreateBulkChargeApiResponse> {
+  create(
+    payload: CreateBulkChargeRequest,
+  ): Promise<CreateBulkChargeApiResponse> {
     return this.executor.execute<CreateBulkChargeApiResponse>(this.basePath, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }
@@ -39,32 +41,30 @@ export class BulkChargesResource extends BaseResource {
     const search = new URLSearchParams()
 
     if (query.perPage !== undefined) {
-      search.set("perPage", String(query.perPage))
+      search.set('perPage', String(query.perPage))
     }
 
     if (query.page !== undefined) {
-      search.set("page", String(query.page))
+      search.set('page', String(query.page))
     }
 
     if (query.status !== undefined) {
-      search.set("status", query.status)
+      search.set('status', query.status)
     }
 
     if (query.from !== undefined) {
-      search.set("from", query.from)
+      search.set('from', query.from)
     }
 
     if (query.to !== undefined) {
-      search.set("to", query.to)
+      search.set('to', query.to)
     }
 
     const path =
-      search.size > 0
-        ? `${this.basePath}?${search.toString()}`
-        : this.basePath
+      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
     return this.executor.execute<ListBulkChargeBatchesApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -79,7 +79,7 @@ export class BulkChargesResource extends BaseResource {
     const path = `${this.basePath}/${encodeURIComponent(batchCode)}`
 
     return this.executor.execute<GetBulkChargeBatchApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -98,15 +98,15 @@ export class BulkChargesResource extends BaseResource {
     const search = new URLSearchParams()
 
     if (query.perPage !== undefined) {
-      search.set("perPage", String(query.perPage))
+      search.set('perPage', String(query.perPage))
     }
 
     if (query.page !== undefined) {
-      search.set("page", String(query.page))
+      search.set('page', String(query.page))
     }
 
     if (query.status !== undefined) {
-      search.set("status", query.status)
+      search.set('status', query.status)
     }
 
     const path =
@@ -117,7 +117,7 @@ export class BulkChargesResource extends BaseResource {
         : `${this.basePath}/${encodeURIComponent(batchCode)}/charges`
 
     return this.executor.execute<ListBulkChargeItemsApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -132,7 +132,7 @@ export class BulkChargesResource extends BaseResource {
     const path = `${this.basePath}/pause/${encodeURIComponent(batchCode)}`
 
     return this.executor.execute<GetBulkChargeBatchApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -147,7 +147,7 @@ export class BulkChargesResource extends BaseResource {
     const path = `${this.basePath}/resume/${encodeURIComponent(batchCode)}`
 
     return this.executor.execute<GetBulkChargeBatchApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 }

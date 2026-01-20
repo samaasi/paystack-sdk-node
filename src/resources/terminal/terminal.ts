@@ -1,17 +1,17 @@
-import { BaseResource } from "../base"
+import { BaseResource } from '../base'
 import type {
   FetchTerminalResponse,
   ListTerminalsResponse,
   SendEventRequest,
   SendEventResponse,
-} from "./terminal.types"
+} from './terminal.types'
 
 export class TerminalResource extends BaseResource {
-  private readonly basePath = "/terminal"
+  private readonly basePath = '/terminal'
 
   list(): Promise<ListTerminalsResponse> {
     return this.executor.execute<ListTerminalsResponse>(this.basePath, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -19,7 +19,7 @@ export class TerminalResource extends BaseResource {
     return this.executor.execute<FetchTerminalResponse>(
       `${this.basePath}/${encodeURIComponent(idOrCode)}`,
       {
-        method: "GET",
+        method: 'GET',
       },
     )
   }
@@ -39,7 +39,7 @@ export class TerminalResource extends BaseResource {
     return this.executor.execute<SendEventResponse>(
       `${this.basePath}/${encodeURIComponent(idOrCode)}/event`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(payload),
       },
     )

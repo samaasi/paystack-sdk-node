@@ -1,4 +1,4 @@
-import { verifyPaystackSignature } from "../webhooks/verifier"
+import { verifyPaystackSignature } from '../webhooks/verifier'
 
 export interface FastifyWebhookOptions {
   secretKey: string
@@ -43,7 +43,9 @@ function getHeader(
  * fastify.addHook("preValidation", createPaystackFastifyHook({ secretKey: "..." }))
  */
 export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
-  const headerName = (options.headerName ?? "x-paystack-signature").toLowerCase()
+  const headerName = (
+    options.headerName ?? 'x-paystack-signature'
+  ).toLowerCase()
 
   return async function paystackWebhookHook(
     req: FastifyLikeRequest,
@@ -56,21 +58,23 @@ export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
 
     let rawBody: string | undefined
 
-    if (typeof req.rawBody === "string") {
+    if (typeof req.rawBody === 'string') {
       rawBody = req.rawBody
     } else if (req.rawBody instanceof Buffer) {
-      rawBody = req.rawBody.toString("utf8")
-    } else if (typeof req.body === "string") {
+      rawBody = req.rawBody.toString('utf8')
+    } else if (typeof req.body === 'string') {
       rawBody = req.body
-    } else if (req.body && typeof req.body === "object") {
+    } else if (req.body && typeof req.body === 'object') {
       // Last resort: stringify body. Warning: key order might differ from payload.
       // Verification might fail if not exact match.
       rawBody = JSON.stringify(req.body)
     }
 
     if (rawBody === undefined) {
-      reply.code(400).send("Missing raw request body for Paystack webhook verification")
-      throw new Error("Missing raw request body")
+      reply
+        .code(400)
+        .send('Missing raw request body for Paystack webhook verification')
+      throw new Error('Missing raw request body')
     }
 
     const signature = getHeader(req.headers, headerName)
@@ -81,13 +85,13 @@ export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
     })
 
     if (!valid) {
-      reply.code(401).send("Invalid Paystack signature")
-      throw new Error("Invalid Paystack signature")
+      reply.code(401).send('Invalid Paystack signature')
+      throw new Error('Invalid Paystack signature')
     }
 
     try {
       req.paystackEvent =
-        typeof req.body === "object" ? req.body : JSON.parse(rawBody)
+        typeof req.body === 'object' ? req.body : JSON.parse(rawBody)
     } catch {
       req.paystackEvent = req.body ?? rawBody
     }

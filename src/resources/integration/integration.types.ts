@@ -1,4 +1,4 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
 export interface PaymentSessionTimeoutData {
   payment_session_timeout: number

@@ -1,18 +1,18 @@
 import type {
-    PlanStatus,
-    PlanInterval,
-    ListPlansQuery,
-    UpdatePlanRequest,
-    CreatePlanRequest,
-    GetPlanApiResponse,
-    ListPlansApiResponse,
-    CreatePlanApiResponse,
-    UpdatePlanApiResponse,
-} from "./plans.types"
-import { BaseResource } from "../base"
+  PlanStatus,
+  PlanInterval,
+  ListPlansQuery,
+  UpdatePlanRequest,
+  CreatePlanRequest,
+  GetPlanApiResponse,
+  ListPlansApiResponse,
+  CreatePlanApiResponse,
+  UpdatePlanApiResponse,
+} from './plans.types'
+import { BaseResource } from '../base'
 
 export class PlansResource extends BaseResource {
-  private readonly basePath = "/plan"
+  private readonly basePath = '/plan'
 
   /**
    * Create a plan on your integration.
@@ -23,7 +23,7 @@ export class PlansResource extends BaseResource {
    */
   create(payload: CreatePlanRequest): Promise<CreatePlanApiResponse> {
     return this.executor.execute<CreatePlanApiResponse>(this.basePath, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }
@@ -39,38 +39,38 @@ export class PlansResource extends BaseResource {
     const search = new URLSearchParams()
 
     if (query.perPage !== undefined) {
-      search.set("perPage", String(query.perPage))
+      search.set('perPage', String(query.perPage))
     }
 
     if (query.page !== undefined) {
-      search.set("page", String(query.page))
+      search.set('page', String(query.page))
     }
 
     if (query.status !== undefined) {
-      search.set("status", query.status as PlanStatus)
+      search.set('status', query.status as PlanStatus)
     }
 
     if (query.interval !== undefined) {
-      search.set("interval", query.interval as PlanInterval)
+      search.set('interval', query.interval as PlanInterval)
     }
 
     if (query.amount !== undefined) {
-      search.set("amount", String(query.amount))
+      search.set('amount', String(query.amount))
     }
 
     if (query.from !== undefined) {
-      search.set("from", query.from)
+      search.set('from', query.from)
     }
 
     if (query.to !== undefined) {
-      search.set("to", query.to)
+      search.set('to', query.to)
     }
 
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
     return this.executor.execute<ListPlansApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -86,7 +86,7 @@ export class PlansResource extends BaseResource {
     const path = `${this.basePath}/${encodeURIComponent(id)}`
 
     return this.executor.execute<GetPlanApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -106,7 +106,7 @@ export class PlansResource extends BaseResource {
     const path = `${this.basePath}/${encodeURIComponent(id)}`
 
     return this.executor.execute<UpdatePlanApiResponse>(path, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(payload),
     })
   }

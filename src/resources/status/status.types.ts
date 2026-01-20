@@ -1,4 +1,4 @@
-export type StatusIndicator = "none" | "minor" | "major" | "critical"
+export type StatusIndicator = 'none' | 'minor' | 'major' | 'critical'
 
 export interface StatusSummaryStatus {
   indicator: StatusIndicator
@@ -12,4 +12,3 @@ export interface StatusSummaryResponse {
   scheduled_maintenances?: Array<Record<string, unknown>>
   status: StatusSummaryStatus
 }
-

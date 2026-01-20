@@ -38,7 +38,7 @@ This library targets modern runtimes:
 ### Create a client
 
 ```ts
-import { PaystackClient } from "paystack-sdk"
+import { PaystackClient } from 'paystack-sdk'
 
 const client = new PaystackClient({
   apiKey: process.env.PAYSTACK_SECRET_KEY!,
@@ -54,7 +54,7 @@ You can optionally override:
 You can also create a client from environment variables using `createPaystackClient`, which reads standard config keys from your environment:
 
 ```ts
-import { createPaystackClient } from "@samaasi/paystack-sdk"
+import { createPaystackClient } from '@samaasi/paystack-sdk'
 
 const client = await createPaystackClient()
 ```
@@ -70,9 +70,9 @@ The client exposes strongly-typed resource helpers under `client.*`.
 ```ts
 // Create customer
 const created = await client.customers.create({
-  email: "customer@example.com",
-  first_name: "Ada",
-  last_name: "Lovelace",
+  email: 'customer@example.com',
+  first_name: 'Ada',
+  last_name: 'Lovelace',
 })
 
 // List customers
@@ -80,7 +80,7 @@ const list = await client.customers.list({ perPage: 20, page: 1 })
 
 // Update customer
 await client.customers.update(created.data.customer_code, {
-  phone: "+2348000000000",
+  phone: '+2348000000000',
 })
 ```
 
@@ -89,7 +89,7 @@ await client.customers.update(created.data.customer_code, {
 ```ts
 // Initialize a transaction
 const tx = await client.transactions.initialize({
-  email: "customer@example.com",
+  email: 'customer@example.com',
   amount: 20000, // amount in kobo
 })
 
@@ -104,7 +104,7 @@ Manage Apple Pay domains for your integration.
 ```ts
 // Register a domain
 await client.applePay.registerDomain({
-  domainName: "example.com"
+  domainName: 'example.com',
 })
 
 // List registered domains
@@ -112,7 +112,7 @@ const domains = await client.applePay.listDomains()
 
 // Unregister a domain
 await client.applePay.unregisterDomain({
-  domainName: "example.com"
+  domainName: 'example.com',
 })
 ```
 
@@ -121,7 +121,7 @@ await client.applePay.unregisterDomain({
 The SDK provides helper functions and an event enum to make handling webhooks type-safe and secure.
 
 ```ts
-import { PaystackEvent } from "paystack-sdk/enums"
+import { PaystackEvent } from 'paystack-sdk/enums'
 
 // Check if an event string matches a known Paystack event
 if (event === PaystackEvent.ChargeSuccess) {
@@ -134,48 +134,56 @@ if (event === PaystackEvent.ChargeSuccess) {
 **Express**
 
 ```ts
-import { createPaystackExpressMiddleware } from "paystack-sdk/express"
+import { createPaystackExpressMiddleware } from 'paystack-sdk/express'
 
 app.post(
-  "/webhook", 
-  createPaystackExpressMiddleware({ secretKey: process.env.PAYSTACK_SECRET_KEY! }), 
+  '/webhook',
+  createPaystackExpressMiddleware({
+    secretKey: process.env.PAYSTACK_SECRET_KEY!,
+  }),
   (req, res) => {
     const event = req.paystackEvent
     // Handle event...
     res.sendStatus(200)
-  }
+  },
 )
 ```
 
 **Next.js (App Router)**
 
 ```ts
-import { verifyPaystackNextjsRequest } from "paystack-sdk/nextjs"
+import { verifyPaystackNextjsRequest } from 'paystack-sdk/nextjs'
 
 export async function POST(req: Request) {
   const { valid, event } = await verifyPaystackNextjsRequest(req, {
-    secretKey: process.env.PAYSTACK_SECRET_KEY!
+    secretKey: process.env.PAYSTACK_SECRET_KEY!,
   })
 
-  if (!valid) return new Response("Invalid signature", { status: 401 })
+  if (!valid) return new Response('Invalid signature', { status: 401 })
 
   // Handle event...
-  return new Response("OK", { status: 200 })
+  return new Response('OK', { status: 200 })
 }
 ```
 
 **Fastify**
 
 ```ts
-import { createPaystackFastifyHook } from "paystack-sdk/fastify"
+import { createPaystackFastifyHook } from 'paystack-sdk/fastify'
 
-fastify.post("/webhook", {
-  preValidation: createPaystackFastifyHook({ secretKey: process.env.PAYSTACK_SECRET_KEY! })
-}, async (req, reply) => {
-  const event = req.paystackEvent
-  // Handle event...
-  return { status: "success" }
-})
+fastify.post(
+  '/webhook',
+  {
+    preValidation: createPaystackFastifyHook({
+      secretKey: process.env.PAYSTACK_SECRET_KEY!,
+    }),
+  },
+  async (req, reply) => {
+    const event = req.paystackEvent
+    // Handle event...
+    return { status: 'success' }
+  },
+)
 ```
 
 ### Transfers and recipients
@@ -183,22 +191,22 @@ fastify.post("/webhook", {
 ```ts
 // Create a transfer recipient
 const recipient = await client.transferRecipients.create({
-  type: "nuban",
-  name: "Jane Doe",
-  account_number: "0123456789",
-  bank_code: "058",
-  currency: "NGN",
+  type: 'nuban',
+  name: 'Jane Doe',
+  account_number: '0123456789',
+  bank_code: '058',
+  currency: 'NGN',
 })
 
 // Initiate a transfer
 const transfer = await client.transfers.initiate(
   {
-    source: "balance",
+    source: 'balance',
     amount: 100000, // 1000 NGN in kobo
     recipient: recipient.data.recipient_code,
-    reference: "salary-2025-01-01",
+    reference: 'salary-2025-01-01',
   },
-  { idempotencyKey: "salary-2025-01-01" },
+  { idempotencyKey: 'salary-2025-01-01' },
 )
 ```
 
@@ -207,15 +215,15 @@ const transfer = await client.transfers.initiate(
 ```ts
 // Resolve bank account name
 const resolved = await client.verification.resolveAccount({
-  account_number: "0123456789",
-  bank_code: "058",
+  account_number: '0123456789',
+  bank_code: '058',
 })
 
 // Match BVN to bank account
 const match = await client.verification.matchBvn({
-  account_number: "0123456789",
-  bank_code: "058",
-  bvn: "12345678901",
+  account_number: '0123456789',
+  bank_code: '058',
+  bvn: '12345678901',
 })
 ```
 
@@ -224,16 +232,16 @@ const match = await client.verification.matchBvn({
 ```ts
 // Create a subaccount
 const sub = await client.subaccounts.create({
-  business_name: "Acme Partners",
-  settlement_bank: "058",
-  account_number: "0123456789",
+  business_name: 'Acme Partners',
+  settlement_bank: '058',
+  account_number: '0123456789',
   percentage_charge: 20,
 })
 
 // Create a subscription
 const subscription = await client.subscriptions.create({
-  customer: "CUS_xxxxxxxx",
-  plan: "PLN_xxxxxxxx",
+  customer: 'CUS_xxxxxxxx',
+  plan: 'PLN_xxxxxxxx',
 })
 ```
 
@@ -241,8 +249,8 @@ const subscription = await client.subscriptions.create({
 
 ```ts
 const dva = await client.virtualAccounts.create({
-  customer: "CUS_xxxxxxxx",
-  preferred_bank: "titan-paystack",
+  customer: 'CUS_xxxxxxxx',
+  preferred_bank: 'titan-paystack',
 })
 ```
 
@@ -257,13 +265,11 @@ The SDK provides low-level signature helpers and some framework-specific utiliti
 Subpath: `paystack-sdk/webhooks`
 
 ```ts
-import {
-  verifyPaystackSignature,
-} from "paystack-sdk/webhooks"
+import { verifyPaystackSignature } from 'paystack-sdk/webhooks'
 
 const valid = await verifyPaystackSignature({
   payload: rawBody, // string or Uint8Array
-  signature: req.headers["x-paystack-signature"] as string | undefined,
+  signature: req.headers['x-paystack-signature'] as string | undefined,
   secretKey: process.env.PAYSTACK_SECRET_KEY!,
 })
 ```
@@ -273,15 +279,12 @@ const valid = await verifyPaystackSignature({
 Subpath: root resources
 
 ```ts
-import {
-  isWebhookEvent,
-  type WebhookEvent,
-} from "paystack-sdk"
+import { isWebhookEvent, type WebhookEvent } from 'paystack-sdk'
 
 if (isWebhookEvent(body)) {
   const event: WebhookEvent = body
 
-  if (event.event === "charge.success") {
+  if (event.event === 'charge.success') {
     // handle successful charge
   }
 }
@@ -296,13 +299,13 @@ if (isWebhookEvent(body)) {
 Subpath: `paystack-sdk/express`
 
 ```ts
-import express from "express"
-import { createPaystackExpressMiddleware } from "paystack-sdk/express"
+import express from 'express'
+import { createPaystackExpressMiddleware } from 'paystack-sdk/express'
 
 const app = express()
 
 app.post(
-  "/webhooks/paystack",
+  '/webhooks/paystack',
   createPaystackExpressMiddleware({
     secretKey: process.env.PAYSTACK_SECRET_KEY!,
   }),
@@ -321,10 +324,10 @@ Ensure your Express setup preserves the raw request body (for example by using a
 Subpath: `paystack-sdk/nestjs`
 
 ```ts
-import { Controller, Post, Req, UseGuards } from "@nestjs/common"
-import { PaystackWebhookGuard } from "paystack-sdk/nestjs"
+import { Controller, Post, Req, UseGuards } from '@nestjs/common'
+import { PaystackWebhookGuard } from 'paystack-sdk/nestjs'
 
-@Controller("webhooks/paystack")
+@Controller('webhooks/paystack')
 @UseGuards(
   new PaystackWebhookGuard({
     secretKey: process.env.PAYSTACK_SECRET_KEY!,
@@ -335,7 +338,7 @@ export class PaystackWebhookController {
   handle(@Req() req: any) {
     const event = req.body
     // handle event
-    return "ok"
+    return 'ok'
   }
 }
 ```
@@ -346,10 +349,8 @@ Subpath: `paystack-sdk/nextjs`
 
 ```ts
 // app/api/webhooks/paystack/route.ts
-import { NextRequest, NextResponse } from "next/server"
-import {
-  verifyPaystackNextjsRequest,
-} from "paystack-sdk/nextjs"
+import { NextRequest, NextResponse } from 'next/server'
+import { verifyPaystackNextjsRequest } from 'paystack-sdk/nextjs'
 
 export async function POST(req: NextRequest) {
   const { valid, event } = await verifyPaystackNextjsRequest(req, {
@@ -357,11 +358,11 @@ export async function POST(req: NextRequest) {
   })
 
   if (!valid) {
-    return new NextResponse("Invalid signature", { status: 401 })
+    return new NextResponse('Invalid signature', { status: 401 })
   }
 
   // handle event
-  return new NextResponse("ok")
+  return new NextResponse('ok')
 }
 ```
 
@@ -372,16 +373,13 @@ export async function POST(req: NextRequest) {
 The SDK includes helpers for idempotent requests via the `x-idempotency-key` header.
 
 ```ts
-import {
-  generateIdempotencyKey,
-  withIdempotencyKey,
-} from "paystack-sdk"
+import { generateIdempotencyKey, withIdempotencyKey } from 'paystack-sdk'
 
 const key = generateIdempotencyKey()
 
 const init = withIdempotencyKey(
   {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({}),
   },
   key,

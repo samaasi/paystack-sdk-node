@@ -1,8 +1,8 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 import type {
   ResolveAccountRequest,
   ResolveAccountResponse,
-} from "../verification/verification.types"
+} from '../verification/verification.types'
 
 export interface Bank {
   name: string

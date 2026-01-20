@@ -5,11 +5,11 @@ export interface VerifyPaystackSignatureOptions {
 }
 
 function toHex(bytes: Uint8Array): string {
-  let hex = ""
+  let hex = ''
 
   for (let i = 0; i < bytes.length; i += 1) {
     const value = bytes[i]!
-    hex += value.toString(16).padStart(2, "0")
+    hex += value.toString(16).padStart(2, '0')
   }
 
   return hex
@@ -36,28 +36,32 @@ async function computeWithSubtle(
   const cryptoObj = (globalThis as { crypto?: Crypto }).crypto
 
   if (!cryptoObj?.subtle) {
-    throw new Error("subtle crypto not available")
+    throw new Error('subtle crypto not available')
   }
 
   const encoder = new TextEncoder()
   const keyData = encoder.encode(secretKey)
   const data: ArrayBufferLike =
-    typeof payload === "string"
+    typeof payload === 'string'
       ? encoder.encode(payload).buffer
       : payload.buffer
 
   const key = await cryptoObj.subtle.importKey(
-    "raw",
+    'raw',
     keyData,
     {
-      name: "HMAC",
-      hash: "SHA-512",
+      name: 'HMAC',
+      hash: 'SHA-512',
     },
     false,
-    ["sign"],
+    ['sign'],
   )
 
-  const signature = await cryptoObj.subtle.sign("HMAC", key, data as ArrayBuffer)
+  const signature = await cryptoObj.subtle.sign(
+    'HMAC',
+    key,
+    data as ArrayBuffer,
+  )
   return toHex(new Uint8Array(signature))
 }
 
@@ -65,16 +69,16 @@ async function computeWithNodeCrypto(
   secretKey: string,
   payload: string | Uint8Array,
 ): Promise<string> {
-  const nodeCrypto = await import("node:crypto")
-  const hmac = nodeCrypto.createHmac("sha512", secretKey)
+  const nodeCrypto = await import('node:crypto')
+  const hmac = nodeCrypto.createHmac('sha512', secretKey)
 
-  if (typeof payload === "string") {
-    hmac.update(payload, "utf8")
+  if (typeof payload === 'string') {
+    hmac.update(payload, 'utf8')
   } else {
     hmac.update(Buffer.from(payload))
   }
 
-  return hmac.digest("hex")
+  return hmac.digest('hex')
 }
 
 export async function computePaystackSignature(
@@ -83,8 +87,7 @@ export async function computePaystackSignature(
 ): Promise<string> {
   try {
     return await computeWithNodeCrypto(secretKey, payload)
-  } catch {
-  }
+  } catch {}
 
   return computeWithSubtle(secretKey, payload)
 }
@@ -99,10 +102,9 @@ export async function verifyPaystackSignature(
   }
 
   const normalizedHeader = headerSignature.trim().toLowerCase()
-  const computed = (await computePaystackSignature(
-    options.secretKey,
-    options.payload,
-  )).toLowerCase()
+  const computed = (
+    await computePaystackSignature(options.secretKey, options.payload)
+  ).toLowerCase()
 
   return timingSafeEqualHex(normalizedHeader, computed)
 }

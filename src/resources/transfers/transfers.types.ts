@@ -1,11 +1,6 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
-export type TransferStatus =
-  | "pending"
-  | "success"
-  | "failed"
-  | "otp"
-  | "queued"
+export type TransferStatus = 'pending' | 'success' | 'failed' | 'otp' | 'queued'
 
 export interface Transfer {
   id: number
@@ -25,7 +20,7 @@ export interface Transfer {
 }
 
 export interface InitiateTransferRequest {
-  source: "balance"
+  source: 'balance'
   amount: number
   recipient: string
   reference?: string

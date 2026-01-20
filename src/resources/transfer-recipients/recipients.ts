@@ -5,9 +5,9 @@ import type {
   ListTransferRecipientsResponse,
   UpdateTransferRecipientRequest,
   UpdateTransferRecipientResponse,
-} from "./recipients.types"
-  import { BaseResource } from "../base"
-  import { withIdempotencyKey } from "../../utils/idempotency"
+} from './recipients.types'
+import { BaseResource } from '../base'
+import { withIdempotencyKey } from '../../utils/idempotency'
 
 export interface CreateTransferRecipientOptions {
   idempotencyKey?: string
@@ -18,7 +18,7 @@ export interface CreateTransferRecipientOptions {
  * @see https://paystack.com/docs/api/transfer-recipient/
  */
 export class TransferRecipientsResource extends BaseResource {
-  private readonly basePath = "/transferrecipient"
+  private readonly basePath = '/transferrecipient'
 
   /**
    * Create a transfer recipient
@@ -33,7 +33,7 @@ export class TransferRecipientsResource extends BaseResource {
   ): Promise<CreateTransferRecipientResponse> {
     const init = withIdempotencyKey(
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(payload),
       },
       options.idempotencyKey,
@@ -54,7 +54,7 @@ export class TransferRecipientsResource extends BaseResource {
     return this.executor.execute<ListTransferRecipientsResponse>(
       this.basePath,
       {
-        method: "GET",
+        method: 'GET',
       },
     )
   }
@@ -73,7 +73,7 @@ export class TransferRecipientsResource extends BaseResource {
     return this.executor.execute<FetchTransferRecipientResponse>(
       `${this.basePath}/${encodeURIComponent(id)}`,
       {
-        method: "GET",
+        method: 'GET',
       },
     )
   }
@@ -92,7 +92,7 @@ export class TransferRecipientsResource extends BaseResource {
     return this.executor.execute<UpdateTransferRecipientResponse>(
       `${this.basePath}/${encodeURIComponent(recipientCode)}`,
       {
-        method: "PUT",
+        method: 'PUT',
         body: JSON.stringify(payload),
       },
     )

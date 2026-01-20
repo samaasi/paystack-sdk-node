@@ -1,4 +1,4 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
 export interface InitializeTransactionRequest {
   amount: number
@@ -20,11 +20,7 @@ export interface TransactionCustomer {
   customer_code: string
 }
 
-export type TransactionStatus =
-  | "pending"
-  | "success"
-  | "failed"
-  | "abandoned"
+export type TransactionStatus = 'pending' | 'success' | 'failed' | 'abandoned'
 
 export interface Transaction {
   id: number
@@ -47,7 +43,8 @@ export interface InitializeTransactionResponse {
   reference: string
 }
 
-export type InitializeTransactionApiResponse = ApiResponse<InitializeTransactionResponse>
+export type InitializeTransactionApiResponse =
+  ApiResponse<InitializeTransactionResponse>
 
 export type VerifyTransactionApiResponse = ApiResponse<Transaction>
 

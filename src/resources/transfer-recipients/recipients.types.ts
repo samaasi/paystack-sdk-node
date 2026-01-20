@@ -1,12 +1,12 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
 export type TransferRecipientType =
-  | "nuban"
-  | "ghipss"
-  | "mobile_money"
-  | "kepss"
-  | "basa"
-  | "authorization"
+  | 'nuban'
+  | 'ghipss'
+  | 'mobile_money'
+  | 'kepss'
+  | 'basa'
+  | 'authorization'
 
 export interface CreateTransferRecipientRequest {
   type: TransferRecipientType

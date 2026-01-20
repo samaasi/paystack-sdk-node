@@ -13,6 +13,8 @@
     "dev": "tsup --watch",
     "test": "bun test",
     "lint": "eslint src/**/*.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "prepublishOnly": "bun run build"
   },
   "devDependencies": {
@@ -21,7 +23,9 @@
     "@typescript-eslint/eslint-plugin": "^8.53.0",
     "@typescript-eslint/parser": "^8.53.0",
     "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
     "express": "^4.18.2",
+    "prettier": "^3.8.0",
     "tsup": "latest",
     "typescript": "latest"
   },

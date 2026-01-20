@@ -1,20 +1,20 @@
 import type {
-    ListSplitsQuery,
-    CreateSplitRequest,
-    UpdateSplitRequest,
-    GetSplitApiResponse,
-    AddSubaccountRequest,
-    ListSplitsApiResponse,
-    CreateSplitApiResponse,
-    UpdateSplitApiResponse,
-    RemoveSubaccountRequest,
-    AddSubaccountApiResponse,
-    RemoveSubaccountApiResponse,
-} from "./splits.types"
-import { BaseResource } from "../base"
+  ListSplitsQuery,
+  CreateSplitRequest,
+  UpdateSplitRequest,
+  GetSplitApiResponse,
+  AddSubaccountRequest,
+  ListSplitsApiResponse,
+  CreateSplitApiResponse,
+  UpdateSplitApiResponse,
+  RemoveSubaccountRequest,
+  AddSubaccountApiResponse,
+  RemoveSubaccountApiResponse,
+} from './splits.types'
+import { BaseResource } from '../base'
 
 export class SplitsResource extends BaseResource {
-  private readonly basePath = "/split"
+  private readonly basePath = '/split'
 
   /**
    * Create a transaction split.
@@ -25,7 +25,7 @@ export class SplitsResource extends BaseResource {
    */
   create(payload: CreateSplitRequest): Promise<CreateSplitApiResponse> {
     return this.executor.execute<CreateSplitApiResponse>(this.basePath, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }
@@ -41,38 +41,38 @@ export class SplitsResource extends BaseResource {
     const search = new URLSearchParams()
 
     if (query.name !== undefined) {
-      search.set("name", query.name)
+      search.set('name', query.name)
     }
 
     if (query.active !== undefined) {
-      search.set("active", String(query.active))
+      search.set('active', String(query.active))
     }
 
     if (query.sort_by !== undefined) {
-      search.set("sort_by", query.sort_by)
+      search.set('sort_by', query.sort_by)
     }
 
     if (query.perPage !== undefined) {
-      search.set("perPage", String(query.perPage))
+      search.set('perPage', String(query.perPage))
     }
 
     if (query.page !== undefined) {
-      search.set("page", String(query.page))
+      search.set('page', String(query.page))
     }
 
     if (query.from !== undefined) {
-      search.set("from", query.from)
+      search.set('from', query.from)
     }
 
     if (query.to !== undefined) {
-      search.set("to", query.to)
+      search.set('to', query.to)
     }
 
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
     return this.executor.execute<ListSplitsApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -88,7 +88,7 @@ export class SplitsResource extends BaseResource {
     const path = `${this.basePath}/${encodeURIComponent(identifier)}`
 
     return this.executor.execute<GetSplitApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -108,7 +108,7 @@ export class SplitsResource extends BaseResource {
     const path = `${this.basePath}/${encodeURIComponent(identifier)}`
 
     return this.executor.execute<UpdateSplitApiResponse>(path, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(payload),
     })
   }
@@ -131,7 +131,7 @@ export class SplitsResource extends BaseResource {
     )}/subaccount/add`
 
     return this.executor.execute<AddSubaccountApiResponse>(path, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }
@@ -154,7 +154,7 @@ export class SplitsResource extends BaseResource {
     )}/subaccount/remove`
 
     return this.executor.execute<RemoveSubaccountApiResponse>(path, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }

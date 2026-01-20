@@ -1,23 +1,23 @@
-import { BaseResource } from "../base"
+import { BaseResource } from '../base'
 import type {
-    ListCustomersQuery,
-    CreateCustomerRequest,
-    ListCustomersResponse,
-    UpdateCustomerRequest,
-    CreateCustomerApiResponse,
-} from "./customers.types"
-import { withIdempotencyKey } from "../../utils/idempotency"
+  ListCustomersQuery,
+  CreateCustomerRequest,
+  ListCustomersResponse,
+  UpdateCustomerRequest,
+  CreateCustomerApiResponse,
+} from './customers.types'
+import { withIdempotencyKey } from '../../utils/idempotency'
 
 export interface CreateCustomerOptions {
   idempotencyKey?: string
 }
 
 export class CustomersResource extends BaseResource {
-  private readonly basePath = "/customer"
+  private readonly basePath = '/customer'
 
   /**
    * Create a customer on your integration.
-   * 
+   *
    * @param payload - The customer creation details (email, first name, last name, etc.)
    * @param options - Optional configuration including idempotency key
    * @returns A promise resolving to the created customer details
@@ -29,7 +29,7 @@ export class CustomersResource extends BaseResource {
   ): Promise<CreateCustomerApiResponse> {
     const init = withIdempotencyKey(
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(payload),
       },
       options.idempotencyKey,
@@ -49,20 +49,18 @@ export class CustomersResource extends BaseResource {
     const search = new URLSearchParams()
 
     if (query.perPage !== undefined) {
-      search.set("perPage", String(query.perPage))
+      search.set('perPage', String(query.perPage))
     }
 
     if (query.page !== undefined) {
-      search.set("page", String(query.page))
+      search.set('page', String(query.page))
     }
 
     const path =
-      search.size > 0
-        ? `${this.basePath}?${search.toString()}`
-        : this.basePath
+      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
     return this.executor.execute<ListCustomersResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -81,7 +79,7 @@ export class CustomersResource extends BaseResource {
     return this.executor.execute<CreateCustomerApiResponse>(
       `${this.basePath}/${encodeURIComponent(customerCodeOrEmail)}`,
       {
-        method: "PUT",
+        method: 'PUT',
         body: JSON.stringify(payload),
       },
     )

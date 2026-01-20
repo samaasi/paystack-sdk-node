@@ -2,11 +2,11 @@ import type {
   GetPaymentSessionTimeoutResponse,
   UpdatePaymentSessionTimeoutRequest,
   UpdatePaymentSessionTimeoutResponse,
-} from "./integration.types"
-import { BaseResource } from "../base"
+} from './integration.types'
+import { BaseResource } from '../base'
 
 export class IntegrationResource extends BaseResource {
-  private readonly basePath = "/integration"
+  private readonly basePath = '/integration'
 
   /**
    * Get payment session timeout.
@@ -18,7 +18,7 @@ export class IntegrationResource extends BaseResource {
     const path = `${this.basePath}/payment_session_timeout`
 
     return this.executor.execute<GetPaymentSessionTimeoutResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -33,14 +33,14 @@ export class IntegrationResource extends BaseResource {
     timeoutOrPayload: number | UpdatePaymentSessionTimeoutRequest,
   ): Promise<UpdatePaymentSessionTimeoutResponse> {
     const payload: UpdatePaymentSessionTimeoutRequest =
-      typeof timeoutOrPayload === "number"
+      typeof timeoutOrPayload === 'number'
         ? { timeout: timeoutOrPayload }
         : timeoutOrPayload
 
     const path = `${this.basePath}/payment_session_timeout`
 
     return this.executor.execute<UpdatePaymentSessionTimeoutResponse>(path, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(payload),
     })
   }

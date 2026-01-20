@@ -1,4 +1,4 @@
-import { verifyPaystackSignature } from "../webhooks/verifier"
+import { verifyPaystackSignature } from '../webhooks/verifier'
 
 export interface NextWebhookOptions {
   secretKey: string
@@ -13,7 +13,7 @@ export interface NextRequestLike {
 }
 
 function getHeader(
-  headers: NextRequestLike["headers"],
+  headers: NextRequestLike['headers'],
   name: string,
 ): string | undefined {
   const value = headers.get(name) ?? headers.get(name.toLowerCase())
@@ -24,7 +24,7 @@ export async function verifyPaystackNextjsRequest(
   req: NextRequestLike,
   options: NextWebhookOptions,
 ): Promise<{ valid: boolean; event?: unknown }> {
-  const headerName = options.headerName ?? "x-paystack-signature"
+  const headerName = options.headerName ?? 'x-paystack-signature'
   const signature = getHeader(req.headers, headerName)
   const rawBody = await req.text()
 

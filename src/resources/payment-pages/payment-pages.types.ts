@@ -1,4 +1,4 @@
-import type { ApiResponse, PaginationMetadata } from "../base"
+import type { ApiResponse, PaginationMetadata } from '../base'
 
 export interface PaymentPage {
   id: number

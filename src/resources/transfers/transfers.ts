@@ -1,18 +1,18 @@
-import { BaseResource } from "../base"
+import { BaseResource } from '../base'
 import type {
   FinalizeTransferRequest,
   FinalizeTransferResponse,
   InitiateTransferRequest,
   InitiateTransferResponse,
-} from "./transfers.types"
-import { withIdempotencyKey } from "../../utils/idempotency"
+} from './transfers.types'
+import { withIdempotencyKey } from '../../utils/idempotency'
 
 export interface InitiateTransferOptions {
   idempotencyKey?: string
 }
 
 export class TransfersResource extends BaseResource {
-  private readonly basePath = "/transfer"
+  private readonly basePath = '/transfer'
 
   /**
    * Initiate a single transfer.
@@ -28,7 +28,7 @@ export class TransfersResource extends BaseResource {
   ): Promise<InitiateTransferResponse> {
     const init = withIdempotencyKey(
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(payload),
       },
       options.idempotencyKey,
@@ -50,7 +50,7 @@ export class TransfersResource extends BaseResource {
     return this.executor.execute<FinalizeTransferResponse>(
       `${this.basePath}/finalize_transfer`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(payload),
       },
     )

@@ -1,18 +1,18 @@
-import { BaseResource } from "../base"
+import { BaseResource } from '../base'
 import type {
   MatchBvnRequest,
   MatchBvnResponse,
   ResolveAccountRequest,
   ResolveAccountResponse,
   ResolveBvnResponse,
-} from "./verification.types"
+} from './verification.types'
 
 /**
  * Verification resource
  * @see https://paystack.com/docs/api/verification/
  */
 export class VerificationResource extends BaseResource {
-  private readonly bankBasePath = "/bank"
+  private readonly bankBasePath = '/bank'
 
   /**
    * Resolve an account number
@@ -24,13 +24,13 @@ export class VerificationResource extends BaseResource {
     params: ResolveAccountRequest,
   ): Promise<ResolveAccountResponse> {
     const search = new URLSearchParams()
-    search.set("account_number", params.account_number)
-    search.set("bank_code", params.bank_code)
+    search.set('account_number', params.account_number)
+    search.set('bank_code', params.bank_code)
 
     const path = `${this.bankBasePath}/resolve?${search.toString()}`
 
     return this.executor.execute<ResolveAccountResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -44,7 +44,7 @@ export class VerificationResource extends BaseResource {
     const path = `${this.bankBasePath}/resolve_bvn/${encodeURIComponent(bvn)}`
 
     return this.executor.execute<ResolveBvnResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -56,14 +56,14 @@ export class VerificationResource extends BaseResource {
    */
   matchBvn(params: MatchBvnRequest): Promise<MatchBvnResponse> {
     const search = new URLSearchParams()
-    search.set("account_number", params.account_number)
-    search.set("bank_code", params.bank_code)
-    search.set("bvn", params.bvn)
+    search.set('account_number', params.account_number)
+    search.set('bank_code', params.bank_code)
+    search.set('bvn', params.bvn)
 
     const path = `${this.bankBasePath}/match_bvn?${search.toString()}`
 
     return this.executor.execute<MatchBvnResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 }

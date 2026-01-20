@@ -41,7 +41,8 @@ export function mapPaystackHttpError(
   httpStatus: number,
   body: PaystackErrorResponse | null | undefined,
 ): PaystackError {
-  const message = body?.message || `Paystack request failed with status ${httpStatus}`
+  const message =
+    body?.message || `Paystack request failed with status ${httpStatus}`
   const code = (body?.code as string | undefined) ?? undefined
   const context: PaystackErrorContext = { status: httpStatus, code, raw: body }
 
@@ -66,7 +67,9 @@ export function mapPaystackHttpError(
 
 export function mapNetworkError(error: unknown): PaystackNetworkError {
   const message =
-    error instanceof Error ? error.message : "Network error while communicating with Paystack"
+    error instanceof Error
+      ? error.message
+      : 'Network error while communicating with Paystack'
 
   return new PaystackNetworkError(message, { raw: error })
 }

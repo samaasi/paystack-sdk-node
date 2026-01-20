@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsup'
 
 export default defineConfig({
   entry: {
@@ -10,10 +10,10 @@ export default defineConfig({
     webhooks: 'src/webhooks/index.ts',
   },
   format: ['cjs', 'esm'],
-  dts: true,              
-  splitting: true,            
+  dts: true,
+  splitting: true,
   sourcemap: true,
   clean: true,
   minify: true,
   external: ['express', '@nestjs/common', '@nestjs/core'],
-});
+})

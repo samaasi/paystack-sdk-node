@@ -1,10 +1,10 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
 export type SubscriptionStatus =
-  | "active"
-  | "non-renewing"
-  | "completed"
-  | "cancelled"
+  | 'active'
+  | 'non-renewing'
+  | 'completed'
+  | 'cancelled'
 
 export interface Subscription {
   id: number

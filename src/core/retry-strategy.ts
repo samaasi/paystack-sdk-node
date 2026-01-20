@@ -34,13 +34,17 @@ export async function executeWithRetry<T>(
     try {
       return await operation()
     } catch (error) {
-      const canRetry = attempt <= merged.maxRetries && shouldRetry(error, attempt)
+      const canRetry =
+        attempt <= merged.maxRetries && shouldRetry(error, attempt)
 
       if (!canRetry) {
         throw error
       }
 
-      const delay = Math.min(merged.baseDelayMs * 2 ** (attempt - 1), merged.maxDelayMs)
+      const delay = Math.min(
+        merged.baseDelayMs * 2 ** (attempt - 1),
+        merged.maxDelayMs,
+      )
       await sleep(delay)
     }
   }

@@ -26,7 +26,7 @@ function readEnvFromRuntime(): EnvRecord {
     return bunEnv
   }
 
-  if (typeof process !== "undefined" && process.env) {
+  if (typeof process !== 'undefined' && process.env) {
     return process.env as EnvRecord
   }
 
@@ -38,7 +38,7 @@ async function readEnvFile(path: string): Promise<EnvRecord> {
 
   const bunFile = (globalThis as GlobalWithBun).Bun?.file
 
-  if (typeof bunFile === "function") {
+  if (typeof bunFile === 'function') {
     try {
       const file = bunFile(path)
       content = await file.text()
@@ -47,8 +47,8 @@ async function readEnvFile(path: string): Promise<EnvRecord> {
     }
   } else {
     try {
-      const fs = await import("node:fs/promises")
-      content = await fs.readFile(path, "utf8")
+      const fs = await import('node:fs/promises')
+      content = await fs.readFile(path, 'utf8')
     } catch {
       content = undefined
     }
@@ -63,11 +63,11 @@ async function readEnvFile(path: string): Promise<EnvRecord> {
   for (const line of content.split(/\r?\n/)) {
     const trimmed = line.trim()
 
-    if (!trimmed || trimmed.startsWith("#")) {
+    if (!trimmed || trimmed.startsWith('#')) {
       continue
     }
 
-    const index = trimmed.indexOf("=")
+    const index = trimmed.indexOf('=')
 
     if (index === -1) {
       continue
@@ -89,10 +89,14 @@ async function readEnvFile(path: string): Promise<EnvRecord> {
   return result
 }
 
-export async function loadPaystackConfig(options: LoadConfigOptions = {}): Promise<PaystackConfig> {
-  const prefix = options.envPrefix ?? ""
+export async function loadPaystackConfig(
+  options: LoadConfigOptions = {},
+): Promise<PaystackConfig> {
+  const prefix = options.envPrefix ?? ''
   const runtimeEnv = readEnvFromRuntime()
-  const fileEnv = options.envFilePath ? await readEnvFile(options.envFilePath) : {}
+  const fileEnv = options.envFilePath
+    ? await readEnvFile(options.envFilePath)
+    : {}
 
   const getEnv = (key: string): string | undefined => {
     const fullKey = `${prefix}${key}`
@@ -108,31 +112,28 @@ export async function loadPaystackConfig(options: LoadConfigOptions = {}): Promi
     return undefined
   }
 
-  const apiKey =
-    options.overrides?.apiKey ??
-    getEnv("PAYSTACK_SECRET_KEY")
+  const apiKey = options.overrides?.apiKey ?? getEnv('PAYSTACK_SECRET_KEY')
 
   if (!apiKey) {
     throw new Error(
-      "Missing Paystack API key. Set PAYSTACK_SECRET_KEY or provide overrides.apiKey.",
+      'Missing Paystack API key. Set PAYSTACK_SECRET_KEY or provide overrides.apiKey.',
     )
   }
 
   const baseUrl =
     options.overrides?.baseUrl ??
-    getEnv("PAYSTACK_BASE_URL") ??
-    "https://api.paystack.co"
+    getEnv('PAYSTACK_BASE_URL') ??
+    'https://api.paystack.co'
 
   const maxRetriesSource =
-    options.overrides?.maxRetries ??
-    getEnv("PAYSTACK_MAX_RETRIES")
+    options.overrides?.maxRetries ?? getEnv('PAYSTACK_MAX_RETRIES')
 
   const maxRetries =
-    typeof maxRetriesSource === "number"
+    typeof maxRetriesSource === 'number'
       ? maxRetriesSource
       : maxRetriesSource
-      ? Number(maxRetriesSource)
-      : 3
+        ? Number(maxRetriesSource)
+        : 3
 
   return {
     apiKey,

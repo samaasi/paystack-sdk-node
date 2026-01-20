@@ -1,15 +1,15 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
 export type PlanInterval =
-  | "hourly"
-  | "daily"
-  | "weekly"
-  | "monthly"
-  | "quarterly"
-  | "biannually"
-  | "annually"
+  | 'hourly'
+  | 'daily'
+  | 'weekly'
+  | 'monthly'
+  | 'quarterly'
+  | 'biannually'
+  | 'annually'
 
-export type PlanStatus = "active" | "inactive"
+export type PlanStatus = 'active' | 'inactive'
 
 export interface Plan {
   id: number

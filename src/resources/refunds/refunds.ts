@@ -1,16 +1,16 @@
 import type {
-    ListRefundsQuery,
-    RetryRefundRequest,
-    CreateRefundRequest,
-    GetRefundApiResponse,
-    ListRefundsApiResponse,
-    RetryRefundApiResponse,
-    CreateRefundApiResponse,
-} from "./refunds.types"
-import { BaseResource } from "../base"
+  ListRefundsQuery,
+  RetryRefundRequest,
+  CreateRefundRequest,
+  GetRefundApiResponse,
+  ListRefundsApiResponse,
+  RetryRefundApiResponse,
+  CreateRefundApiResponse,
+} from './refunds.types'
+import { BaseResource } from '../base'
 
 export class RefundsResource extends BaseResource {
-  private readonly basePath = "/refund"
+  private readonly basePath = '/refund'
 
   /**
    * Initiate a refund.
@@ -21,7 +21,7 @@ export class RefundsResource extends BaseResource {
    */
   create(payload: CreateRefundRequest): Promise<CreateRefundApiResponse> {
     return this.executor.execute<CreateRefundApiResponse>(this.basePath, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }
@@ -37,30 +37,30 @@ export class RefundsResource extends BaseResource {
     const search = new URLSearchParams()
 
     if (query.transaction !== undefined) {
-      search.set("transaction", String(query.transaction))
+      search.set('transaction', String(query.transaction))
     }
 
     if (query.from !== undefined) {
-      search.set("from", query.from)
+      search.set('from', query.from)
     }
 
     if (query.to !== undefined) {
-      search.set("to", query.to)
+      search.set('to', query.to)
     }
 
     if (query.perPage !== undefined) {
-      search.set("perPage", String(query.perPage))
+      search.set('perPage', String(query.perPage))
     }
 
     if (query.page !== undefined) {
-      search.set("page", String(query.page))
+      search.set('page', String(query.page))
     }
 
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
     return this.executor.execute<ListRefundsApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -76,7 +76,7 @@ export class RefundsResource extends BaseResource {
     const path = `${this.basePath}/${encodeURIComponent(identifier)}`
 
     return this.executor.execute<GetRefundApiResponse>(path, {
-      method: "GET",
+      method: 'GET',
     })
   }
 
@@ -97,7 +97,7 @@ export class RefundsResource extends BaseResource {
     )}`
 
     return this.executor.execute<RetryRefundApiResponse>(path, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
     })
   }

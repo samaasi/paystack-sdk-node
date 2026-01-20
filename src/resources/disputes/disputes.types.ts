@@ -1,12 +1,12 @@
-import type { ApiResponse, PaginationMetadata } from "../base"
+import type { ApiResponse, PaginationMetadata } from '../base'
 
 export type DisputeStatus =
-  | "waiting_evidence"
-  | "review"
-  | "resolved"
-  | "rejected"
-  | "chargeback"
-  | "settled"
+  | 'waiting_evidence'
+  | 'review'
+  | 'resolved'
+  | 'rejected'
+  | 'chargeback'
+  | 'settled'
 
 export interface DisputeCustomer {
   id: number

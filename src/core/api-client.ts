@@ -3,8 +3,8 @@ import {
   mapNetworkError,
   mapPaystackHttpError,
   type PaystackErrorResponse,
-} from "./error-handler"
-import { executeWithRetry, type RetryOptions } from "./retry-strategy"
+} from './error-handler'
+import { executeWithRetry, type RetryOptions } from './retry-strategy'
 
 export interface ApiClientOptions {
   apiKey: string
@@ -21,7 +21,7 @@ export class ApiClient {
 
   constructor(options: ApiClientOptions) {
     this.apiKey = options.apiKey
-    this.baseUrl = options.baseUrl ?? "https://api.paystack.co"
+    this.baseUrl = options.baseUrl ?? 'https://api.paystack.co'
     this.fetchImpl = options.fetchImpl
     this.retryOptions = options.retry
   }
@@ -48,7 +48,7 @@ export class ApiClient {
           ...init,
           headers: {
             Authorization: `Bearer ${this.apiKey}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             ...(extraHeaders ?? {}),
           },
         } as RequestInit)
@@ -93,28 +93,36 @@ export class ApiClient {
   }
 
   async get<T>(path: string, init: RequestInit = {}): Promise<T> {
-    return this.request<T>(path, { ...init, method: "GET" })
+    return this.request<T>(path, { ...init, method: 'GET' })
   }
 
-  async post<T, B = unknown>(path: string, body?: B, init: RequestInit = {}): Promise<T> {
+  async post<T, B = unknown>(
+    path: string,
+    body?: B,
+    init: RequestInit = {},
+  ): Promise<T> {
     const finalInit: RequestInit =
       body === undefined
-        ? { ...init, method: "POST" }
-        : { ...init, method: "POST", body: JSON.stringify(body) }
+        ? { ...init, method: 'POST' }
+        : { ...init, method: 'POST', body: JSON.stringify(body) }
 
     return this.request<T>(path, finalInit)
   }
 
-  async put<T, B = unknown>(path: string, body?: B, init: RequestInit = {}): Promise<T> {
+  async put<T, B = unknown>(
+    path: string,
+    body?: B,
+    init: RequestInit = {},
+  ): Promise<T> {
     const finalInit: RequestInit =
       body === undefined
-        ? { ...init, method: "PUT" }
-        : { ...init, method: "PUT", body: JSON.stringify(body) }
+        ? { ...init, method: 'PUT' }
+        : { ...init, method: 'PUT', body: JSON.stringify(body) }
 
     return this.request<T>(path, finalInit)
   }
 
   async delete<T>(path: string, init: RequestInit = {}): Promise<T> {
-    return this.request<T>(path, { ...init, method: "DELETE" })
+    return this.request<T>(path, { ...init, method: 'DELETE' })
   }
 }

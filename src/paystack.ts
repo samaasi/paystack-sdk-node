@@ -1,30 +1,30 @@
-import { loadPaystackConfig } from "./core/config"
-import { MiscResource } from "./resources/misc/misc"
-import { PlansResource } from "./resources/plans/plans"
-import { RequestExecutor } from "./core/request-executor"
-import { SplitsResource } from "./resources/splits/splits"
-import { StatusResource } from "./resources/status/status"
-import { ChargesResource } from "./resources/charges/charges"
-import { RefundsResource } from "./resources/refunds/refunds"
-import { DisputesResource } from "./resources/disputes/disputes"
-import { TerminalResource } from "./resources/terminal/terminal"
-import { ProductsResource } from "./resources/products/products"
-import { CustomersResource } from "./resources/customers/customers"
-import { TransfersResource } from "./resources/transfers/transfers"
-import type { PaystackConfig, LoadConfigOptions } from "./core/config"
-import { SubaccountsResource } from "./resources/subaccounts/subaccounts"
-import { IntegrationResource } from "./resources/integration/integration"
-import { SettlementsResource } from "./resources/settlements/settlements"
-import { BulkChargesResource } from "./resources/bulk-charges/bulk-charges"
-import { TransactionsResource } from "./resources/transactions/transactions"
-import { VerificationResource } from "./resources/verification/verification"
-import { PaymentPagesResource } from "./resources/payment-pages/payment-pages"
-import { SubscriptionsResource } from "./resources/subscriptions/subscriptions"
-import { VirtualAccountsResource } from "./resources/virtual-accounts/virtual-accounts"
-import { TransferRecipientsResource } from "./resources/transfer-recipients/recipients"
-import { TransferControlResource } from "./resources/transfer-control/transfer-control"
-import { PaymentRequestsResource } from "./resources/payment-requests/payment-requests"
-import { ApplePayResource } from "./resources/apple-pay/apple-pay"
+import { loadPaystackConfig } from './core/config'
+import { MiscResource } from './resources/misc/misc'
+import { PlansResource } from './resources/plans/plans'
+import { RequestExecutor } from './core/request-executor'
+import { SplitsResource } from './resources/splits/splits'
+import { StatusResource } from './resources/status/status'
+import { ChargesResource } from './resources/charges/charges'
+import { RefundsResource } from './resources/refunds/refunds'
+import { DisputesResource } from './resources/disputes/disputes'
+import { TerminalResource } from './resources/terminal/terminal'
+import { ProductsResource } from './resources/products/products'
+import { CustomersResource } from './resources/customers/customers'
+import { TransfersResource } from './resources/transfers/transfers'
+import type { PaystackConfig, LoadConfigOptions } from './core/config'
+import { SubaccountsResource } from './resources/subaccounts/subaccounts'
+import { IntegrationResource } from './resources/integration/integration'
+import { SettlementsResource } from './resources/settlements/settlements'
+import { BulkChargesResource } from './resources/bulk-charges/bulk-charges'
+import { TransactionsResource } from './resources/transactions/transactions'
+import { VerificationResource } from './resources/verification/verification'
+import { PaymentPagesResource } from './resources/payment-pages/payment-pages'
+import { SubscriptionsResource } from './resources/subscriptions/subscriptions'
+import { VirtualAccountsResource } from './resources/virtual-accounts/virtual-accounts'
+import { TransferRecipientsResource } from './resources/transfer-recipients/recipients'
+import { TransferControlResource } from './resources/transfer-control/transfer-control'
+import { PaymentRequestsResource } from './resources/payment-requests/payment-requests'
+import { ApplePayResource } from './resources/apple-pay/apple-pay'
 
 export interface PaystackClientConfig {
   apiKey: string
@@ -67,7 +67,7 @@ export class PaystackClient {
   constructor(config: PaystackClientConfig) {
     const normalized: PaystackConfig = {
       apiKey: config.apiKey,
-      baseUrl: config.baseUrl ?? "https://api.paystack.co",
+      baseUrl: config.baseUrl ?? 'https://api.paystack.co',
       maxRetries: config.maxRetries ?? 3,
     }
 

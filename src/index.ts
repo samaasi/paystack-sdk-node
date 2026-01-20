@@ -1,171 +1,112 @@
-export {
-  PaystackClient,
-  createPaystackClient,
-} from "./paystack"
+export { PaystackClient, createPaystackClient } from './paystack'
 
-export type {
-  PaystackEnvOptions,
-  PaystackClientConfig,
-} from "./paystack"
+export type { PaystackEnvOptions, PaystackClientConfig } from './paystack'
 
-export {
-  BaseResource,
-} from "./resources/base"
+export { BaseResource } from './resources/base'
 
 export type {
   ApiResponse,
   PaginationMetadata,
   BaseResourceOptions,
-} from "./resources/base"
+} from './resources/base'
 
-export {
-  TransactionsResource,
-} from "./resources/transactions/transactions"
+export { TransactionsResource } from './resources/transactions/transactions'
 
-export * from "./resources/transactions/transactions.types"
+export * from './resources/transactions/transactions.types'
 
-export {
-  CustomersResource,
-} from "./resources/customers/customers"
+export { CustomersResource } from './resources/customers/customers'
 
-export * from "./resources/customers/customers.types"
+export * from './resources/customers/customers.types'
 
-export {
-  VirtualAccountsResource,
-} from "./resources/virtual-accounts/virtual-accounts"
+export { VirtualAccountsResource } from './resources/virtual-accounts/virtual-accounts'
 
-export * from "./resources/virtual-accounts/virtual-accounts.types"
+export * from './resources/virtual-accounts/virtual-accounts.types'
 
-export {
-  TransfersResource,
-} from "./resources/transfers/transfers"
+export { TransfersResource } from './resources/transfers/transfers'
 
-export * from "./resources/transfers/transfers.types"
+export * from './resources/transfers/transfers.types'
 
-export {
-  DisputesResource,
-} from "./resources/disputes/disputes"
+export { DisputesResource } from './resources/disputes/disputes'
 
-export * from "./resources/disputes/disputes.types"
+export * from './resources/disputes/disputes.types'
 
-export {
-  MiscResource,
-} from "./resources/misc/misc"
+export { MiscResource } from './resources/misc/misc'
 
-export * from "./resources/misc/misc.types"
+export * from './resources/misc/misc.types'
 
-export {
-  IntegrationResource,
-} from "./resources/integration/integration"
+export { IntegrationResource } from './resources/integration/integration'
 
-export * from "./resources/integration/integration.types"
+export * from './resources/integration/integration.types'
 
-export {
-  StatusResource,
-} from "./resources/status/status"
+export { StatusResource } from './resources/status/status'
 
-export * from "./resources/status/status.types"
+export * from './resources/status/status.types'
 
-export {
-  VerificationResource,
-} from "./resources/verification/verification"
+export { VerificationResource } from './resources/verification/verification'
 
-export * from "./resources/verification/verification.types"
+export * from './resources/verification/verification.types'
 
-export {
-  TransferRecipientsResource,
-} from "./resources/transfer-recipients/recipients"
+export { TransferRecipientsResource } from './resources/transfer-recipients/recipients'
 
-export * from "./resources/transfer-recipients/recipients.types"
+export * from './resources/transfer-recipients/recipients.types'
 
-export {
-  TransferControlResource,
-} from "./resources/transfer-control/transfer-control"
+export { TransferControlResource } from './resources/transfer-control/transfer-control'
 
-export * from "./resources/transfer-control/transfer-control.types"
+export * from './resources/transfer-control/transfer-control.types'
 
-export {
-  TerminalResource,
-} from "./resources/terminal/terminal"
+export { TerminalResource } from './resources/terminal/terminal'
 
-export * from "./resources/terminal/terminal.types"
+export * from './resources/terminal/terminal.types'
 
-export {
-  SubaccountsResource,
-} from "./resources/subaccounts/subaccounts"
+export { SubaccountsResource } from './resources/subaccounts/subaccounts'
 
-export * from "./resources/subaccounts/subaccounts.types"
+export * from './resources/subaccounts/subaccounts.types'
 
-export {
-  ChargesResource,
-} from "./resources/charges/charges"
+export { ChargesResource } from './resources/charges/charges'
 
-export * from "./resources/charges/charges.types"
+export * from './resources/charges/charges.types'
 
-export {
-  BulkChargesResource,
-} from "./resources/bulk-charges/bulk-charges"
+export { BulkChargesResource } from './resources/bulk-charges/bulk-charges'
 
-export * from "./resources/bulk-charges/bulk-charges.types"
+export * from './resources/bulk-charges/bulk-charges.types'
 
-export {
-  PaymentPagesResource,
-} from "./resources/payment-pages/payment-pages"
+export { PaymentPagesResource } from './resources/payment-pages/payment-pages'
 
-export * from "./resources/payment-pages/payment-pages.types"
+export * from './resources/payment-pages/payment-pages.types'
 
-export {
-  PaymentRequestsResource,
-} from "./resources/payment-requests/payment-requests"
+export { PaymentRequestsResource } from './resources/payment-requests/payment-requests'
 
-export * from "./resources/payment-requests/payment-requests.types"
+export * from './resources/payment-requests/payment-requests.types'
 
-export {
-  ProductsResource,
-} from "./resources/products/products"
+export { ProductsResource } from './resources/products/products'
 
-export * from "./resources/products/products.types"
+export * from './resources/products/products.types'
 
-export {
-  PlansResource,
-} from "./resources/plans/plans"
+export { PlansResource } from './resources/plans/plans'
 
-export * from "./resources/plans/plans.types"
+export * from './resources/plans/plans.types'
 
-export {
-  RefundsResource,
-} from "./resources/refunds/refunds"
+export { RefundsResource } from './resources/refunds/refunds'
 
-export * from "./resources/refunds/refunds.types"
+export * from './resources/refunds/refunds.types'
 
-export {
-  SettlementsResource,
-} from "./resources/settlements/settlements"
+export { SettlementsResource } from './resources/settlements/settlements'
 
-export * from "./resources/settlements/settlements.types"
+export * from './resources/settlements/settlements.types'
 
-export {
-  SplitsResource,
-} from "./resources/splits/splits"
+export { SplitsResource } from './resources/splits/splits'
 
-export * from "./resources/splits/splits.types"
+export * from './resources/splits/splits.types'
 
-export {
-  ApplePayResource,
-} from "./resources/apple-pay/apple-pay"
+export { ApplePayResource } from './resources/apple-pay/apple-pay'
 
-export * from "./resources/apple-pay/apple-pay.types"
+export * from './resources/apple-pay/apple-pay.types'
 
-export {
-  SubscriptionsResource,
-} from "./resources/subscriptions/subscriptions"
+export { SubscriptionsResource } from './resources/subscriptions/subscriptions'
 
-export * from "./resources/subscriptions/subscriptions.types"
+export * from './resources/subscriptions/subscriptions.types'
 
-export * from "./resources/webhooks/webhooks"
-export * from "./resources/webhooks/webhooks.types"
+export * from './resources/webhooks/webhooks'
+export * from './resources/webhooks/webhooks.types'
 
-export {
-  withIdempotencyKey,
-  generateIdempotencyKey,
-} from "./utils/idempotency"
+export { withIdempotencyKey, generateIdempotencyKey } from './utils/idempotency'

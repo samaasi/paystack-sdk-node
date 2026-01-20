@@ -1,17 +1,17 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
 export type ChargeStatus =
-  | "pending"
-  | "success"
-  | "failed"
-  | "timeout"
-  | "send_pin"
-  | "send_otp"
-  | "send_phone"
-  | "send_birthday"
-  | "send_address"
-  | "open_url"
-  | "pay_offline"
+  | 'pending'
+  | 'success'
+  | 'failed'
+  | 'timeout'
+  | 'send_pin'
+  | 'send_otp'
+  | 'send_phone'
+  | 'send_birthday'
+  | 'send_address'
+  | 'open_url'
+  | 'pay_offline'
 
 export interface ChargeCardDetails {
   cvv: string

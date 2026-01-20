@@ -1,12 +1,12 @@
 export function generateIdempotencyKey(): string {
   const globalCrypto = (globalThis as { crypto?: Crypto }).crypto
 
-  if (globalCrypto && typeof globalCrypto.randomUUID === "function") {
+  if (globalCrypto && typeof globalCrypto.randomUUID === 'function') {
     return globalCrypto.randomUUID()
   }
 
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
-  let value = ""
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  let value = ''
 
   for (let i = 0; i < 24; i += 1) {
     const index = Math.floor(Math.random() * chars.length)
@@ -30,14 +30,14 @@ export function withIdempotencyKey(
     return {
       ...init,
       headers: {
-        "x-idempotency-key": idempotencyKey,
+        'x-idempotency-key': idempotencyKey,
       },
     }
   }
 
   if (existing instanceof Headers) {
     const clone = new Headers(existing)
-    clone.set("x-idempotency-key", idempotencyKey)
+    clone.set('x-idempotency-key', idempotencyKey)
 
     return {
       ...init,
@@ -49,7 +49,7 @@ export function withIdempotencyKey(
     ...init,
     headers: {
       ...(existing as Record<string, string>),
-      "x-idempotency-key": idempotencyKey,
+      'x-idempotency-key': idempotencyKey,
     },
   }
 }

@@ -1,4 +1,4 @@
-import type { WebhookEvent } from "./webhooks.types"
+import type { WebhookEvent } from './webhooks.types'
 
 /**
  * Type guard to check if a value is a valid WebhookEvent.
@@ -7,17 +7,17 @@ import type { WebhookEvent } from "./webhooks.types"
  * @returns True if the value is a WebhookEvent, false otherwise
  */
 export function isWebhookEvent(value: unknown): value is WebhookEvent {
-  if (!value || typeof value !== "object") {
+  if (!value || typeof value !== 'object') {
     return false
   }
 
   const record = value as Record<string, unknown>
 
-  if (typeof record.event !== "string") {
+  if (typeof record.event !== 'string') {
     return false
   }
 
-  if (!("data" in record)) {
+  if (!('data' in record)) {
     return false
   }
 

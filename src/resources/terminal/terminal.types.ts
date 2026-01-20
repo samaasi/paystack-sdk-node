@@ -1,6 +1,6 @@
-import type { ApiResponse } from "../base"
+import type { ApiResponse } from '../base'
 
-export type TerminalStatus = "active" | "inactive"
+export type TerminalStatus = 'active' | 'inactive'
 
 export interface Terminal {
   id: number
