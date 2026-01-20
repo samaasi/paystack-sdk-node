@@ -45,6 +45,11 @@
       "import": "./dist/webhooks.js",
       "require": "./dist/webhooks.cjs"
     },
+    "./fastify": {
+      "types": "./dist/fastify.d.ts",
+      "import": "./dist/fastify.js",
+      "require": "./dist/fastify.cjs"
+    },
     "./nextjs": {
       "types": "./dist/nextjs.d.ts",
       "import": "./dist/nextjs.js",
