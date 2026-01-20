@@ -1,5 +1,5 @@
-import { describe, expect, test, mock, beforeEach } from "bun:test"
-import { PaystackClient } from "../src/index"
+import { PaystackClient, createPaystackClient } from "../src/index"
+import { describe, expect, test, mock, beforeEach, afterEach } from "bun:test"
 
 describe("PaystackClient", () => {
   const mockFetch = mock((url: any, init: any) => Promise.resolve(new Response(JSON.stringify({
@@ -16,6 +16,14 @@ describe("PaystackClient", () => {
     const client = new PaystackClient({ apiKey: "sk_test_123" })
     expect(client).toBeDefined()
     expect(client.applePay).toBeDefined()
+  })
+
+  test("createPaystackClient helper works", async () => {
+    process.env.PAYSTACK_SECRET_KEY = "sk_env_helper"
+    const client = await createPaystackClient()
+    expect(client).toBeDefined()
+    // We can't easily check internal state, but instantiation without error is good
+    delete process.env.PAYSTACK_SECRET_KEY
   })
 
   test("Apple Pay resource makes correct request", async () => {
