@@ -13,9 +13,20 @@ export interface CreateTransferRecipientOptions {
   idempotencyKey?: string
 }
 
+/**
+ * Transfer Recipients resource
+ * @see https://paystack.com/docs/api/transfer-recipient/
+ */
 export class TransferRecipientsResource extends BaseResource {
   private readonly basePath = "/transferrecipient"
 
+  /**
+   * Create a transfer recipient
+   * @param payload - The recipient details
+   * @param options - Additional options (idempotency key)
+   * @returns A promise resolving to the created recipient
+   * @see https://paystack.com/docs/api/transfer-recipient/#create
+   */
   create(
     payload: CreateTransferRecipientRequest,
     options: CreateTransferRecipientOptions = {},
@@ -34,6 +45,11 @@ export class TransferRecipientsResource extends BaseResource {
     )
   }
 
+  /**
+   * List transfer recipients
+   * @returns A promise resolving to the list of recipients
+   * @see https://paystack.com/docs/api/transfer-recipient/#list
+   */
   list(): Promise<ListTransferRecipientsResponse> {
     return this.executor.execute<ListTransferRecipientsResponse>(
       this.basePath,
@@ -43,6 +59,12 @@ export class TransferRecipientsResource extends BaseResource {
     )
   }
 
+  /**
+   * Fetch a transfer recipient
+   * @param recipientIdOrCode - The recipient ID or code
+   * @returns A promise resolving to the recipient details
+   * @see https://paystack.com/docs/api/transfer-recipient/#fetch
+   */
   fetch(
     recipientIdOrCode: string | number,
   ): Promise<FetchTransferRecipientResponse> {
@@ -56,6 +78,13 @@ export class TransferRecipientsResource extends BaseResource {
     )
   }
 
+  /**
+   * Update a transfer recipient
+   * @param recipientCode - The recipient code
+   * @param payload - The update details
+   * @returns A promise resolving to the updated recipient
+   * @see https://paystack.com/docs/api/transfer-recipient/#update
+   */
   update(
     recipientCode: string,
     payload: UpdateTransferRecipientRequest,

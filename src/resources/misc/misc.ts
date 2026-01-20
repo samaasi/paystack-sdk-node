@@ -15,6 +15,13 @@ export class MiscResource extends BaseResource {
   private readonly addressBasePath = "/address"
   private readonly decisionBasePath = "/decision"
 
+  /**
+   * List banks.
+   *
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of banks
+   * @see https://paystack.com/docs/api/misc/#list-banks
+   */
   listBanks(query: ListBanksQuery = {}): Promise<ListBanksResponse> {
     const search = new URLSearchParams()
 
@@ -36,6 +43,12 @@ export class MiscResource extends BaseResource {
     })
   }
 
+  /**
+   * List countries.
+   *
+   * @returns A promise resolving to the list of countries
+   * @see https://paystack.com/docs/api/misc/#list-countries
+   */
   listCountries(): Promise<ListCountriesResponse> {
     return this.executor.execute<ListCountriesResponse>(
       this.countryBasePath,
@@ -45,6 +58,12 @@ export class MiscResource extends BaseResource {
     )
   }
 
+  /**
+   * List states.
+   *
+   * @returns A promise resolving to the list of states
+   * @see https://paystack.com/docs/api/misc/#list-states
+   */
   listStates(): Promise<ListStatesResponse> {
     const path = `${this.addressBasePath}/pyramid/states`
 
@@ -53,6 +72,13 @@ export class MiscResource extends BaseResource {
     })
   }
 
+  /**
+   * Resolve a card BIN.
+   *
+   * @param bin - The card BIN
+   * @returns A promise resolving to the BIN details
+   * @see https://paystack.com/docs/api/misc/#resolve-card-bin
+   */
   resolveCardBin(bin: string): Promise<ResolveCardBinResponse> {
     const path = `${this.decisionBasePath}/bin/${encodeURIComponent(bin)}`
 
@@ -61,6 +87,13 @@ export class MiscResource extends BaseResource {
     })
   }
 
+  /**
+   * Resolve an account number.
+   *
+   * @param params - The account resolution parameters (account number, bank code)
+   * @returns A promise resolving to the account details
+   * @see https://paystack.com/docs/api/misc/#resolve-account-number
+   */
   resolveAccount(
     params: ResolveAccountLookupRequest,
   ): Promise<ResolveAccountLookupResponse> {

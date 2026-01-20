@@ -17,6 +17,9 @@ export class TransfersResource extends BaseResource {
   /**
    * Initiate a single transfer.
    *
+   * @param payload - The transfer details
+   * @param options - Optional parameters (e.g., idempotency key)
+   * @returns A promise resolving to the transfer response
    * @see https://paystack.com/docs/api/transfer/#initiate
    */
   initiate(
@@ -37,6 +40,8 @@ export class TransfersResource extends BaseResource {
   /**
    * Finalize a transfer that requires OTP.
    *
+   * @param payload - The finalization details (OTP, transfer code)
+   * @returns A promise resolving to the finalization response
    * @see https://paystack.com/docs/api/transfer/#finalize
    */
   finalize(

@@ -45,6 +45,14 @@ export class SettlementsResource extends BaseResource {
     })
   }
 
+  /**
+   * List settlement transactions.
+   *
+   * @param settlementId - The settlement ID
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of transactions in the settlement
+   * @see https://paystack.com/docs/api/settlement/#transactions
+   */
   listTransactions(
     settlementId: number | string,
     query: ListSettlementTransactionsQuery = {},

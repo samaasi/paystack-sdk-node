@@ -90,6 +90,8 @@ export class VirtualAccountsResource extends BaseResource {
   /**
    * Re-query a dedicated virtual account for new transactions.
    *
+   * @param params - The requery parameters
+   * @returns A promise resolving to the requery response
    * @see https://paystack.com/docs/api/dedicated-virtual-account/#requery
    */
   requery(

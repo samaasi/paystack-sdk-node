@@ -19,6 +19,13 @@ export class PaymentPagesResource extends BaseResource {
     })
   }
 
+  /**
+   * List payment pages.
+   *
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of payment pages
+   * @see https://paystack.com/docs/api/page/#list
+   */
   list(
     query: ListPaymentPagesQuery = {},
   ): Promise<ListPaymentPagesApiResponse> {
@@ -58,6 +65,14 @@ export class PaymentPagesResource extends BaseResource {
     })
   }
 
+  /**
+   * Update a payment page.
+   *
+   * @param idOrSlug - The payment page ID or slug
+   * @param payload - The update payload
+   * @returns A promise resolving to the updated payment page
+   * @see https://paystack.com/docs/api/page/#update
+   */
   update(
     idOrSlug: string | number,
     payload: UpdatePaymentPageRequest,
@@ -70,6 +85,13 @@ export class PaymentPagesResource extends BaseResource {
     })
   }
 
+  /**
+   * Check if a slug is available.
+   *
+   * @param payload - The slug to check
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/page/#check-slug
+   */
   checkSlug(payload: CheckSlugRequest): Promise<CheckSlugApiResponse> {
     const path = `${this.basePath}/check_slug`
 

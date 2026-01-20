@@ -12,6 +12,13 @@ import { BaseResource } from "../base"
 export class BulkChargesResource extends BaseResource {
   private readonly basePath = "/bulkcharge"
 
+  /**
+   * Create a bulk charge.
+   *
+   * @param payload - The bulk charge creation payload
+   * @returns A promise resolving to the created bulk charge details
+   * @see https://paystack.com/docs/api/bulk-charge/#initiate
+   */
   create(payload: CreateBulkChargeRequest): Promise<CreateBulkChargeApiResponse> {
     return this.executor.execute<CreateBulkChargeApiResponse>(this.basePath, {
       method: "POST",
@@ -19,6 +26,13 @@ export class BulkChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * List bulk charge batches.
+   *
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of bulk charge batches
+   * @see https://paystack.com/docs/api/bulk-charge/#list
+   */
   listBatches(
     query: ListBulkChargeBatchesQuery = {},
   ): Promise<ListBulkChargeBatchesApiResponse> {
@@ -54,6 +68,13 @@ export class BulkChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Fetch a bulk charge batch.
+   *
+   * @param batchCode - The bulk charge batch code
+   * @returns A promise resolving to the batch details
+   * @see https://paystack.com/docs/api/bulk-charge/#fetch
+   */
   get(batchCode: string): Promise<GetBulkChargeBatchApiResponse> {
     const path = `${this.basePath}/${encodeURIComponent(batchCode)}`
 
@@ -62,6 +83,14 @@ export class BulkChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * List charges in a batch.
+   *
+   * @param batchCode - The bulk charge batch code
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of charges in the batch
+   * @see https://paystack.com/docs/api/bulk-charge/#fetch-charges
+   */
   listItems(
     batchCode: string,
     query: ListBulkChargeItemsQuery = {},
@@ -92,6 +121,13 @@ export class BulkChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Pause a bulk charge batch.
+   *
+   * @param batchCode - The bulk charge batch code
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/bulk-charge/#pause
+   */
   pause(batchCode: string): Promise<GetBulkChargeBatchApiResponse> {
     const path = `${this.basePath}/pause/${encodeURIComponent(batchCode)}`
 
@@ -100,6 +136,13 @@ export class BulkChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Resume a bulk charge batch.
+   *
+   * @param batchCode - The bulk charge batch code
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/bulk-charge/#resume
+   */
   resume(batchCode: string): Promise<GetBulkChargeBatchApiResponse> {
     const path = `${this.basePath}/resume/${encodeURIComponent(batchCode)}`
 

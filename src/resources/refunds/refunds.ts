@@ -12,6 +12,13 @@ import { BaseResource } from "../base"
 export class RefundsResource extends BaseResource {
   private readonly basePath = "/refund"
 
+  /**
+   * Initiate a refund.
+   *
+   * @param payload - The refund creation details
+   * @returns A promise resolving to the refund creation response
+   * @see https://paystack.com/docs/api/refund/#create
+   */
   create(payload: CreateRefundRequest): Promise<CreateRefundApiResponse> {
     return this.executor.execute<CreateRefundApiResponse>(this.basePath, {
       method: "POST",
@@ -57,6 +64,13 @@ export class RefundsResource extends BaseResource {
     })
   }
 
+  /**
+   * Fetch a refund details.
+   *
+   * @param idOrReference - The refund ID or reference
+   * @returns A promise resolving to the refund details
+   * @see https://paystack.com/docs/api/refund/#fetch
+   */
   get(idOrReference: number | string): Promise<GetRefundApiResponse> {
     const identifier = String(idOrReference)
     const path = `${this.basePath}/${encodeURIComponent(identifier)}`

@@ -43,6 +43,8 @@ export class TransactionsResource extends BaseResource {
   /**
    * Verify the status of a transaction using its reference.
    *
+   * @param reference - The transaction reference
+   * @returns A promise resolving to the transaction verification details
    * @see https://paystack.com/docs/api/transaction/#verify
    */
   verify(reference: string): Promise<VerifyTransactionApiResponse> {

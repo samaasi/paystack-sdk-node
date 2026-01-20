@@ -21,6 +21,12 @@ export class StatusResource {
     this.baseUrl = options.baseUrl ?? "https://status.paystack.com"
   }
 
+  /**
+   * Check Paystack API status.
+   *
+   * @returns A promise resolving to the status summary
+   * @see https://status.paystack.com/
+   */
   async check(): Promise<StatusSummaryResponse> {
     const trimmedBase = this.baseUrl.replace(/\/$/, "")
     const url = `${trimmedBase}/api/v2/summary.json`

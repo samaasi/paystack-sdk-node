@@ -12,6 +12,13 @@ import { BaseResource } from "../base"
 export class ProductsResource extends BaseResource {
   private readonly basePath = "/product"
 
+  /**
+   * Create a product.
+   *
+   * @param payload - The product creation payload
+   * @returns A promise resolving to the created product
+   * @see https://paystack.com/docs/api/product/#create
+   */
   create(payload: CreateProductRequest): Promise<CreateProductApiResponse> {
     return this.executor.execute<CreateProductApiResponse>(this.basePath, {
       method: "POST",
@@ -48,6 +55,13 @@ export class ProductsResource extends BaseResource {
     })
   }
 
+  /**
+   * Fetch a product.
+   *
+   * @param id - The product ID
+   * @returns A promise resolving to the product details
+   * @see https://paystack.com/docs/api/product/#fetch
+   */
   get(id: number): Promise<GetProductApiResponse> {
     const path = `${this.basePath}/${id}`
 
@@ -56,6 +70,14 @@ export class ProductsResource extends BaseResource {
     })
   }
 
+  /**
+   * Update a product.
+   *
+   * @param id - The product ID
+   * @param payload - The update payload
+   * @returns A promise resolving to the updated product
+   * @see https://paystack.com/docs/api/product/#update
+   */
   update(
     id: number,
     payload: UpdateProductRequest,

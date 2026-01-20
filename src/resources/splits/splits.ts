@@ -16,6 +16,13 @@ import { BaseResource } from "../base"
 export class SplitsResource extends BaseResource {
   private readonly basePath = "/split"
 
+  /**
+   * Create a transaction split.
+   *
+   * @param payload - The split creation payload
+   * @returns A promise resolving to the created split
+   * @see https://paystack.com/docs/api/split/#create
+   */
   create(payload: CreateSplitRequest): Promise<CreateSplitApiResponse> {
     return this.executor.execute<CreateSplitApiResponse>(this.basePath, {
       method: "POST",
@@ -23,6 +30,13 @@ export class SplitsResource extends BaseResource {
     })
   }
 
+  /**
+   * List transaction splits.
+   *
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of splits
+   * @see https://paystack.com/docs/api/split/#list
+   */
   list(query: ListSplitsQuery = {}): Promise<ListSplitsApiResponse> {
     const search = new URLSearchParams()
 
@@ -62,6 +76,13 @@ export class SplitsResource extends BaseResource {
     })
   }
 
+  /**
+   * Get details of a split.
+   *
+   * @param id - The split ID or code
+   * @returns A promise resolving to the split details
+   * @see https://paystack.com/docs/api/split/#fetch
+   */
   get(id: number | string): Promise<GetSplitApiResponse> {
     const identifier = String(id)
     const path = `${this.basePath}/${encodeURIComponent(identifier)}`
@@ -71,6 +92,14 @@ export class SplitsResource extends BaseResource {
     })
   }
 
+  /**
+   * Update a transaction split.
+   *
+   * @param id - The split ID or code
+   * @param payload - The update payload
+   * @returns A promise resolving to the updated split
+   * @see https://paystack.com/docs/api/split/#update
+   */
   update(
     id: number | string,
     payload: UpdateSplitRequest,
@@ -99,6 +128,14 @@ export class SplitsResource extends BaseResource {
     })
   }
 
+  /**
+   * Remove a subaccount from a split.
+   *
+   * @param id - The split ID or code
+   * @param payload - The subaccount to remove
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/split/#remove-subaccount
+   */
   removeSubaccount(
     id: number | string,
     payload: RemoveSubaccountRequest,

@@ -13,6 +13,13 @@ import { BaseResource } from "../base"
 export class DisputesResource extends BaseResource {
   private readonly basePath = "/dispute"
 
+  /**
+   * List disputes.
+   *
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of disputes
+   * @see https://paystack.com/docs/api/dispute/#list
+   */
   list(query: ListDisputesQuery = {}): Promise<ListDisputesApiResponse> {
     const search = new URLSearchParams()
 
@@ -54,6 +61,13 @@ export class DisputesResource extends BaseResource {
     })
   }
 
+  /**
+   * Fetch a dispute.
+   *
+   * @param id - The dispute ID
+   * @returns A promise resolving to the dispute details
+   * @see https://paystack.com/docs/api/dispute/#fetch
+   */
   get(id: number): Promise<GetDisputeApiResponse> {
     return this.executor.execute<GetDisputeApiResponse>(
       `${this.basePath}/${id}`,
@@ -63,6 +77,13 @@ export class DisputesResource extends BaseResource {
     )
   }
 
+  /**
+   * List disputes for a transaction.
+   *
+   * @param transactionId - The transaction ID
+   * @returns A promise resolving to the list of disputes for the transaction
+   * @see https://paystack.com/docs/api/dispute/#list-transaction-disputes
+   */
   listForTransaction(
     transactionId: number,
   ): Promise<ListTransactionDisputesApiResponse> {
@@ -73,6 +94,14 @@ export class DisputesResource extends BaseResource {
     })
   }
 
+  /**
+   * Submit evidence for a dispute.
+   *
+   * @param id - The dispute ID
+   * @param payload - The evidence payload
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/dispute/#submit-evidence
+   */
   submitEvidence(
     id: number,
     payload: SubmitEvidenceRequest,
@@ -85,6 +114,13 @@ export class DisputesResource extends BaseResource {
     })
   }
 
+  /**
+   * Get upload URL for dispute evidence.
+   *
+   * @param id - The dispute ID
+   * @returns A promise resolving to the upload URL
+   * @see https://paystack.com/docs/api/dispute/#upload-url
+   */
   getUploadUrl(id: number): Promise<GetUploadUrlApiResponse> {
     const path = `${this.basePath}/${id}/upload_url`
 

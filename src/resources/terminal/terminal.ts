@@ -24,6 +24,14 @@ export class TerminalResource extends BaseResource {
     )
   }
 
+  /**
+   * Send an event to a terminal.
+   *
+   * @param idOrCode - The terminal ID or code
+   * @param payload - The event payload
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/terminal/#send-event
+   */
   sendEvent(
     idOrCode: string,
     payload: SendEventRequest,

@@ -1,5 +1,11 @@
 import type { WebhookEvent } from "./webhooks.types"
 
+/**
+ * Type guard to check if a value is a valid WebhookEvent.
+ *
+ * @param value - The value to check
+ * @returns True if the value is a WebhookEvent, false otherwise
+ */
 export function isWebhookEvent(value: unknown): value is WebhookEvent {
   if (!value || typeof value !== "object") {
     return false

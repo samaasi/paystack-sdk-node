@@ -28,6 +28,13 @@ export class PlansResource extends BaseResource {
     })
   }
 
+  /**
+   * List plans on your integration.
+   *
+   * @param query - The query parameters for listing plans
+   * @returns A promise resolving to the list of plans
+   * @see https://paystack.com/docs/api/plan/#list
+   */
   list(query: ListPlansQuery = {}): Promise<ListPlansApiResponse> {
     const search = new URLSearchParams()
 
@@ -67,6 +74,13 @@ export class PlansResource extends BaseResource {
     })
   }
 
+  /**
+   * Fetch a plan on your integration.
+   *
+   * @param idOrCode - The plan ID or code
+   * @returns A promise resolving to the plan details
+   * @see https://paystack.com/docs/api/plan/#fetch
+   */
   get(idOrCode: number | string): Promise<GetPlanApiResponse> {
     const id = String(idOrCode)
     const path = `${this.basePath}/${encodeURIComponent(id)}`

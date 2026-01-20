@@ -9,6 +9,13 @@ import type {
 export class SubscriptionsResource extends BaseResource {
   private readonly basePath = "/subscription"
 
+  /**
+   * Create a subscription.
+   *
+   * @param payload - The subscription creation payload
+   * @returns A promise resolving to the created subscription
+   * @see https://paystack.com/docs/api/subscription/#create
+   */
   create(
     payload: CreateSubscriptionRequest,
   ): Promise<CreateSubscriptionResponse> {
@@ -18,12 +25,25 @@ export class SubscriptionsResource extends BaseResource {
     })
   }
 
+  /**
+   * List subscriptions.
+   *
+   * @returns A promise resolving to the list of subscriptions
+   * @see https://paystack.com/docs/api/subscription/#list
+   */
   list(): Promise<ListSubscriptionsResponse> {
     return this.executor.execute<ListSubscriptionsResponse>(this.basePath, {
       method: "GET",
     })
   }
 
+  /**
+   * Fetch a subscription.
+   *
+   * @param codeOrId - The subscription code or ID
+   * @returns A promise resolving to the subscription details
+   * @see https://paystack.com/docs/api/subscription/#fetch
+   */
   fetch(codeOrId: string | number): Promise<FetchSubscriptionResponse> {
     const id = String(codeOrId)
 
@@ -35,6 +55,14 @@ export class SubscriptionsResource extends BaseResource {
     )
   }
 
+  /**
+   * Disable a subscription.
+   *
+   * @param code - The subscription code
+   * @param token - The email token for disabling
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/subscription/#disable
+   */
   disable(code: string, token: string): Promise<FetchSubscriptionResponse> {
     const body = JSON.stringify({ code, token })
 

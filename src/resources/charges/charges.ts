@@ -80,6 +80,13 @@ export class ChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Submit birthday to complete a charge.
+   *
+   * @param payload - The birthday submission details
+   * @returns A promise resolving to the birthday submission response
+   * @see https://paystack.com/docs/api/charge/#submit-birthday
+   */
   submitBirthday(
     payload: SubmitBirthdayRequest,
   ): Promise<SubmitBirthdayApiResponse> {

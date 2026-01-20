@@ -11,6 +11,13 @@ import type {
 export class SubaccountsResource extends BaseResource {
   private readonly basePath = "/subaccount"
 
+  /**
+   * Create a subaccount.
+   *
+   * @param payload - The subaccount creation payload
+   * @returns A promise resolving to the created subaccount
+   * @see https://paystack.com/docs/api/subaccount/#create
+   */
   create(
     payload: CreateSubaccountRequest,
   ): Promise<CreateSubaccountResponse> {
@@ -20,12 +27,25 @@ export class SubaccountsResource extends BaseResource {
     })
   }
 
+  /**
+   * List subaccounts.
+   *
+   * @returns A promise resolving to the list of subaccounts
+   * @see https://paystack.com/docs/api/subaccount/#list
+   */
   list(): Promise<ListSubaccountsResponse> {
     return this.executor.execute<ListSubaccountsResponse>(this.basePath, {
       method: "GET",
     })
   }
 
+  /**
+   * Fetch a subaccount.
+   *
+   * @param codeOrId - The subaccount code or ID
+   * @returns A promise resolving to the subaccount details
+   * @see https://paystack.com/docs/api/subaccount/#fetch
+   */
   fetch(codeOrId: string | number): Promise<FetchSubaccountResponse> {
     const id = String(codeOrId)
 
@@ -37,6 +57,14 @@ export class SubaccountsResource extends BaseResource {
     )
   }
 
+  /**
+   * Update a subaccount.
+   *
+   * @param code - The subaccount code
+   * @param payload - The update payload
+   * @returns A promise resolving to the updated subaccount
+   * @see https://paystack.com/docs/api/subaccount/#update
+   */
   update(
     code: string,
     payload: UpdateSubaccountRequest,

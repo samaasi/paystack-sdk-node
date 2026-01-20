@@ -12,6 +12,13 @@ import { BaseResource } from "../base"
 export class PaymentRequestsResource extends BaseResource {
   private readonly basePath = "/paymentrequest"
 
+  /**
+   * Create a payment request.
+   *
+   * @param payload - The payment request creation payload
+   * @returns A promise resolving to the created payment request
+   * @see https://paystack.com/docs/api/payment-request/#create
+   */
   create(
     payload: CreatePaymentRequestRequest,
   ): Promise<GetPaymentRequestApiResponse> {
@@ -21,6 +28,13 @@ export class PaymentRequestsResource extends BaseResource {
     })
   }
 
+  /**
+   * List payment requests.
+   *
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of payment requests
+   * @see https://paystack.com/docs/api/payment-request/#list
+   */
   list(
     query: ListPaymentRequestsQuery = {},
   ): Promise<ListPaymentRequestsApiResponse> {
@@ -56,6 +70,13 @@ export class PaymentRequestsResource extends BaseResource {
     })
   }
 
+  /**
+   * Fetch a payment request.
+   *
+   * @param id - The payment request ID
+   * @returns A promise resolving to the payment request details
+   * @see https://paystack.com/docs/api/payment-request/#fetch
+   */
   get(id: number): Promise<GetPaymentRequestApiResponse> {
     const path = `${this.basePath}/${id}`
 
@@ -64,6 +85,14 @@ export class PaymentRequestsResource extends BaseResource {
     })
   }
 
+  /**
+   * Update a payment request.
+   *
+   * @param id - The payment request ID
+   * @param payload - The update payload
+   * @returns A promise resolving to the updated payment request
+   * @see https://paystack.com/docs/api/payment-request/#update
+   */
   update(
     id: number,
     payload: UpdatePaymentRequestRequest,
@@ -76,6 +105,13 @@ export class PaymentRequestsResource extends BaseResource {
     })
   }
 
+  /**
+   * Send notification for a payment request.
+   *
+   * @param id - The payment request ID
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/payment-request/#notify
+   */
   sendNotification(id: number): Promise<GetPaymentRequestApiResponse> {
     const path = `${this.basePath}/notify/${id}`
 
@@ -84,6 +120,12 @@ export class PaymentRequestsResource extends BaseResource {
     })
   }
 
+  /**
+   * Get payment request totals.
+   *
+   * @returns A promise resolving to the totals
+   * @see https://paystack.com/docs/api/payment-request/#totals
+   */
   totals(): Promise<GetPaymentRequestTotalsApiResponse> {
     const path = `${this.basePath}/totals`
 
@@ -100,6 +142,13 @@ export class PaymentRequestsResource extends BaseResource {
     })
   }
 
+  /**
+   * Archive a payment request.
+   *
+   * @param id - The payment request ID
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/payment-request/#archive
+   */
   archive(id: number): Promise<GetPaymentRequestApiResponse> {
     const path = `${this.basePath}/archive/${id}`
 

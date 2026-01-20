@@ -41,6 +41,8 @@ export class CustomersResource extends BaseResource {
   /**
    * List customers available on your integration.
    *
+   * @param query - The query parameters for filtering (perPage, page)
+   * @returns A promise resolving to the list of customers
    * @see https://paystack.com/docs/api/customer/#list
    */
   list(query: ListCustomersQuery = {}): Promise<ListCustomersResponse> {
