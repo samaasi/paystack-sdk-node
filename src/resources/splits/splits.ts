@@ -113,6 +113,14 @@ export class SplitsResource extends BaseResource {
     })
   }
 
+  /**
+   * Add a subaccount to a split.
+   *
+   * @param id - The split ID or code
+   * @param payload - The subaccount to add
+   * @returns A promise resolving to the result
+   * @see https://paystack.com/docs/api/split/#add-subaccount
+   */
   addSubaccount(
     id: number | string,
     payload: AddSubaccountRequest,
