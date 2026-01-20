@@ -91,6 +91,31 @@ describe("Paystack Resources", () => {
         interval: "monthly"
       })
     })
+
+    test("list handles query params", async () => {
+      await client.plans.list({ status: "active", interval: "monthly" })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [url] = mockFetch.mock.calls[0]!
+      expect(url).toContain("/plan")
+      expect(url).toContain("status=active")
+      expect(url).toContain("interval=monthly")
+    })
+
+    test("get calls correct endpoint", async () => {
+      await client.plans.get("PLN_123")
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [url] = mockFetch.mock.calls[0]!
+      expect(url).toContain("/plan/PLN_123")
+    })
+
+    test("update sends correct payload", async () => {
+      await client.plans.update("PLN_123", { name: "New Name" })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [url, init] = mockFetch.mock.calls[0]!
+      expect(url).toContain("/plan/PLN_123")
+      expect(init.method).toBe("PUT")
+      expect(JSON.parse(init.body as string)).toEqual({ name: "New Name" })
+    })
   })
 
   describe("Transfers", () => {
@@ -110,6 +135,15 @@ describe("Paystack Resources", () => {
         amount: 50000,
         recipient: "RCP_gx2wn530m0i3w3m"
       })
+    })
+
+    test("finalize sends correct payload", async () => {
+      await client.transfers.finalize({ transfer_code: "TRF_123", otp: "123456" })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [url, init] = mockFetch.mock.calls[0]!
+      expect(url).toContain("/transfer/finalize_transfer")
+      expect(init.method).toBe("POST")
+      expect(JSON.parse(init.body as string)).toEqual({ transfer_code: "TRF_123", otp: "123456" })
     })
   })
 
