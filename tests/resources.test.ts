@@ -127,5 +127,46 @@ describe("Paystack Resources", () => {
       expect(url).toContain("bank_code=058")
       expect(init.method).toBe("GET")
     })
+
+    test("resolveBvn calls correct endpoint", async () => {
+      await client.verification.resolveBvn("12345678901")
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [url] = mockFetch.mock.calls[0]!
+      expect(url).toContain("/bank/resolve_bvn/12345678901")
+    })
+
+    test("matchBvn sends correct query params", async () => {
+      await client.verification.matchBvn({
+        account_number: "0001234567",
+        bank_code: "058",
+        bvn: "12345678901"
+      })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [url] = mockFetch.mock.calls[0]!
+      expect(url).toContain("/bank/match_bvn")
+      expect(url).toContain("account_number=0001234567")
+      expect(url).toContain("bank_code=058")
+      expect(url).toContain("bvn=12345678901")
+    })
+  })
+
+  describe("Apple Pay", () => {
+    test("registerDomain sends correct payload", async () => {
+      await client.applePay.registerDomain({ domainName: "example.com" })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [url, init] = mockFetch.mock.calls[0]!
+      expect(url).toContain("/apple-pay/domain")
+      expect(init.method).toBe("POST")
+      expect(JSON.parse(init.body as string)).toEqual({ domainName: "example.com" })
+    })
+
+    test("unregisterDomain sends correct payload", async () => {
+      await client.applePay.unregisterDomain({ domainName: "example.com" })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [url, init] = mockFetch.mock.calls[0]!
+      expect(url).toContain("/apple-pay/domain")
+      expect(init.method).toBe("DELETE")
+      expect(JSON.parse(init.body as string)).toEqual({ domainName: "example.com" })
+    })
   })
 })
