@@ -47,7 +47,7 @@ export interface RetryRefundRequest {
 }
 
 export interface ListRefundsQuery {
-  transaction?: number
+  transaction?: number | string
   from?: string
   to?: string
   perPage?: number
