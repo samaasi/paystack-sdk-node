@@ -18,6 +18,13 @@ import { BaseResource } from "../base"
 export class ChargesResource extends BaseResource {
   private readonly basePath = "/charge"
 
+  /**
+   * Initiate a payment by creating a charge.
+   *
+   * @param payload - The charge creation details
+   * @returns A promise resolving to the charge creation response
+   * @see https://paystack.com/docs/api/charge/#create
+   */
   create(payload: CreateChargeRequest): Promise<CreateChargeApiResponse> {
     return this.executor.execute<CreateChargeApiResponse>(this.basePath, {
       method: "POST",
@@ -25,6 +32,13 @@ export class ChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Submit OTP to complete a charge.
+   *
+   * @param payload - The OTP submission details
+   * @returns A promise resolving to the OTP submission response
+   * @see https://paystack.com/docs/api/charge/#submit-otp
+   */
   submitOtp(payload: SubmitOtpRequest): Promise<SubmitOtpApiResponse> {
     const path = `${this.basePath}/submit_otp`
 
@@ -34,6 +48,13 @@ export class ChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Submit PIN to complete a charge.
+   *
+   * @param payload - The PIN submission details
+   * @returns A promise resolving to the PIN submission response
+   * @see https://paystack.com/docs/api/charge/#submit-pin
+   */
   submitPin(payload: SubmitPinRequest): Promise<SubmitPinApiResponse> {
     const path = `${this.basePath}/submit_pin`
 
@@ -43,6 +64,13 @@ export class ChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Submit phone number to complete a charge.
+   *
+   * @param payload - The phone number submission details
+   * @returns A promise resolving to the phone submission response
+   * @see https://paystack.com/docs/api/charge/#submit-phone
+   */
   submitPhone(payload: SubmitPhoneRequest): Promise<SubmitPhoneApiResponse> {
     const path = `${this.basePath}/submit_phone`
 
@@ -63,6 +91,13 @@ export class ChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Submit address to complete a charge.
+   *
+   * @param payload - The address submission details
+   * @returns A promise resolving to the address submission response
+   * @see https://paystack.com/docs/api/charge/#submit-address
+   */
   submitAddress(
     payload: SubmitAddressRequest,
   ): Promise<SubmitAddressApiResponse> {
@@ -74,6 +109,13 @@ export class ChargesResource extends BaseResource {
     })
   }
 
+  /**
+   * Check pending charge status.
+   *
+   * @param reference - The charge reference
+   * @returns A promise resolving to the pending charge status
+   * @see https://paystack.com/docs/api/charge/#check-pending-charge
+   */
   checkPending(reference: string): Promise<CheckPendingChargeApiResponse> {
     const path = `${this.basePath}/${encodeURIComponent(reference)}`
 

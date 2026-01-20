@@ -14,6 +14,13 @@ import { BaseResource } from "../base"
 export class PlansResource extends BaseResource {
   private readonly basePath = "/plan"
 
+  /**
+   * Create a plan on your integration.
+   *
+   * @param payload - The plan creation details
+   * @returns A promise resolving to the created plan details
+   * @see https://paystack.com/docs/api/plan/#create
+   */
   create(payload: CreatePlanRequest): Promise<CreatePlanApiResponse> {
     return this.executor.execute<CreatePlanApiResponse>(this.basePath, {
       method: "POST",
@@ -69,6 +76,14 @@ export class PlansResource extends BaseResource {
     })
   }
 
+  /**
+   * Update a plan details on your integration.
+   *
+   * @param idOrCode - The plan ID or code
+   * @param payload - The fields to update
+   * @returns A promise resolving to the updated plan details
+   * @see https://paystack.com/docs/api/plan/#update
+   */
   update(
     idOrCode: number | string,
     payload: UpdatePlanRequest,

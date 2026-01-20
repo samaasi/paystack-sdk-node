@@ -19,6 +19,13 @@ export class RefundsResource extends BaseResource {
     })
   }
 
+  /**
+   * List refunds available on your integration.
+   *
+   * @param query - Pagination and filtering options
+   * @returns A promise resolving to the list of refunds
+   * @see https://paystack.com/docs/api/refund/#list
+   */
   list(query: ListRefundsQuery = {}): Promise<ListRefundsApiResponse> {
     const search = new URLSearchParams()
 
@@ -59,6 +66,13 @@ export class RefundsResource extends BaseResource {
     })
   }
 
+  /**
+   * Retry a refund.
+   *
+   * @param id - The refund ID
+   * @param payload - The retry details
+   * @returns A promise resolving to the retry response
+   */
   retry(
     id: number | string,
     payload: RetryRefundRequest,
