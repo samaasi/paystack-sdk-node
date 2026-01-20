@@ -9,6 +9,8 @@ eslint.config.mjs
 bun.lock
 .gitignore
 .github/
+.prettierrc
+.prettierignore
 
 # Logs & Caches
 logs
