@@ -1,6 +1,7 @@
 {
   "name": "paystack-sdk-node",
   "version": "1.0.0",
+  "description": "Type-safe, modern TypeScript SDK for the Paystack API. Includes first-class support for Express, NestJS, Next.js, and Fastify.",
   "module": "src/index.ts",
   "type": "module",
   "author": "Benson Samaasi <dev.bensonsamaasi@gmail.com>",
