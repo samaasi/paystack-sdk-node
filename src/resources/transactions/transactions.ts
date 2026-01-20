@@ -17,6 +17,9 @@ export class TransactionsResource extends BaseResource {
   /**
    * Initialize a transaction.
    *
+   * @param payload - The transaction initialization details (email, amount, etc.)
+   * @param options - Optional configuration including idempotency key
+   * @returns A promise resolving to the initialization response containing the authorization URL and access code
    * @see https://paystack.com/docs/api/transaction/#initialize
    */
   initialize(
@@ -54,6 +57,8 @@ export class TransactionsResource extends BaseResource {
   /**
    * Re-query a transaction by its ID.
    *
+   * @param id - The numeric ID of the transaction to fetch
+   * @returns A promise resolving to the transaction details
    * @see https://paystack.com/docs/api/transaction/#fetch
    */
   requery(id: number): Promise<RequeryTransactionApiResponse> {
