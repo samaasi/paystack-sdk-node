@@ -6,6 +6,7 @@ export default defineConfig({
     express: 'src/integrations/express.ts',
     nestjs: 'src/integrations/nestjs.ts',
     nextjs: 'src/integrations/nextjs.ts',
+    fastify: 'src/integrations/fastify.ts',
     webhooks: 'src/webhooks/index.ts',
   },
   format: ['cjs', 'esm'],
