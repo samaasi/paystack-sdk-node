@@ -28,7 +28,7 @@ export interface InitiateTransferRequest {
   source: "balance"
   amount: number
   recipient: string
-  reference: string
+  reference?: string
   reason?: string
   currency?: string
 }
