@@ -26,6 +26,13 @@ export class ProductsResource extends BaseResource {
     })
   }
 
+  /**
+   * List products.
+   *
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of products
+   * @see https://paystack.com/docs/api/product/#list
+   */
   list(query: ListProductsQuery = {}): Promise<ListProductsApiResponse> {
     const search = new URLSearchParams()
 

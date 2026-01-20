@@ -10,6 +10,13 @@ import { BaseResource } from "../base"
 export class SettlementsResource extends BaseResource {
   private readonly basePath = "/settlement"
 
+  /**
+   * List settlements made to your integration.
+   *
+   * @param query - The query parameters for filtering
+   * @returns A promise resolving to the list of settlements
+   * @see https://paystack.com/docs/api/settlement/#list
+   */
   list(query: ListSettlementsQuery = {}): Promise<ListSettlementsApiResponse> {
     const search = new URLSearchParams()
 
