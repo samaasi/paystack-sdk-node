@@ -1,4 +1,4 @@
-# paystack-sdk
+# paystack-sdk-node
 
 Type-safe, modern TypeScript SDK for the [Paystack](https://paystack.com) API.
 
@@ -17,13 +17,13 @@ This package helps you talk to Paystack from Node.js, with:
 
 ```bash
 # with bun
-bun add paystack-sdk
+bun add paystack-sdk-node
 
 # or with npm
-npm install paystack-sdk
+npm install paystack-sdk-node
 
 # or with pnpm
-pnpm add paystack-sdk
+pnpm add paystack-sdk-node
 ```
 
 This library targets modern runtimes:

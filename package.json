@@ -1,5 +1,5 @@
 {
-  "name": "paystack-sdk",
+  "name": "paystack-sdk-node",
   "version": "1.0.0",
   "module": "src/index.ts",
   "type": "module",
