@@ -54,7 +54,7 @@ You can optionally override:
 You can also create a client from environment variables using `createPaystackClient`, which reads standard config keys from your environment:
 
 ```ts
-import { createPaystackClient } from "paystack-sdk"
+import { createPaystackClient } from "@samaasi/paystack-sdk"
 
 const client = await createPaystackClient()
 ```
