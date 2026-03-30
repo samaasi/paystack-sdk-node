@@ -17,9 +17,7 @@ export class IntegrationResource extends BaseResource {
   getPaymentSessionTimeout(): Promise<GetPaymentSessionTimeoutResponse> {
     const path = `${this.basePath}/payment_session_timeout`
 
-    return this.executor.execute<GetPaymentSessionTimeoutResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetPaymentSessionTimeoutResponse>(path)
   }
 
   /**
@@ -39,9 +37,6 @@ export class IntegrationResource extends BaseResource {
 
     const path = `${this.basePath}/payment_session_timeout`
 
-    return this.executor.execute<UpdatePaymentSessionTimeoutResponse>(path, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.put<UpdatePaymentSessionTimeoutResponse>(path, payload)
   }
 }

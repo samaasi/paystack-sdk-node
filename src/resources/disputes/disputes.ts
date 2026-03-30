@@ -54,9 +54,7 @@ export class DisputesResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListDisputesApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListDisputesApiResponse>(path)
   }
 
   /**
@@ -67,12 +65,7 @@ export class DisputesResource extends BaseResource {
    * @see https://paystack.com/docs/api/dispute/#fetch
    */
   get(id: number): Promise<GetDisputeApiResponse> {
-    return this.executor.execute<GetDisputeApiResponse>(
-      `${this.basePath}/${id}`,
-      {
-        method: 'GET',
-      },
-    )
+    return this.executor.get<GetDisputeApiResponse>(`${this.basePath}/${id}`)
   }
 
   /**
@@ -87,9 +80,7 @@ export class DisputesResource extends BaseResource {
   ): Promise<ListTransactionDisputesApiResponse> {
     const path = `${this.basePath}/transaction/${transactionId}`
 
-    return this.executor.execute<ListTransactionDisputesApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListTransactionDisputesApiResponse>(path)
   }
 
   /**
@@ -106,10 +97,7 @@ export class DisputesResource extends BaseResource {
   ): Promise<SubmitEvidenceApiResponse> {
     const path = `${this.basePath}/${id}/evidence`
 
-    return this.executor.execute<SubmitEvidenceApiResponse>(path, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<SubmitEvidenceApiResponse>(path, payload)
   }
 
   /**
@@ -122,8 +110,6 @@ export class DisputesResource extends BaseResource {
   getUploadUrl(id: number): Promise<GetUploadUrlApiResponse> {
     const path = `${this.basePath}/${id}/upload_url`
 
-    return this.executor.execute<GetUploadUrlApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetUploadUrlApiResponse>(path)
   }
 }
