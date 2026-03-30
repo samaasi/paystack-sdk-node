@@ -19,10 +19,7 @@ export class SubaccountsResource extends BaseResource {
    * @see https://paystack.com/docs/api/subaccount/#create
    */
   create(payload: CreateSubaccountRequest): Promise<CreateSubaccountResponse> {
-    return this.executor.execute<CreateSubaccountResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CreateSubaccountResponse>(this.basePath, payload)
   }
 
   /**
@@ -32,9 +29,7 @@ export class SubaccountsResource extends BaseResource {
    * @see https://paystack.com/docs/api/subaccount/#list
    */
   list(): Promise<ListSubaccountsResponse> {
-    return this.executor.execute<ListSubaccountsResponse>(this.basePath, {
-      method: 'GET',
-    })
+    return this.executor.get<ListSubaccountsResponse>(this.basePath)
   }
 
   /**
@@ -47,11 +42,8 @@ export class SubaccountsResource extends BaseResource {
   fetch(codeOrId: string | number): Promise<FetchSubaccountResponse> {
     const id = String(codeOrId)
 
-    return this.executor.execute<FetchSubaccountResponse>(
+    return this.executor.get<FetchSubaccountResponse>(
       `${this.basePath}/${encodeURIComponent(id)}`,
-      {
-        method: 'GET',
-      },
     )
   }
 
@@ -67,12 +59,9 @@ export class SubaccountsResource extends BaseResource {
     code: string,
     payload: UpdateSubaccountRequest,
   ): Promise<UpdateSubaccountResponse> {
-    return this.executor.execute<UpdateSubaccountResponse>(
+    return this.executor.put<UpdateSubaccountResponse>(
       `${this.basePath}/${encodeURIComponent(code)}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 }

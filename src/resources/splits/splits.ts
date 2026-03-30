@@ -24,10 +24,7 @@ export class SplitsResource extends BaseResource {
    * @see https://paystack.com/docs/api/split/#create
    */
   create(payload: CreateSplitRequest): Promise<CreateSplitApiResponse> {
-    return this.executor.execute<CreateSplitApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CreateSplitApiResponse>(this.basePath, payload)
   }
 
   /**
@@ -71,9 +68,7 @@ export class SplitsResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListSplitsApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListSplitsApiResponse>(path)
   }
 
   /**
@@ -87,9 +82,7 @@ export class SplitsResource extends BaseResource {
     const identifier = String(id)
     const path = `${this.basePath}/${encodeURIComponent(identifier)}`
 
-    return this.executor.execute<GetSplitApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetSplitApiResponse>(path)
   }
 
   /**
@@ -107,10 +100,7 @@ export class SplitsResource extends BaseResource {
     const identifier = String(id)
     const path = `${this.basePath}/${encodeURIComponent(identifier)}`
 
-    return this.executor.execute<UpdateSplitApiResponse>(path, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.put<UpdateSplitApiResponse>(path, payload)
   }
 
   /**
@@ -130,10 +120,7 @@ export class SplitsResource extends BaseResource {
       identifier,
     )}/subaccount/add`
 
-    return this.executor.execute<AddSubaccountApiResponse>(path, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<AddSubaccountApiResponse>(path, payload)
   }
 
   /**
@@ -153,9 +140,6 @@ export class SplitsResource extends BaseResource {
       identifier,
     )}/subaccount/remove`
 
-    return this.executor.execute<RemoveSubaccountApiResponse>(path, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<RemoveSubaccountApiResponse>(path, payload)
   }
 }
