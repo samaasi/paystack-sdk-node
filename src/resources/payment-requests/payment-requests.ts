@@ -22,10 +22,10 @@ export class PaymentRequestsResource extends BaseResource {
   create(
     payload: CreatePaymentRequestRequest,
   ): Promise<GetPaymentRequestApiResponse> {
-    return this.executor.execute<GetPaymentRequestApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<GetPaymentRequestApiResponse>(
+      this.basePath,
+      payload,
+    )
   }
 
   /**
@@ -63,9 +63,7 @@ export class PaymentRequestsResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListPaymentRequestsApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListPaymentRequestsApiResponse>(path)
   }
 
   /**
@@ -78,9 +76,7 @@ export class PaymentRequestsResource extends BaseResource {
   get(id: number): Promise<GetPaymentRequestApiResponse> {
     const path = `${this.basePath}/${id}`
 
-    return this.executor.execute<GetPaymentRequestApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetPaymentRequestApiResponse>(path)
   }
 
   /**
@@ -97,10 +93,7 @@ export class PaymentRequestsResource extends BaseResource {
   ): Promise<GetPaymentRequestApiResponse> {
     const path = `${this.basePath}/${id}`
 
-    return this.executor.execute<GetPaymentRequestApiResponse>(path, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.put<GetPaymentRequestApiResponse>(path, payload)
   }
 
   /**
@@ -113,9 +106,7 @@ export class PaymentRequestsResource extends BaseResource {
   sendNotification(id: number): Promise<GetPaymentRequestApiResponse> {
     const path = `${this.basePath}/notify/${id}`
 
-    return this.executor.execute<GetPaymentRequestApiResponse>(path, {
-      method: 'POST',
-    })
+    return this.executor.post<GetPaymentRequestApiResponse>(path)
   }
 
   /**
@@ -127,17 +118,13 @@ export class PaymentRequestsResource extends BaseResource {
   totals(): Promise<GetPaymentRequestTotalsApiResponse> {
     const path = `${this.basePath}/totals`
 
-    return this.executor.execute<GetPaymentRequestTotalsApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetPaymentRequestTotalsApiResponse>(path)
   }
 
   verify(code: string): Promise<VerifyPaymentRequestApiResponse> {
     const path = `${this.basePath}/verify/${encodeURIComponent(code)}`
 
-    return this.executor.execute<VerifyPaymentRequestApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<VerifyPaymentRequestApiResponse>(path)
   }
 
   /**
@@ -150,8 +137,6 @@ export class PaymentRequestsResource extends BaseResource {
   archive(id: number): Promise<GetPaymentRequestApiResponse> {
     const path = `${this.basePath}/archive/${id}`
 
-    return this.executor.execute<GetPaymentRequestApiResponse>(path, {
-      method: 'POST',
-    })
+    return this.executor.post<GetPaymentRequestApiResponse>(path)
   }
 }

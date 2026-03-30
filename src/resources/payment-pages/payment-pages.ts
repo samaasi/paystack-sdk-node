@@ -15,10 +15,7 @@ export class PaymentPagesResource extends BaseResource {
   create(
     payload: CreatePaymentPageRequest,
   ): Promise<GetPaymentPageApiResponse> {
-    return this.executor.execute<GetPaymentPageApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<GetPaymentPageApiResponse>(this.basePath, payload)
   }
 
   /**
@@ -52,17 +49,13 @@ export class PaymentPagesResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListPaymentPagesApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListPaymentPagesApiResponse>(path)
   }
 
   get(idOrSlug: string | number): Promise<GetPaymentPageApiResponse> {
     const path = `${this.basePath}/${encodeURIComponent(String(idOrSlug))}`
 
-    return this.executor.execute<GetPaymentPageApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetPaymentPageApiResponse>(path)
   }
 
   /**
@@ -79,10 +72,7 @@ export class PaymentPagesResource extends BaseResource {
   ): Promise<GetPaymentPageApiResponse> {
     const path = `${this.basePath}/${encodeURIComponent(String(idOrSlug))}`
 
-    return this.executor.execute<GetPaymentPageApiResponse>(path, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.put<GetPaymentPageApiResponse>(path, payload)
   }
 
   /**
@@ -95,9 +85,6 @@ export class PaymentPagesResource extends BaseResource {
   checkSlug(payload: CheckSlugRequest): Promise<CheckSlugApiResponse> {
     const path = `${this.basePath}/check_slug`
 
-    return this.executor.execute<CheckSlugApiResponse>(path, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CheckSlugApiResponse>(path, payload)
   }
 }
