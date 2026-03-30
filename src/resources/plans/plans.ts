@@ -22,10 +22,7 @@ export class PlansResource extends BaseResource {
    * @see https://paystack.com/docs/api/plan/#create
    */
   create(payload: CreatePlanRequest): Promise<CreatePlanApiResponse> {
-    return this.executor.execute<CreatePlanApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CreatePlanApiResponse>(this.basePath, payload)
   }
 
   /**
@@ -69,9 +66,7 @@ export class PlansResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListPlansApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListPlansApiResponse>(path)
   }
 
   /**
@@ -85,9 +80,7 @@ export class PlansResource extends BaseResource {
     const id = String(idOrCode)
     const path = `${this.basePath}/${encodeURIComponent(id)}`
 
-    return this.executor.execute<GetPlanApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetPlanApiResponse>(path)
   }
 
   /**
@@ -105,9 +98,6 @@ export class PlansResource extends BaseResource {
     const id = String(idOrCode)
     const path = `${this.basePath}/${encodeURIComponent(id)}`
 
-    return this.executor.execute<UpdatePlanApiResponse>(path, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.put<UpdatePlanApiResponse>(path, payload)
   }
 }

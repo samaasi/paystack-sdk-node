@@ -20,10 +20,7 @@ export class ProductsResource extends BaseResource {
    * @see https://paystack.com/docs/api/product/#create
    */
   create(payload: CreateProductRequest): Promise<CreateProductApiResponse> {
-    return this.executor.execute<CreateProductApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CreateProductApiResponse>(this.basePath, payload)
   }
 
   /**
@@ -55,9 +52,7 @@ export class ProductsResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListProductsApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListProductsApiResponse>(path)
   }
 
   /**
@@ -70,9 +65,7 @@ export class ProductsResource extends BaseResource {
   get(id: number): Promise<GetProductApiResponse> {
     const path = `${this.basePath}/${id}`
 
-    return this.executor.execute<GetProductApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetProductApiResponse>(path)
   }
 
   /**
@@ -89,9 +82,6 @@ export class ProductsResource extends BaseResource {
   ): Promise<UpdateProductApiResponse> {
     const path = `${this.basePath}/${id}`
 
-    return this.executor.execute<UpdateProductApiResponse>(path, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.put<UpdateProductApiResponse>(path, payload)
   }
 }
