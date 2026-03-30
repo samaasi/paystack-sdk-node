@@ -28,5 +28,8 @@ jobs:
       - name: Build
         run: bun run build
 
+      - name: Typecheck (consumer)
+        run: bun run typecheck:consumer
+
       - name: Test
         run: bun test
