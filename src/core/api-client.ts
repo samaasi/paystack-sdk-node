@@ -15,6 +15,7 @@ export interface RequestInitLike {
   headers?: HeadersInit
   body?: string | Uint8Array | ArrayBuffer | null
   signal?: AbortSignal | null
+  timeoutMs?: number
   [key: string]: unknown
 }
 
@@ -97,6 +98,7 @@ export interface ApiClientOptions {
   baseUrl?: string
   fetchImpl?: FetchImpl
   retry?: RetryOptions
+  timeoutMs?: number
 }
 
 export class ApiClient {
@@ -104,12 +106,14 @@ export class ApiClient {
   private baseUrl: string
   private fetchImpl?: FetchImpl
   private retryOptions?: RetryOptions
+  private timeoutMs?: number
 
   constructor(options: ApiClientOptions) {
     this.apiKey = options.apiKey
     this.baseUrl = options.baseUrl ?? 'https://api.paystack.co'
     this.fetchImpl = options.fetchImpl
     this.retryOptions = options.retry
+    this.timeoutMs = options.timeoutMs
   }
 
   private getFetch(): FetchImpl {
@@ -128,15 +132,95 @@ export class ApiClient {
   async request<T>(path: string, init: RequestInitLike = {}): Promise<T> {
     const url = `${this.baseUrl}${path}`
     const fetchFn = this.getFetch()
+    const timeoutMs =
+      typeof init.timeoutMs === 'number' ? init.timeoutMs : this.timeoutMs
+    const externalSignal = init.signal ?? undefined
+
+    let timeoutId: ReturnType<typeof setTimeout> | undefined
+    let timeoutController: AbortController | undefined
+    let linkedAbortHandler: (() => void) | undefined
+    let requestSignal: AbortSignal | undefined
+
+    if (timeoutMs !== undefined && timeoutMs > 0) {
+      timeoutController = new AbortController()
+      requestSignal = timeoutController.signal
+
+      if (externalSignal) {
+        if (externalSignal.aborted) {
+          timeoutController.abort()
+        } else {
+          linkedAbortHandler = () => {
+            timeoutController?.abort()
+          }
+          externalSignal.addEventListener('abort', linkedAbortHandler, {
+            once: true,
+          })
+        }
+      }
+
+      timeoutId = setTimeout(() => {
+        timeoutController?.abort()
+      }, timeoutMs)
+    } else {
+      requestSignal = externalSignal
+    }
+
+    const { timeoutMs: _timeout, signal: _signal, headers: _headers, ...rest } =
+      init
+    const baseInit: RequestInitLike = {
+      ...rest,
+      signal: requestSignal,
+    }
 
     const operation = async () => {
       try {
-        const headers = buildHeaders(this.apiKey, init.headers)
+        const headers = buildHeaders(this.apiKey, _headers)
+        const requestInit = { ...baseInit, headers }
 
-        const response = await fetchFn(url, {
-          ...init,
-          headers,
-        })
+        const signal = requestInit.signal ?? undefined
+
+        if (signal?.aborted) {
+          throw new Error('Request aborted')
+        }
+
+        const fetchPromise = fetchFn(url, requestInit)
+        let abortCleanup: (() => void) | undefined
+        const race: Array<Promise<ResponseLike>> = [fetchPromise]
+
+        if (signal) {
+          race.push(
+            new Promise<ResponseLike>((_, reject) => {
+              const onAbort = () => {
+                fetchPromise.catch(() => {})
+                reject(new Error('Request aborted'))
+              }
+
+              signal.addEventListener('abort', onAbort, { once: true })
+              abortCleanup = () => {
+                signal.removeEventListener('abort', onAbort)
+              }
+            }),
+          )
+        }
+
+        let response: ResponseLike
+
+        try {
+          response = await Promise.race(race)
+        } catch (error) {
+          if (
+            error instanceof Error &&
+            error.message === 'Request aborted' &&
+            timeoutController?.signal.aborted &&
+            !externalSignal?.aborted
+          ) {
+            throw new Error('Request timed out')
+          }
+
+          throw error
+        } finally {
+          abortCleanup?.()
+        }
 
         if (!response.ok) {
           const status = response.status
@@ -174,7 +258,17 @@ export class ApiClient {
       return status === 502 || status === 503 || status === 504
     }
 
-    return executeWithRetry(operation, shouldRetry, this.retryOptions)
+    try {
+      return await executeWithRetry(operation, shouldRetry, this.retryOptions)
+    } finally {
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId)
+      }
+
+      if (externalSignal && linkedAbortHandler) {
+        externalSignal.removeEventListener('abort', linkedAbortHandler)
+      }
+    }
   }
 
   async get<T>(path: string, init: RequestInitLike = {}): Promise<T> {
