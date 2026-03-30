@@ -1,5 +1,7 @@
 # paystack-sdk-node
 
+[![Coverage](https://codecov.io/gh/samaasi/paystack-sdk-node/branch/master/graph/badge.svg)](https://codecov.io/gh/samaasi/paystack-sdk-node)
+
 Type-safe, modern TypeScript SDK for the [Paystack](https://paystack.com) API.
 
 This package helps you talk to Paystack from Node.js, with:
