@@ -63,15 +63,21 @@ export function generateIdempotencyKey(): string {
     return globalCrypto.randomUUID()
   }
 
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
-  let value = ''
-
-  for (let i = 0; i < 24; i += 1) {
-    const index = Math.floor(Math.random() * chars.length)
-    value += chars[index]
+  if (!globalCrypto || typeof globalCrypto.getRandomValues !== 'function') {
+    throw new Error('No cryptographically secure random source available')
   }
 
-  return value
+  const bytes = new Uint8Array(12)
+  globalCrypto.getRandomValues(bytes)
+
+  let hex = ''
+
+  for (let i = 0; i < bytes.length; i += 1) {
+    const value = bytes[i]!
+    hex += value.toString(16).padStart(2, '0')
+  }
+
+  return hex
 }
 
 export function withIdempotencyKey(
