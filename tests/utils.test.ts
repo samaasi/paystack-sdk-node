@@ -52,13 +52,15 @@ describe('Utils', () => {
     test('adds header to existing Headers object', () => {
       const headers = new Headers()
       headers.set('Content-Type', 'application/json')
-      const init = { headers }
+      const init = { headers } as any
 
       const result = withIdempotencyKey(init, 'key_123')
-      const resultHeaders = result.headers as Headers
+      const resultHeaders = result.headers as Record<string, string>
+      const contentType =
+        resultHeaders['Content-Type'] ?? resultHeaders['content-type']
 
-      expect(resultHeaders.get('Content-Type')).toBe('application/json')
-      expect(resultHeaders.get('x-idempotency-key')).toBe('key_123')
+      expect(contentType).toBe('application/json')
+      expect(resultHeaders['x-idempotency-key']).toBe('key_123')
     })
 
     test('adds header to existing header tuples', () => {
@@ -67,10 +69,10 @@ describe('Utils', () => {
       }
 
       const result = withIdempotencyKey(init, 'key_123')
-      const resultHeaders = result.headers as Headers
+      const resultHeaders = result.headers as Record<string, string>
 
-      expect(resultHeaders.get('Content-Type')).toBe('application/json')
-      expect(resultHeaders.get('x-idempotency-key')).toBe('key_123')
+      expect(resultHeaders['Content-Type']).toBe('application/json')
+      expect(resultHeaders['x-idempotency-key']).toBe('key_123')
     })
 
     test('does nothing if key is missing', () => {
