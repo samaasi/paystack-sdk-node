@@ -22,10 +22,10 @@ export class BulkChargesResource extends BaseResource {
   create(
     payload: CreateBulkChargeRequest,
   ): Promise<CreateBulkChargeApiResponse> {
-    return this.executor.execute<CreateBulkChargeApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CreateBulkChargeApiResponse>(
+      this.basePath,
+      payload,
+    )
   }
 
   /**
@@ -63,9 +63,7 @@ export class BulkChargesResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListBulkChargeBatchesApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListBulkChargeBatchesApiResponse>(path)
   }
 
   /**
@@ -78,9 +76,7 @@ export class BulkChargesResource extends BaseResource {
   get(batchCode: string): Promise<GetBulkChargeBatchApiResponse> {
     const path = `${this.basePath}/${encodeURIComponent(batchCode)}`
 
-    return this.executor.execute<GetBulkChargeBatchApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetBulkChargeBatchApiResponse>(path)
   }
 
   /**
@@ -116,9 +112,7 @@ export class BulkChargesResource extends BaseResource {
           )}/charges?${search.toString()}`
         : `${this.basePath}/${encodeURIComponent(batchCode)}/charges`
 
-    return this.executor.execute<ListBulkChargeItemsApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListBulkChargeItemsApiResponse>(path)
   }
 
   /**
@@ -131,9 +125,7 @@ export class BulkChargesResource extends BaseResource {
   pause(batchCode: string): Promise<GetBulkChargeBatchApiResponse> {
     const path = `${this.basePath}/pause/${encodeURIComponent(batchCode)}`
 
-    return this.executor.execute<GetBulkChargeBatchApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetBulkChargeBatchApiResponse>(path)
   }
 
   /**
@@ -146,8 +138,6 @@ export class BulkChargesResource extends BaseResource {
   resume(batchCode: string): Promise<GetBulkChargeBatchApiResponse> {
     const path = `${this.basePath}/resume/${encodeURIComponent(batchCode)}`
 
-    return this.executor.execute<GetBulkChargeBatchApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetBulkChargeBatchApiResponse>(path)
   }
 }
