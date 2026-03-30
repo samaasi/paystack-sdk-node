@@ -20,10 +20,7 @@ export class RefundsResource extends BaseResource {
    * @see https://paystack.com/docs/api/refund/#create
    */
   create(payload: CreateRefundRequest): Promise<CreateRefundApiResponse> {
-    return this.executor.execute<CreateRefundApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CreateRefundApiResponse>(this.basePath, payload)
   }
 
   /**
@@ -59,9 +56,7 @@ export class RefundsResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListRefundsApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListRefundsApiResponse>(path)
   }
 
   /**
@@ -75,9 +70,7 @@ export class RefundsResource extends BaseResource {
     const identifier = String(idOrReference)
     const path = `${this.basePath}/${encodeURIComponent(identifier)}`
 
-    return this.executor.execute<GetRefundApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetRefundApiResponse>(path)
   }
 
   /**
@@ -96,9 +89,6 @@ export class RefundsResource extends BaseResource {
       identifier,
     )}`
 
-    return this.executor.execute<RetryRefundApiResponse>(path, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<RetryRefundApiResponse>(path, payload)
   }
 }

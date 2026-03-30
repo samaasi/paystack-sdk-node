@@ -47,9 +47,7 @@ export class SettlementsResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListSettlementsApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListSettlementsApiResponse>(path)
   }
 
   /**
@@ -86,8 +84,6 @@ export class SettlementsResource extends BaseResource {
     const base = `${this.basePath}/${encodeURIComponent(id)}/transactions`
     const path = search.size > 0 ? `${base}?${search.toString()}` : base
 
-    return this.executor.execute<ListSettlementTransactionsApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListSettlementTransactionsApiResponse>(path)
   }
 }
