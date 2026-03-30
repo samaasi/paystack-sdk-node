@@ -50,6 +50,45 @@ describe('Core', () => {
       })
     })
 
+    test('request handles tuple array headers', async () => {
+      await client.request('/test', { headers: [['X-Custom', 'value']] as any })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [_, init] = mockFetch.mock.calls[0]!
+      expect(init.headers).toEqual({
+        Authorization: 'Bearer sk_test_123',
+        'Content-Type': 'application/json',
+        'X-Custom': 'value',
+      })
+    })
+
+    test('request handles Headers-like headers', async () => {
+      const headers = new Headers()
+      headers.set('X-Custom', 'value')
+      await client.request('/test', { headers: headers as any })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [_, init] = mockFetch.mock.calls[0]!
+      expect(init.headers).toMatchObject({
+        Authorization: 'Bearer sk_test_123',
+        'Content-Type': 'application/json',
+      })
+      const record = init.headers as Record<string, string>
+      expect(record['X-Custom'] ?? record['x-custom']).toBe('value')
+    })
+
+    test('request allows overriding Authorization header', async () => {
+      await client.request('/test', {
+        headers: {
+          Authorization: 'Bearer override',
+        },
+      })
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+      const [_, init] = mockFetch.mock.calls[0]!
+      expect(init.headers).toEqual({
+        Authorization: 'Bearer override',
+        'Content-Type': 'application/json',
+      })
+    })
+
     test('request handles HTTP errors', async () => {
       mockFetch.mockResolvedValueOnce(
         new Response(JSON.stringify({ message: 'Bad Request' }), {
