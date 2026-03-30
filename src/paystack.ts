@@ -25,16 +25,17 @@ import { TransferRecipientsResource } from './resources/transfer-recipients/reci
 import { TransferControlResource } from './resources/transfer-control/transfer-control'
 import { PaymentRequestsResource } from './resources/payment-requests/payment-requests'
 import { ApplePayResource } from './resources/apple-pay/apple-pay'
+import type { FetchImpl } from './core/api-client'
 
 export interface PaystackClientConfig {
   apiKey: string
   baseUrl?: string
   maxRetries?: number
-  fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
+  fetchImpl?: FetchImpl
 }
 
 export interface PaystackEnvOptions extends LoadConfigOptions {
-  fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
+  fetchImpl?: FetchImpl
 }
 
 export class PaystackClient {
