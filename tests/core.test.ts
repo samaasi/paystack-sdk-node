@@ -33,19 +33,21 @@ describe('Core', () => {
       expect(mockFetch).toHaveBeenCalledTimes(1)
       const [url, init] = mockFetch.mock.calls[0]!
       expect(url).toBe('https://api.paystack.co/test')
-      const headers = init.headers as Headers
-      expect(headers.get('Authorization')).toBe('Bearer sk_test_123')
-      expect(headers.get('Content-Type')).toBe('application/json')
+      expect(init.headers).toEqual({
+        Authorization: 'Bearer sk_test_123',
+        'Content-Type': 'application/json',
+      })
     })
 
     test('request handles extra headers', async () => {
       await client.request('/test', { headers: { 'X-Custom': 'value' } })
       expect(mockFetch).toHaveBeenCalledTimes(1)
       const [url, init] = mockFetch.mock.calls[0]!
-      const headers = init.headers as Headers
-      expect(headers.get('Authorization')).toBe('Bearer sk_test_123')
-      expect(headers.get('Content-Type')).toBe('application/json')
-      expect(headers.get('X-Custom')).toBe('value')
+      expect(init.headers).toEqual({
+        Authorization: 'Bearer sk_test_123',
+        'Content-Type': 'application/json',
+        'X-Custom': 'value',
+      })
     })
 
     test('request handles HTTP errors', async () => {
