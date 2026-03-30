@@ -19,10 +19,7 @@ export class SubscriptionsResource extends BaseResource {
   create(
     payload: CreateSubscriptionRequest,
   ): Promise<CreateSubscriptionResponse> {
-    return this.executor.execute<CreateSubscriptionResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CreateSubscriptionResponse>(this.basePath, payload)
   }
 
   /**
@@ -32,9 +29,7 @@ export class SubscriptionsResource extends BaseResource {
    * @see https://paystack.com/docs/api/subscription/#list
    */
   list(): Promise<ListSubscriptionsResponse> {
-    return this.executor.execute<ListSubscriptionsResponse>(this.basePath, {
-      method: 'GET',
-    })
+    return this.executor.get<ListSubscriptionsResponse>(this.basePath)
   }
 
   /**
@@ -47,11 +42,8 @@ export class SubscriptionsResource extends BaseResource {
   fetch(codeOrId: string | number): Promise<FetchSubscriptionResponse> {
     const id = String(codeOrId)
 
-    return this.executor.execute<FetchSubscriptionResponse>(
+    return this.executor.get<FetchSubscriptionResponse>(
       `${this.basePath}/${encodeURIComponent(id)}`,
-      {
-        method: 'GET',
-      },
     )
   }
 
@@ -64,14 +56,9 @@ export class SubscriptionsResource extends BaseResource {
    * @see https://paystack.com/docs/api/subscription/#disable
    */
   disable(code: string, token: string): Promise<FetchSubscriptionResponse> {
-    const body = JSON.stringify({ code, token })
-
-    return this.executor.execute<FetchSubscriptionResponse>(
+    return this.executor.post<FetchSubscriptionResponse>(
       `${this.basePath}/disable`,
-      {
-        method: 'POST',
-        body,
-      },
+      { code, token },
     )
   }
 }

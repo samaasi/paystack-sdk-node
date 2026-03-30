@@ -10,17 +10,12 @@ export class TerminalResource extends BaseResource {
   private readonly basePath = '/terminal'
 
   list(): Promise<ListTerminalsResponse> {
-    return this.executor.execute<ListTerminalsResponse>(this.basePath, {
-      method: 'GET',
-    })
+    return this.executor.get<ListTerminalsResponse>(this.basePath)
   }
 
   fetch(idOrCode: string): Promise<FetchTerminalResponse> {
-    return this.executor.execute<FetchTerminalResponse>(
+    return this.executor.get<FetchTerminalResponse>(
       `${this.basePath}/${encodeURIComponent(idOrCode)}`,
-      {
-        method: 'GET',
-      },
     )
   }
 
@@ -36,12 +31,9 @@ export class TerminalResource extends BaseResource {
     idOrCode: string,
     payload: SendEventRequest,
   ): Promise<SendEventResponse> {
-    return this.executor.execute<SendEventResponse>(
+    return this.executor.post<SendEventResponse>(
       `${this.basePath}/${encodeURIComponent(idOrCode)}/event`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 }
