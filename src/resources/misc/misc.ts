@@ -38,9 +38,7 @@ export class MiscResource extends BaseResource {
         ? `${this.bankBasePath}?${search.toString()}`
         : this.bankBasePath
 
-    return this.executor.execute<ListBanksResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListBanksResponse>(path)
   }
 
   /**
@@ -50,9 +48,7 @@ export class MiscResource extends BaseResource {
    * @see https://paystack.com/docs/api/misc/#list-countries
    */
   listCountries(): Promise<ListCountriesResponse> {
-    return this.executor.execute<ListCountriesResponse>(this.countryBasePath, {
-      method: 'GET',
-    })
+    return this.executor.get<ListCountriesResponse>(this.countryBasePath)
   }
 
   /**
@@ -64,9 +60,7 @@ export class MiscResource extends BaseResource {
   listStates(): Promise<ListStatesResponse> {
     const path = `${this.addressBasePath}/pyramid/states`
 
-    return this.executor.execute<ListStatesResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListStatesResponse>(path)
   }
 
   /**
@@ -79,9 +73,7 @@ export class MiscResource extends BaseResource {
   resolveCardBin(bin: string): Promise<ResolveCardBinResponse> {
     const path = `${this.decisionBasePath}/bin/${encodeURIComponent(bin)}`
 
-    return this.executor.execute<ResolveCardBinResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ResolveCardBinResponse>(path)
   }
 
   /**
@@ -100,8 +92,6 @@ export class MiscResource extends BaseResource {
 
     const path = `${this.bankBasePath}/resolve?${search.toString()}`
 
-    return this.executor.execute<ResolveAccountLookupResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ResolveAccountLookupResponse>(path)
   }
 }
