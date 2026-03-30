@@ -112,6 +112,43 @@ describe('Core', () => {
       await client.delete('/test')
       expect(mockFetch.mock.calls[0]![1].method).toBe('DELETE')
     })
+
+    test('request times out when timeoutMs is set', async () => {
+      const slowFetch = mock((_url: any, _init: any) => new Promise(() => {}))
+      const timed = new ApiClient({
+        apiKey: 'sk_test_123',
+        fetchImpl: slowFetch as any,
+        timeoutMs: 5,
+      })
+
+      try {
+        await timed.request('/test')
+        expect(true).toBe(false)
+      } catch (error) {
+        expect(error).toBeInstanceOf(PaystackNetworkError)
+        expect((error as Error).message).toContain('timed out')
+      }
+    })
+
+    test('request aborts when signal is aborted', async () => {
+      const slowFetch = mock((_url: any, _init: any) => new Promise(() => {}))
+      const abortable = new ApiClient({
+        apiKey: 'sk_test_123',
+        fetchImpl: slowFetch as any,
+      })
+
+      const controller = new AbortController()
+      const promise = abortable.request('/test', { signal: controller.signal })
+      controller.abort()
+
+      try {
+        await promise
+        expect(true).toBe(false)
+      } catch (error) {
+        expect(error).toBeInstanceOf(PaystackNetworkError)
+        expect((error as Error).message).toContain('aborted')
+      }
+    })
   })
 
   describe('ErrorHandler', () => {
