@@ -45,6 +45,16 @@ export function withIdempotencyKey(
     }
   }
 
+  if (Array.isArray(existing)) {
+    const clone = new Headers(existing as string[][])
+    clone.set('x-idempotency-key', idempotencyKey)
+
+    return {
+      ...init,
+      headers: clone,
+    }
+  }
+
   return {
     ...init,
     headers: {
