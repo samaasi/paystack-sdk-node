@@ -1,15 +1,13 @@
 import type { StatusSummaryResponse } from './status.types'
+import type { FetchImpl, RequestInitLike } from '../../core/api-client'
 
 export interface StatusResourceOptions {
-  fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
+  fetchImpl?: FetchImpl
   baseUrl?: string
 }
 
 export class StatusResource {
-  private readonly fetchImpl: (
-    input: string,
-    init?: RequestInit,
-  ) => Promise<Response>
+  private readonly fetchImpl: FetchImpl
   private readonly baseUrl: string
 
   constructor(options: StatusResourceOptions = {}) {
@@ -39,7 +37,7 @@ export class StatusResource {
     const url = `${trimmedBase}/api/v2/summary.json`
     const response = await this.fetchImpl(url, {
       method: 'GET',
-    })
+    } satisfies RequestInitLike)
 
     if (!response || typeof response.json !== 'function') {
       throw new Error('Invalid response from Paystack status endpoint')
