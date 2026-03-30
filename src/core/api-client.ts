@@ -207,7 +207,16 @@ export class ApiClient {
     return this.request<T>(path, finalInit)
   }
 
-  async delete<T>(path: string, init: RequestInitLike = {}): Promise<T> {
-    return this.request<T>(path, { ...init, method: 'DELETE' })
+  async delete<T, B = unknown>(
+    path: string,
+    body?: B,
+    init: RequestInitLike = {},
+  ): Promise<T> {
+    const finalInit: RequestInitLike =
+      body === undefined
+        ? { ...init, method: 'DELETE' }
+        : { ...init, method: 'DELETE', body: JSON.stringify(body) }
+
+    return this.request<T>(path, finalInit)
   }
 }
