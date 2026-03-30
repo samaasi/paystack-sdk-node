@@ -61,6 +61,18 @@ describe('Utils', () => {
       expect(resultHeaders.get('x-idempotency-key')).toBe('key_123')
     })
 
+    test('adds header to existing header tuples', () => {
+      const init = {
+        headers: [['Content-Type', 'application/json']] as any,
+      }
+
+      const result = withIdempotencyKey(init, 'key_123')
+      const resultHeaders = result.headers as Headers
+
+      expect(resultHeaders.get('Content-Type')).toBe('application/json')
+      expect(resultHeaders.get('x-idempotency-key')).toBe('key_123')
+    })
+
     test('does nothing if key is missing', () => {
       const init = { method: 'POST' }
       const result = withIdempotencyKey(init)

@@ -45,12 +45,9 @@ describe('PaystackClient', () => {
 
     expect(url).toContain('/apple-pay/domain')
     expect(init.method).toBe('GET')
-    expect(init.headers).toEqual(
-      expect.objectContaining({
-        Authorization: 'Bearer sk_test_123',
-        'Content-Type': 'application/json',
-      }),
-    )
+    const headers = init.headers as Headers
+    expect(headers.get('Authorization')).toBe('Bearer sk_test_123')
+    expect(headers.get('Content-Type')).toBe('application/json')
   })
 
   test('uses custom base URL', async () => {
