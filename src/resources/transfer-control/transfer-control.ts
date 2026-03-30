@@ -25,12 +25,9 @@ export class TransferControlResource extends BaseResource {
   resendOtp(
     payload: TransferResendOtpRequest,
   ): Promise<TransferControlResponse> {
-    return this.executor.execute<TransferControlResponse>(
+    return this.executor.post<TransferControlResponse>(
       `${this.transferBasePath}/resend_otp`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 
@@ -42,12 +39,9 @@ export class TransferControlResource extends BaseResource {
   disableOtp(
     payload: TransferDisableOtpRequest,
   ): Promise<TransferControlResponse> {
-    return this.executor.execute<TransferControlResponse>(
+    return this.executor.post<TransferControlResponse>(
       `${this.transferBasePath}/disable_otp`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 
@@ -60,12 +54,9 @@ export class TransferControlResource extends BaseResource {
   finalizeDisableOtp(
     payload: TransferFinalizeDisableOtpRequest,
   ): Promise<TransferControlResponse> {
-    return this.executor.execute<TransferControlResponse>(
+    return this.executor.post<TransferControlResponse>(
       `${this.transferBasePath}/disable_otp_finalize`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 
@@ -77,12 +68,9 @@ export class TransferControlResource extends BaseResource {
   enableOtp(
     payload: TransferEnableOtpRequest,
   ): Promise<TransferControlResponse> {
-    return this.executor.execute<TransferControlResponse>(
+    return this.executor.post<TransferControlResponse>(
       `${this.transferBasePath}/enable_otp`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 
@@ -92,8 +80,6 @@ export class TransferControlResource extends BaseResource {
    * @see https://paystack.com/docs/api/transfer-control/#check-balance
    */
   getBalance(): Promise<GetBalanceResponse> {
-    return this.executor.execute<GetBalanceResponse>(this.balancePath, {
-      method: 'GET',
-    })
+    return this.executor.get<GetBalanceResponse>(this.balancePath)
   }
 }

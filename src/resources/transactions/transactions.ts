@@ -26,16 +26,11 @@ export class TransactionsResource extends BaseResource {
     payload: InitializeTransactionRequest,
     options: InitializeOptions = {},
   ): Promise<InitializeTransactionApiResponse> {
-    const init = withIdempotencyKey(
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      options.idempotencyKey,
-    )
+    const init = withIdempotencyKey({}, options.idempotencyKey)
 
-    return this.executor.execute<InitializeTransactionApiResponse>(
+    return this.executor.post<InitializeTransactionApiResponse>(
       `${this.basePath}/initialize`,
+      payload,
       init,
     )
   }
@@ -48,11 +43,8 @@ export class TransactionsResource extends BaseResource {
    * @see https://paystack.com/docs/api/transaction/#verify
    */
   verify(reference: string): Promise<VerifyTransactionApiResponse> {
-    return this.executor.execute<VerifyTransactionApiResponse>(
+    return this.executor.get<VerifyTransactionApiResponse>(
       `${this.basePath}/verify/${encodeURIComponent(reference)}`,
-      {
-        method: 'GET',
-      },
     )
   }
 
@@ -64,11 +56,8 @@ export class TransactionsResource extends BaseResource {
    * @see https://paystack.com/docs/api/transaction/#fetch
    */
   requery(id: number): Promise<RequeryTransactionApiResponse> {
-    return this.executor.execute<RequeryTransactionApiResponse>(
+    return this.executor.get<RequeryTransactionApiResponse>(
       `${this.basePath}/${id}`,
-      {
-        method: 'GET',
-      },
     )
   }
 }
