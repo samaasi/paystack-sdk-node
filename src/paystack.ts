@@ -31,10 +31,12 @@ export interface PaystackClientConfig {
   apiKey: string
   baseUrl?: string
   maxRetries?: number
+  timeoutMs?: number
   fetchImpl?: FetchImpl
 }
 
 export interface PaystackEnvOptions extends LoadConfigOptions {
+  timeoutMs?: number
   fetchImpl?: FetchImpl
 }
 
@@ -70,6 +72,7 @@ export class PaystackClient {
       apiKey: config.apiKey,
       baseUrl: config.baseUrl ?? 'https://api.paystack.co',
       maxRetries: config.maxRetries ?? 3,
+      timeoutMs: config.timeoutMs,
     }
 
     this.config = normalized
@@ -80,6 +83,7 @@ export class PaystackClient {
       retry: {
         maxRetries: normalized.maxRetries,
       },
+      timeoutMs: normalized.timeoutMs,
       fetchImpl: config.fetchImpl,
     })
 
@@ -98,6 +102,7 @@ export class PaystackClient {
     this.integration = new IntegrationResource(resourceOptions)
     this.status = new StatusResource({
       fetchImpl: config.fetchImpl,
+      timeoutMs: normalized.timeoutMs,
     })
     this.misc = new MiscResource(resourceOptions)
     this.disputes = new DisputesResource(resourceOptions)
@@ -123,6 +128,7 @@ export async function createPaystackClient(
     apiKey: config.apiKey,
     baseUrl: config.baseUrl,
     maxRetries: config.maxRetries,
+    timeoutMs: options.timeoutMs,
     fetchImpl: options.fetchImpl,
   })
 }
