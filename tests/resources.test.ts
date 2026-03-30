@@ -685,8 +685,7 @@ describe('Paystack Resources', () => {
       await client.customers.create(payload, { idempotencyKey: 'key_123' })
       expect(mockFetch).toHaveBeenCalledTimes(1)
       const [_, init] = mockFetch.mock.calls[0]!
-      const headers = init.headers as Headers
-      expect(headers.get('x-idempotency-key')).toBe('key_123')
+      expect(init.headers).toMatchObject({ 'x-idempotency-key': 'key_123' })
     })
 
     test('list handles query params', async () => {
