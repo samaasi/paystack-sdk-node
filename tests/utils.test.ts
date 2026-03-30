@@ -20,16 +20,39 @@ describe('Utils', () => {
 
     test('uses fallback if crypto.randomUUID is not available', () => {
       const originalCrypto = globalThis.crypto
-      // @ts-ignore
-      globalThis.crypto = undefined
+      const originalGetRandomValues = originalCrypto?.getRandomValues
 
       try {
+        // @ts-ignore
+        globalThis.crypto = {
+          getRandomValues: <T extends ArrayBufferView | null>(array: T): T => {
+            if (!array) {
+              return array
+            }
+
+            const view = new Uint8Array(
+              array.buffer,
+              array.byteOffset,
+              array.byteLength,
+            )
+
+            for (let i = 0; i < view.length; i += 1) {
+              view[i] = i + 1
+            }
+
+            return array
+          },
+        }
+
         const key = generateIdempotencyKey()
         expect(typeof key).toBe('string')
         expect(key.length).toBe(24)
       } finally {
         // @ts-ignore
         globalThis.crypto = originalCrypto
+        if (originalCrypto && originalGetRandomValues) {
+          originalCrypto.getRandomValues = originalGetRandomValues
+        }
       }
     })
   })
