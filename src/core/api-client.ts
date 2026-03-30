@@ -6,24 +6,87 @@ import {
 } from './error-handler'
 import { executeWithRetry, type RetryOptions } from './retry-strategy'
 
-type FetchImpl = (input: string, init?: RequestInit) => Promise<Response>
+export type HeadersInit =
+  | Record<string, string>
+  | Array<[string, string]>
 
-function buildHeaders(
-  apiKey: string,
-  existing?: RequestInit['headers'],
-): Headers {
-  const headers = new Headers()
-  headers.set('Authorization', `Bearer ${apiKey}`)
-  headers.set('Content-Type', 'application/json')
+export interface RequestInitLike {
+  method?: string
+  headers?: HeadersInit
+  body?: string | Uint8Array | ArrayBuffer | null
+  signal?: AbortSignal | null
+  [key: string]: unknown
+}
 
-  if (!existing) {
-    return headers
+export interface ResponseLike {
+  ok: boolean
+  status: number
+  json(): Promise<unknown>
+}
+
+export type FetchImpl = (
+  input: string,
+  init?: RequestInitLike,
+) => Promise<ResponseLike>
+
+function isForEachHeaders(
+  value: unknown,
+): value is { forEach: (cb: (value: string, key: string) => void) => void } {
+  if (!value || typeof value !== 'object') {
+    return false
   }
 
-  const extras = new Headers(existing)
+  const record = value as Record<string, unknown>
+  return typeof record.forEach === 'function'
+}
 
-  for (const [key, value] of extras.entries()) {
-    headers.set(key, value)
+function normalizeHeaderPairs(
+  existing?: unknown,
+): Array<[string, string]> {
+  if (!existing) {
+    return []
+  }
+
+  if (Array.isArray(existing)) {
+    return existing
+      .map(([key, value]) => [String(key), String(value)] as [string, string])
+      .filter(([key]) => key.length > 0)
+  }
+
+  if (isForEachHeaders(existing)) {
+    const pairs: Array<[string, string]> = []
+    existing.forEach((value, key) => {
+      if (!key) {
+        return
+      }
+
+      pairs.push([key, String(value)])
+    })
+    return pairs
+  }
+
+  const pairs: Array<[string, string]> = []
+  for (const [key, value] of Object.entries(
+    existing as Record<string, unknown>,
+  )) {
+    if (value === undefined) {
+      continue
+    }
+
+    pairs.push([key, String(value)])
+  }
+
+  return pairs
+}
+
+function buildHeaders(apiKey: string, existing?: unknown) {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
+  }
+
+  for (const [key, value] of normalizeHeaderPairs(existing)) {
+    headers[key] = value
   }
 
   return headers
@@ -62,7 +125,7 @@ export class ApiClient {
     return impl
   }
 
-  async request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  async request<T>(path: string, init: RequestInitLike = {}): Promise<T> {
     const url = `${this.baseUrl}${path}`
     const fetchFn = this.getFetch()
 
@@ -73,7 +136,7 @@ export class ApiClient {
         const response = await fetchFn(url, {
           ...init,
           headers,
-        } as RequestInit)
+        })
 
         if (!response.ok) {
           const status = response.status
@@ -114,16 +177,16 @@ export class ApiClient {
     return executeWithRetry(operation, shouldRetry, this.retryOptions)
   }
 
-  async get<T>(path: string, init: RequestInit = {}): Promise<T> {
+  async get<T>(path: string, init: RequestInitLike = {}): Promise<T> {
     return this.request<T>(path, { ...init, method: 'GET' })
   }
 
   async post<T, B = unknown>(
     path: string,
     body?: B,
-    init: RequestInit = {},
+    init: RequestInitLike = {},
   ): Promise<T> {
-    const finalInit: RequestInit =
+    const finalInit: RequestInitLike =
       body === undefined
         ? { ...init, method: 'POST' }
         : { ...init, method: 'POST', body: JSON.stringify(body) }
@@ -134,9 +197,9 @@ export class ApiClient {
   async put<T, B = unknown>(
     path: string,
     body?: B,
-    init: RequestInit = {},
+    init: RequestInitLike = {},
   ): Promise<T> {
-    const finalInit: RequestInit =
+    const finalInit: RequestInitLike =
       body === undefined
         ? { ...init, method: 'PUT' }
         : { ...init, method: 'PUT', body: JSON.stringify(body) }
@@ -144,7 +207,7 @@ export class ApiClient {
     return this.request<T>(path, finalInit)
   }
 
-  async delete<T>(path: string, init: RequestInit = {}): Promise<T> {
+  async delete<T>(path: string, init: RequestInitLike = {}): Promise<T> {
     return this.request<T>(path, { ...init, method: 'DELETE' })
   }
 }
