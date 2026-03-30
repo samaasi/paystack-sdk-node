@@ -6,17 +6,19 @@ import {
 } from './error-handler'
 import { executeWithRetry, type RetryOptions } from './retry-strategy'
 
+type FetchImpl = (input: string, init?: RequestInit) => Promise<Response>
+
 export interface ApiClientOptions {
   apiKey: string
   baseUrl?: string
-  fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
+  fetchImpl?: FetchImpl
   retry?: RetryOptions
 }
 
 export class ApiClient {
   private apiKey: string
   private baseUrl: string
-  private fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
+  private fetchImpl?: FetchImpl
   private retryOptions?: RetryOptions
 
   constructor(options: ApiClientOptions) {
@@ -26,8 +28,16 @@ export class ApiClient {
     this.retryOptions = options.retry
   }
 
-  private getFetch() {
-    const impl = this.fetchImpl ?? fetch
+  private getFetch(): FetchImpl {
+    const globalFetch: typeof fetch | undefined = (
+      globalThis as { fetch?: typeof fetch }
+    ).fetch
+    const impl = this.fetchImpl ?? globalFetch
+
+    if (!impl) {
+      throw new Error('A fetch implementation is required to use ApiClient')
+    }
+
     return impl
   }
 
