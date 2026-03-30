@@ -46,14 +46,6 @@ function getRawBody(req: ExpressLikeRequest): string | undefined {
     return Buffer.from(raw).toString('utf8')
   }
 
-  if (typeof req.body === 'string') {
-    return req.body
-  }
-
-  if (req.body && typeof req.body === 'object') {
-    return JSON.stringify(req.body)
-  }
-
   return undefined
 }
 
