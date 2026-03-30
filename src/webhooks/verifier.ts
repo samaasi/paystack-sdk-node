@@ -41,10 +41,14 @@ async function computeWithSubtle(
 
   const encoder = new TextEncoder()
   const keyData = encoder.encode(secretKey)
-  const data: ArrayBufferLike =
-    typeof payload === 'string'
-      ? encoder.encode(payload).buffer
-      : payload.buffer
+  const dataBytes =
+    typeof payload === 'string' ? encoder.encode(payload) : payload
+  const data =
+    dataBytes.buffer instanceof ArrayBuffer &&
+    dataBytes.byteOffset === 0 &&
+    dataBytes.byteLength === dataBytes.buffer.byteLength
+      ? dataBytes.buffer
+      : dataBytes.slice().buffer
 
   const key = await cryptoObj.subtle.importKey(
     'raw',
@@ -60,7 +64,7 @@ async function computeWithSubtle(
   const signature = await cryptoObj.subtle.sign(
     'HMAC',
     key,
-    data as ArrayBuffer,
+    data,
   )
   return toHex(new Uint8Array(signature))
 }
