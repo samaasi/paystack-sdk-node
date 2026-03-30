@@ -1,4 +1,4 @@
-import { ApiClient, type ApiClientOptions } from './api-client'
+import { ApiClient, type ApiClientOptions, type RequestInitLike } from './api-client'
 
 export interface RequestExecutorOptions extends ApiClientOptions {}
 
@@ -9,7 +9,7 @@ export class RequestExecutor {
     this.client = new ApiClient(options)
   }
 
-  execute<T>(path: string, options: RequestInit = {}): Promise<T> {
+  execute<T>(path: string, options: RequestInitLike = {}): Promise<T> {
     return this.client.request<T>(path, options)
   }
 }
