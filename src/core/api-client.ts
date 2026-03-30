@@ -8,6 +8,27 @@ import { executeWithRetry, type RetryOptions } from './retry-strategy'
 
 type FetchImpl = (input: string, init?: RequestInit) => Promise<Response>
 
+function buildHeaders(
+  apiKey: string,
+  existing?: RequestInit['headers'],
+): Headers {
+  const headers = new Headers()
+  headers.set('Authorization', `Bearer ${apiKey}`)
+  headers.set('Content-Type', 'application/json')
+
+  if (!existing) {
+    return headers
+  }
+
+  const extras = new Headers(existing)
+
+  for (const [key, value] of extras.entries()) {
+    headers.set(key, value)
+  }
+
+  return headers
+}
+
 export interface ApiClientOptions {
   apiKey: string
   baseUrl?: string
@@ -47,20 +68,11 @@ export class ApiClient {
 
     const operation = async () => {
       try {
-        const extraHeaders =
-          init.headers &&
-          !(init.headers instanceof Headers) &&
-          !Array.isArray(init.headers)
-            ? init.headers
-            : undefined
+        const headers = buildHeaders(this.apiKey, init.headers)
 
         const response = await fetchFn(url, {
           ...init,
-          headers: {
-            Authorization: `Bearer ${this.apiKey}`,
-            'Content-Type': 'application/json',
-            ...(extraHeaders ?? {}),
-          },
+          headers,
         } as RequestInit)
 
         if (!response.ok) {
