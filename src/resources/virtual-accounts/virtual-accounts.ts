@@ -25,16 +25,10 @@ export class VirtualAccountsResource extends BaseResource {
     payload: AssignDedicatedVirtualAccountRequest,
     options: AssignDedicatedVirtualAccountOptions = {},
   ): Promise<AssignDedicatedVirtualAccountResponse> {
-    const init = withIdempotencyKey(
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      options.idempotencyKey,
-    )
-
-    return this.executor.execute<AssignDedicatedVirtualAccountResponse>(
+    const init = withIdempotencyKey({}, options.idempotencyKey)
+    return this.executor.post<AssignDedicatedVirtualAccountResponse>(
       this.basePath,
+      payload,
       init,
     )
   }
@@ -80,9 +74,7 @@ export class VirtualAccountsResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListDedicatedVirtualAccountsResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListDedicatedVirtualAccountsResponse>(path)
   }
 
   /**
@@ -105,8 +97,6 @@ export class VirtualAccountsResource extends BaseResource {
 
     const path = `${this.basePath}/requery?${search.toString()}`
 
-    return this.executor.execute<RequeryDedicatedVirtualAccountResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<RequeryDedicatedVirtualAccountResponse>(path)
   }
 }

@@ -29,9 +29,7 @@ export class VerificationResource extends BaseResource {
 
     const path = `${this.bankBasePath}/resolve?${search.toString()}`
 
-    return this.executor.execute<ResolveAccountResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ResolveAccountResponse>(path)
   }
 
   /**
@@ -43,9 +41,7 @@ export class VerificationResource extends BaseResource {
   resolveBvn(bvn: string): Promise<ResolveBvnResponse> {
     const path = `${this.bankBasePath}/resolve_bvn/${encodeURIComponent(bvn)}`
 
-    return this.executor.execute<ResolveBvnResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ResolveBvnResponse>(path)
   }
 
   /**
@@ -62,8 +58,6 @@ export class VerificationResource extends BaseResource {
 
     const path = `${this.bankBasePath}/match_bvn?${search.toString()}`
 
-    return this.executor.execute<MatchBvnResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<MatchBvnResponse>(path)
   }
 }
