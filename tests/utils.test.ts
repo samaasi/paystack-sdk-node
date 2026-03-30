@@ -107,9 +107,8 @@ describe('Utils', () => {
 
   describe('Webhooks', () => {
     test('computePaystackSignature uses Uint8Array view for subtle crypto', async () => {
-      mock.module('node:crypto', () => ({} as any))
-
       const originalCrypto = globalThis.crypto
+      const originalBuffer = (globalThis as any).Buffer
       const original = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8])
       const slice = original.subarray(2, 6)
       const expectedHex = Array.from(slice)
@@ -126,6 +125,8 @@ describe('Utils', () => {
           },
         },
       } as any
+      // @ts-ignore
+      globalThis.Buffer = undefined
 
       try {
         const { computePaystackSignature } = await import(
@@ -136,6 +137,31 @@ describe('Utils', () => {
       } finally {
         // @ts-ignore
         globalThis.crypto = originalCrypto
+        // @ts-ignore
+        globalThis.Buffer = originalBuffer
+      }
+    })
+
+    test('computePaystackSignature throws when subtle crypto is unavailable and node crypto path fails', async () => {
+      const originalCrypto = globalThis.crypto
+      const originalBuffer = (globalThis as any).Buffer
+      // @ts-ignore
+      globalThis.crypto = undefined
+      // @ts-ignore
+      globalThis.Buffer = undefined
+
+      try {
+        const { computePaystackSignature } = await import(
+          '../src/webhooks/verifier'
+        )
+        await expect(
+          computePaystackSignature('sk_test', new Uint8Array([1, 2, 3])),
+        ).rejects.toThrow('subtle crypto not available')
+      } finally {
+        // @ts-ignore
+        globalThis.crypto = originalCrypto
+        // @ts-ignore
+        globalThis.Buffer = originalBuffer
       }
     })
   })
