@@ -79,4 +79,39 @@ describe('Utils', () => {
       expect(result).toBe(init)
     })
   })
+
+  describe('Webhooks', () => {
+    test('computePaystackSignature uses Uint8Array view for subtle crypto', async () => {
+      mock.module('node:crypto', () => ({} as any))
+
+      const originalCrypto = globalThis.crypto
+      const original = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8])
+      const slice = original.subarray(2, 6)
+      const expectedHex = Array.from(slice)
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('')
+
+      // @ts-ignore
+      globalThis.crypto = {
+        subtle: {
+          importKey: async () => ({}),
+          sign: async (_algo: unknown, _key: unknown, data: unknown) => {
+            const bytes = data instanceof ArrayBuffer ? new Uint8Array(data) : new Uint8Array()
+            return Uint8Array.from(bytes).buffer
+          },
+        },
+      } as any
+
+      try {
+        const { computePaystackSignature } = await import(
+          '../src/webhooks/verifier'
+        )
+        const result = await computePaystackSignature('sk_test', slice)
+        expect(result).toBe(expectedHex)
+      } finally {
+        // @ts-ignore
+        globalThis.crypto = originalCrypto
+      }
+    })
+  })
 })
