@@ -2,6 +2,7 @@ export interface PaystackConfig {
   apiKey: string
   baseUrl: string
   maxRetries: number
+  timeoutMs?: number
 }
 
 export interface LoadConfigOptions {
