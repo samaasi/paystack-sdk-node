@@ -197,7 +197,7 @@ describe('Core', () => {
       expect(attempts).toBe(2)
     })
 
-    test('executeWithRetry fails after max retries', async () => {
+    test('executeWithRetry maxRetries means retries after the first attempt', async () => {
       let attempts = 0
       const operation = async () => {
         attempts++
@@ -212,7 +212,7 @@ describe('Core', () => {
         })
       } catch (error) {
         expect((error as Error).message).toBe('Fail')
-        expect(attempts).toBe(3) // Initial + 2 retries
+        expect(attempts).toBe(3)
       }
     })
   })
