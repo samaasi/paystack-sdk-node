@@ -26,15 +26,12 @@ export class TransfersResource extends BaseResource {
     payload: InitiateTransferRequest,
     options: InitiateTransferOptions = {},
   ): Promise<InitiateTransferResponse> {
-    const init = withIdempotencyKey(
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      options.idempotencyKey,
+    const init = withIdempotencyKey({}, options.idempotencyKey)
+    return this.executor.post<InitiateTransferResponse>(
+      this.basePath,
+      payload,
+      init,
     )
-
-    return this.executor.execute<InitiateTransferResponse>(this.basePath, init)
   }
 
   /**
@@ -47,12 +44,9 @@ export class TransfersResource extends BaseResource {
   finalize(
     payload: FinalizeTransferRequest,
   ): Promise<FinalizeTransferResponse> {
-    return this.executor.execute<FinalizeTransferResponse>(
+    return this.executor.post<FinalizeTransferResponse>(
       `${this.basePath}/finalize_transfer`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 }

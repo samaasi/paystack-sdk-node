@@ -31,16 +31,11 @@ export class TransferRecipientsResource extends BaseResource {
     payload: CreateTransferRecipientRequest,
     options: CreateTransferRecipientOptions = {},
   ): Promise<CreateTransferRecipientResponse> {
-    const init = withIdempotencyKey(
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      options.idempotencyKey,
-    )
+    const init = withIdempotencyKey({}, options.idempotencyKey)
 
-    return this.executor.execute<CreateTransferRecipientResponse>(
+    return this.executor.post<CreateTransferRecipientResponse>(
       this.basePath,
+      payload,
       init,
     )
   }
@@ -51,12 +46,7 @@ export class TransferRecipientsResource extends BaseResource {
    * @see https://paystack.com/docs/api/transfer-recipient/#list
    */
   list(): Promise<ListTransferRecipientsResponse> {
-    return this.executor.execute<ListTransferRecipientsResponse>(
-      this.basePath,
-      {
-        method: 'GET',
-      },
-    )
+    return this.executor.get<ListTransferRecipientsResponse>(this.basePath)
   }
 
   /**
@@ -70,11 +60,8 @@ export class TransferRecipientsResource extends BaseResource {
   ): Promise<FetchTransferRecipientResponse> {
     const id = String(recipientIdOrCode)
 
-    return this.executor.execute<FetchTransferRecipientResponse>(
+    return this.executor.get<FetchTransferRecipientResponse>(
       `${this.basePath}/${encodeURIComponent(id)}`,
-      {
-        method: 'GET',
-      },
     )
   }
 
@@ -89,12 +76,9 @@ export class TransferRecipientsResource extends BaseResource {
     recipientCode: string,
     payload: UpdateTransferRecipientRequest,
   ): Promise<UpdateTransferRecipientResponse> {
-    return this.executor.execute<UpdateTransferRecipientResponse>(
+    return this.executor.put<UpdateTransferRecipientResponse>(
       `${this.basePath}/${encodeURIComponent(recipientCode)}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 }
