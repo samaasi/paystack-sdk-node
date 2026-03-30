@@ -27,15 +27,13 @@ export class CustomersResource extends BaseResource {
     payload: CreateCustomerRequest,
     options: CreateCustomerOptions = {},
   ): Promise<CreateCustomerApiResponse> {
-    const init = withIdempotencyKey(
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      options.idempotencyKey,
-    )
+    const init = withIdempotencyKey({}, options.idempotencyKey)
 
-    return this.executor.execute<CreateCustomerApiResponse>(this.basePath, init)
+    return this.executor.post<CreateCustomerApiResponse>(
+      this.basePath,
+      payload,
+      init,
+    )
   }
 
   /**
@@ -59,9 +57,7 @@ export class CustomersResource extends BaseResource {
     const path =
       search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
 
-    return this.executor.execute<ListCustomersResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<ListCustomersResponse>(path)
   }
 
   /**
@@ -76,12 +72,9 @@ export class CustomersResource extends BaseResource {
     customerCodeOrEmail: string,
     payload: UpdateCustomerRequest,
   ): Promise<CreateCustomerApiResponse> {
-    return this.executor.execute<CreateCustomerApiResponse>(
+    return this.executor.put<CreateCustomerApiResponse>(
       `${this.basePath}/${encodeURIComponent(customerCodeOrEmail)}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 }
