@@ -1,3 +1,6 @@
+import { stringifyQuery } from '../../utils/qs'
+import { AutoPaginator, type PaginatorOptions } from '../../utils/pagination'
+import type { PaymentPage } from './payment-pages.types'
 import type {
   CheckSlugRequest,
   CheckSlugApiResponse,
@@ -15,10 +18,7 @@ export class PaymentPagesResource extends BaseResource {
   create(
     payload: CreatePaymentPageRequest,
   ): Promise<GetPaymentPageApiResponse> {
-    return this.executor.execute<GetPaymentPageApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<GetPaymentPageApiResponse>(this.basePath, payload)
   }
 
   /**
@@ -31,38 +31,25 @@ export class PaymentPagesResource extends BaseResource {
   list(
     query: ListPaymentPagesQuery = {},
   ): Promise<ListPaymentPagesApiResponse> {
-    const search = new URLSearchParams()
+    const qs = stringifyQuery(query as Record<string, unknown>)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
-    if (query.perPage !== undefined) {
-      search.set('perPage', String(query.perPage))
-    }
+    return this.executor.get<ListPaymentPagesApiResponse>(path)
+  }
 
-    if (query.page !== undefined) {
-      search.set('page', String(query.page))
-    }
-
-    if (query.from !== undefined) {
-      search.set('from', query.from)
-    }
-
-    if (query.to !== undefined) {
-      search.set('to', query.to)
-    }
-
-    const path =
-      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
-
-    return this.executor.execute<ListPaymentPagesApiResponse>(path, {
-      method: 'GET',
+  listAll(
+    query: ListPaymentPagesQuery = {},
+  ): AutoPaginator<PaymentPage, ListPaymentPagesQuery> {
+    return new AutoPaginator({
+      fetchPage: (q) => this.list(q),
+      initialQuery: query,
     })
   }
 
   get(idOrSlug: string | number): Promise<GetPaymentPageApiResponse> {
     const path = `${this.basePath}/${encodeURIComponent(String(idOrSlug))}`
 
-    return this.executor.execute<GetPaymentPageApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetPaymentPageApiResponse>(path)
   }
 
   /**
@@ -79,10 +66,7 @@ export class PaymentPagesResource extends BaseResource {
   ): Promise<GetPaymentPageApiResponse> {
     const path = `${this.basePath}/${encodeURIComponent(String(idOrSlug))}`
 
-    return this.executor.execute<GetPaymentPageApiResponse>(path, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.put<GetPaymentPageApiResponse>(path, payload)
   }
 
   /**
@@ -95,9 +79,6 @@ export class PaymentPagesResource extends BaseResource {
   checkSlug(payload: CheckSlugRequest): Promise<CheckSlugApiResponse> {
     const path = `${this.basePath}/check_slug`
 
-    return this.executor.execute<CheckSlugApiResponse>(path, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CheckSlugApiResponse>(path, payload)
   }
 }

@@ -1,4 +1,7 @@
 import { BaseResource } from '../base'
+import { stringifyQuery } from '../../utils/qs'
+import { AutoPaginator, type PaginatorOptions } from '../../utils/pagination'
+import type { Transfer } from './transfers.types'
 import type {
   FinalizeTransferRequest,
   FinalizeTransferResponse,
@@ -34,7 +37,42 @@ export class TransfersResource extends BaseResource {
       options.idempotencyKey,
     )
 
-    return this.executor.execute<InitiateTransferResponse>(this.basePath, init)
+    return this.executor.post<InitiateTransferResponse>(
+      this.basePath,
+      payload,
+      init,
+    )
+  }
+
+  /**
+   * List transfers available on your integration.
+   */
+  list(query: Record<string, unknown> = {}): Promise<any> {
+    const qs = stringifyQuery(query)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
+
+    return this.executor.get<any>(path)
+  }
+
+  /**
+   * List transfers via an async iterator.
+   */
+  listAll(
+    query: Record<string, unknown> = {},
+  ): AutoPaginator<Transfer, Record<string, unknown>> {
+    return new AutoPaginator({
+      fetchPage: (q) => this.list(q),
+      initialQuery: query,
+    })
+  }
+
+  /**
+   * Fetch a transfer.
+   */
+  fetch(idOrCode: string | number): Promise<any> {
+    return this.executor.get<any>(
+      `${this.basePath}/${encodeURIComponent(String(idOrCode))}`,
+    )
   }
 
   /**
@@ -47,12 +85,9 @@ export class TransfersResource extends BaseResource {
   finalize(
     payload: FinalizeTransferRequest,
   ): Promise<FinalizeTransferResponse> {
-    return this.executor.execute<FinalizeTransferResponse>(
+    return this.executor.post<FinalizeTransferResponse>(
       `${this.basePath}/finalize_transfer`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 }

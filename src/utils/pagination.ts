@@ -5,9 +5,10 @@ export interface PaginatorOptions<T, Q> {
   initialQuery: Q
 }
 
-export class AutoPaginator<T, Q extends { page?: number; perPage?: number }>
-  implements AsyncIterableIterator<T>
-{
+export class AutoPaginator<
+  T,
+  Q extends { page?: number; perPage?: number },
+> implements AsyncIterableIterator<T> {
   private currentPage = 1
   private currentItems: T[] = []
   private itemIndex = 0
@@ -41,7 +42,10 @@ export class AutoPaginator<T, Q extends { page?: number; perPage?: number }>
   }
 
   public async next(): Promise<IteratorResult<T>> {
-    if (!this.fetchedFirstPage || (this.itemIndex >= this.currentItems.length && this.hasMorePages)) {
+    if (
+      !this.fetchedFirstPage ||
+      (this.itemIndex >= this.currentItems.length && this.hasMorePages)
+    ) {
       await this.fetchNextPage()
     }
 

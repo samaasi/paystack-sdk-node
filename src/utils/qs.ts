@@ -23,15 +23,24 @@ export function stringifyQuery(
         for (let i = 0; i < value.length; i++) {
           const arrValue = value[i]
           if (arrValue === null || arrValue === undefined) continue
-          
+
           if (typeof arrValue === 'object') {
             if (arrValue instanceof Date) {
-              pairs.push(`${encodedKey}[${i}]=${encodeURIComponent(arrValue.toISOString())}`)
+              pairs.push(
+                `${encodedKey}[${i}]=${encodeURIComponent(arrValue.toISOString())}`,
+              )
             } else {
-              pairs.push(stringifyQuery(arrValue as Record<string, unknown>, `${encodedKey}[${i}]`))
+              pairs.push(
+                stringifyQuery(
+                  arrValue as Record<string, unknown>,
+                  `${encodedKey}[${i}]`,
+                ),
+              )
             }
           } else {
-            pairs.push(`${encodedKey}[${i}]=${encodeURIComponent(String(arrValue))}`)
+            pairs.push(
+              `${encodedKey}[${i}]=${encodeURIComponent(String(arrValue))}`,
+            )
           }
         }
       } else {

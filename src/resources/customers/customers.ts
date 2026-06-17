@@ -68,7 +68,9 @@ export class CustomersResource extends BaseResource {
    * @param query - The query parameters for filtering (perPage, page)
    * @returns An async iterator over customers
    */
-  listAll(query: ListCustomersQuery = {}): AutoPaginator<Customer, ListCustomersQuery> {
+  listAll(
+    query: ListCustomersQuery = {},
+  ): AutoPaginator<Customer, ListCustomersQuery> {
     const options: PaginatorOptions<Customer, ListCustomersQuery> = {
       fetchPage: (q) => this.list(q),
       initialQuery: query,
