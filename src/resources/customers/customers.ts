@@ -2,11 +2,21 @@ import { BaseResource } from '../base'
 import type {
   ListCustomersQuery,
   CreateCustomerRequest,
-  ListCustomersResponse,
+  ListCustomersApiResponse,
   UpdateCustomerRequest,
   CreateCustomerApiResponse,
+  FetchCustomerApiResponse,
+  ValidateCustomerRequest,
+  ValidateCustomerApiResponse,
+  SetRiskActionRequest,
+  SetRiskActionApiResponse,
+  DeactivateAuthorizationRequest,
+  DeactivateAuthorizationApiResponse,
+  Customer,
 } from './customers.types'
 import { withIdempotencyKey } from '../../utils/idempotency'
+import { stringifyQuery } from '../../utils/qs'
+import { AutoPaginator, type PaginatorOptions } from '../../utils/pagination'
 
 export interface CreateCustomerOptions {
   idempotencyKey?: string
@@ -45,23 +55,26 @@ export class CustomersResource extends BaseResource {
    * @returns A promise resolving to the list of customers
    * @see https://paystack.com/docs/api/customer/#list
    */
-  list(query: ListCustomersQuery = {}): Promise<ListCustomersResponse> {
-    const search = new URLSearchParams()
+  list(query: ListCustomersQuery = {}): Promise<ListCustomersApiResponse> {
+    const qs = stringifyQuery(query as Record<string, unknown>)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
-    if (query.perPage !== undefined) {
-      search.set('perPage', String(query.perPage))
+    return this.executor.get<ListCustomersApiResponse>(path)
+  }
+
+  /**
+   * List customers available on your integration via an async iterator.
+   *
+   * @param query - The query parameters for filtering (perPage, page)
+   * @returns An async iterator over customers
+   */
+  listAll(query: ListCustomersQuery = {}): AutoPaginator<Customer, ListCustomersQuery> {
+    const options: PaginatorOptions<Customer, ListCustomersQuery> = {
+      fetchPage: (q) => this.list(q),
+      initialQuery: query,
     }
 
-    if (query.page !== undefined) {
-      search.set('page', String(query.page))
-    }
-
-    const path =
-      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
-
-    return this.executor.execute<ListCustomersResponse>(path, {
-      method: 'GET',
-    })
+    return new AutoPaginator(options)
   }
 
   /**
@@ -76,12 +89,72 @@ export class CustomersResource extends BaseResource {
     customerCodeOrEmail: string,
     payload: UpdateCustomerRequest,
   ): Promise<CreateCustomerApiResponse> {
-    return this.executor.execute<CreateCustomerApiResponse>(
+    return this.executor.put<CreateCustomerApiResponse>(
       `${this.basePath}/${encodeURIComponent(customerCodeOrEmail)}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(payload),
-      },
+      payload,
+    )
+  }
+
+  /**
+   * Fetch details of a customer on your integration.
+   *
+   * @param emailOrCode - An email or customer code for the customer you want to fetch
+   * @returns A promise resolving to the customer details
+   * @see https://paystack.com/docs/api/customer/#fetch
+   */
+  fetch(emailOrCode: string): Promise<FetchCustomerApiResponse> {
+    return this.executor.get<FetchCustomerApiResponse>(
+      `${this.basePath}/${encodeURIComponent(emailOrCode)}`,
+    )
+  }
+
+  /**
+   * Validate a customer's identity.
+   *
+   * @param customerCodeOrEmail - An email or customer code for the customer you want to validate
+   * @param payload - The validation payload
+   * @returns A promise resolving to the validation response
+   * @see https://paystack.com/docs/api/customer/#validate
+   */
+  validate(
+    customerCodeOrEmail: string,
+    payload: ValidateCustomerRequest,
+  ): Promise<ValidateCustomerApiResponse> {
+    return this.executor.post<ValidateCustomerApiResponse>(
+      `${this.basePath}/${encodeURIComponent(customerCodeOrEmail)}/identification`,
+      payload,
+    )
+  }
+
+  /**
+   * Whitelist or blacklist a customer on your integration.
+   *
+   * @param payload - The risk action payload
+   * @returns A promise resolving to the updated customer details
+   * @see https://paystack.com/docs/api/customer/#set-risk-action
+   */
+  setRiskAction(
+    payload: SetRiskActionRequest,
+  ): Promise<SetRiskActionApiResponse> {
+    return this.executor.post<SetRiskActionApiResponse>(
+      `${this.basePath}/set_risk_action`,
+      payload,
+    )
+  }
+
+  /**
+   * Deactivate an authorization when the card needs to be forgotten.
+   *
+   * @param payload - The authorization deactivation payload
+   * @returns A promise resolving to the deactivation response
+   * @see https://paystack.com/docs/api/customer/#deactivate-authorization
+   */
+  deactivateAuthorization(
+    payload: DeactivateAuthorizationRequest,
+  ): Promise<DeactivateAuthorizationApiResponse> {
+    return this.executor.post<DeactivateAuthorizationApiResponse>(
+      `${this.basePath}/deactivate_authorization`,
+      payload,
     )
   }
 }
