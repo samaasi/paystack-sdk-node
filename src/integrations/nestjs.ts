@@ -128,7 +128,8 @@ export class PaystackWebhookGuard implements CanActivate {
           ? (req.body as WebhookEvent<unknown>)
           : JSON.parse(rawBody)
     } catch {
-      req.paystackEvent = req.body ?? rawBody
+      // If parsing fails, leave paystackEvent undefined
+      req.paystackEvent = undefined
     }
 
     return true
