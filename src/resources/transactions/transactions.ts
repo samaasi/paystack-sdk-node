@@ -84,13 +84,27 @@ export class TransactionsResource extends BaseResource {
   }
 
   /**
+   * Requery a transaction (alias for fetch, for backward compatibility).
+   *
+   * @param id - The numeric ID of the transaction to requery
+   * @returns A promise resolving to the transaction details
+   * @see https://paystack.com/docs/api/transaction/#fetch
+   * @deprecated Use fetch instead
+   */
+  requery(id: number): Promise<FetchTransactionApiResponse> {
+    return this.fetch(id)
+  }
+
+  /**
    * List transactions available on your integration.
    *
    * @param query - The query parameters for filtering (perPage, page, status, etc.)
    * @returns A promise resolving to the list of transactions
    * @see https://paystack.com/docs/api/transaction/#list
    */
-  list(query: ListTransactionsQuery = {}): Promise<ListTransactionsApiResponse> {
+  list(
+    query: ListTransactionsQuery = {},
+  ): Promise<ListTransactionsApiResponse> {
     const qs = stringifyQuery(query as Record<string, unknown>)
     const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
@@ -103,7 +117,9 @@ export class TransactionsResource extends BaseResource {
    * @param query - The query parameters for filtering (perPage, page, status, etc.)
    * @returns An async iterator over transactions
    */
-  listAll(query: ListTransactionsQuery = {}): AutoPaginator<Transaction, ListTransactionsQuery> {
+  listAll(
+    query: ListTransactionsQuery = {},
+  ): AutoPaginator<Transaction, ListTransactionsQuery> {
     const options: PaginatorOptions<Transaction, ListTransactionsQuery> = {
       fetchPage: (q) => this.list(q),
       initialQuery: query,
@@ -140,7 +156,9 @@ export class TransactionsResource extends BaseResource {
    * @returns A promise resolving to the transaction timeline
    * @see https://paystack.com/docs/api/transaction/#timeline
    */
-  timeline(idOrReference: string | number): Promise<TransactionTimelineApiResponse> {
+  timeline(
+    idOrReference: string | number,
+  ): Promise<TransactionTimelineApiResponse> {
     return this.executor.get<TransactionTimelineApiResponse>(
       `${this.basePath}/timeline/${encodeURIComponent(String(idOrReference))}`,
     )
@@ -153,9 +171,13 @@ export class TransactionsResource extends BaseResource {
    * @returns A promise resolving to the transaction totals
    * @see https://paystack.com/docs/api/transaction/#totals
    */
-  totals(query: TransactionTotalsQuery = {}): Promise<TransactionTotalsApiResponse> {
+  totals(
+    query: TransactionTotalsQuery = {},
+  ): Promise<TransactionTotalsApiResponse> {
     const qs = stringifyQuery(query as Record<string, unknown>)
-    const path = qs ? `${this.basePath}/totals?${qs}` : `${this.basePath}/totals`
+    const path = qs
+      ? `${this.basePath}/totals?${qs}`
+      : `${this.basePath}/totals`
 
     return this.executor.get<TransactionTotalsApiResponse>(path)
   }
@@ -167,9 +189,13 @@ export class TransactionsResource extends BaseResource {
    * @returns A promise resolving to the export response containing the path to download the export
    * @see https://paystack.com/docs/api/transaction/#export
    */
-  export(query: ExportTransactionsQuery = {}): Promise<ExportTransactionsApiResponse> {
+  export(
+    query: ExportTransactionsQuery = {},
+  ): Promise<ExportTransactionsApiResponse> {
     const qs = stringifyQuery(query as Record<string, unknown>)
-    const path = qs ? `${this.basePath}/export?${qs}` : `${this.basePath}/export`
+    const path = qs
+      ? `${this.basePath}/export?${qs}`
+      : `${this.basePath}/export`
 
     return this.executor.get<ExportTransactionsApiResponse>(path)
   }

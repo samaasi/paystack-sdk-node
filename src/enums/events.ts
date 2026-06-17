@@ -24,6 +24,20 @@ export enum PaystackEvent {
   TransferReversed = 'transfer.reversed',
   DedicatedAccountAssignSuccess = 'dedicatedaccount.assign.success',
   DedicatedAccountAssignFailed = 'dedicatedaccount.assign.failed',
+  ChargePending = 'charge.pending',
+  ChargeFailed = 'charge.failed',
+  ChargeExpired = 'charge.expired',
+  ChargeTimeout = 'charge.timeout',
+  TransferPending = 'transfer.pending',
+  TransferOtpPending = 'transfer.otp_pending',
+  TransferOtpSent = 'transfer.otp_sent',
+  TransferReversedPending = 'transfer.reversed_pending',
+  SubscriptionPending = 'subscription.pending',
+  SubscriptionFailed = 'subscription.failed',
+  InvoicePaid = 'invoice.paid',
+  DedicatedAccountDeactivated = 'dedicatedaccount.deactivated',
+  DedicatedAccountReactivated = 'dedicatedaccount.reactivated',
+  DedicatedAccountTransaction = 'dedicatedaccount.transaction',
 }
 
 export type PaystackEventName = `${PaystackEvent}`
