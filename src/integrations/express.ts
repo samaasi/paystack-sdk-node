@@ -1,7 +1,11 @@
 import { verifyPaystackSignature } from '../webhooks/verifier'
+import type { PaystackEvent } from '../enums/events'
+import type { WebhookEvent } from '../resources/webhooks/webhooks.types'
 
 export interface ExpressWebhookOptions {
+  /** Your Paystack secret key used to verify webhook signatures */
   secretKey: string
+  /** The header name to check for the signature (default: 'x-paystack-signature') */
   headerName?: string
 }
 
@@ -9,7 +13,7 @@ export interface ExpressLikeRequest {
   rawBody?: string | Uint8Array
   body?: unknown
   headers?: Record<string, unknown>
-  paystackEvent?: unknown
+  paystackEvent?: WebhookEvent<unknown>
   [key: string]: unknown
 }
 
@@ -57,6 +61,57 @@ function getRawBody(req: ExpressLikeRequest): string | undefined {
   return undefined
 }
 
+/**
+ * Creates an Express middleware for verifying Paystack webhook signatures.
+ *
+ * **Important**: To use this middleware, you must configure your Express app to parse
+ * the raw request body. You can do this using `express.json({ verify: (req, res, buf) => { req.rawBody = buf } })`
+ * or a similar approach.
+ *
+ * @param options - Configuration options for the middleware
+ * @returns An Express middleware function that verifies webhook signatures
+ *
+ * @example
+ * ```typescript
+ * import express from 'express'
+ * import { createPaystackExpressMiddleware } from 'paystack-sdk-node/express'
+ * import type { PaystackEvent, WebhookEvent } from 'paystack-sdk-node'
+ *
+ * const app = express()
+ *
+ * // Configure Express to parse raw body
+ * app.use(express.json({
+ *   verify: (req, res, buf) => {
+ *     req.rawBody = buf
+ *   }
+ * }))
+ *
+ * // Add Paystack webhook middleware
+ * app.use('/paystack/webhook', createPaystackExpressMiddleware({
+ *   secretKey: 'sk_test_your_secret_key'
+ * }))
+ *
+ * // Handle webhook events
+ * app.post('/paystack/webhook', (req, res) => {
+ *   const event = req.paystackEvent as WebhookEvent
+ *
+ *   switch (event.event) {
+ *     case PaystackEvent.ChargeSuccess:
+ *       // Handle successful charge
+ *       console.log('Charge successful!', event.data)
+ *       break
+ *     case PaystackEvent.TransferSuccess:
+ *       // Handle successful transfer
+ *       console.log('Transfer successful!', event.data)
+ *       break
+ *   }
+ *
+ *   res.status(200).send('OK')
+ * })
+ *
+ * app.listen(3000)
+ * ```
+ */
 export function createPaystackExpressMiddleware(
   options: ExpressWebhookOptions,
 ) {
@@ -93,10 +148,11 @@ export function createPaystackExpressMiddleware(
     try {
       req.paystackEvent =
         req.body && typeof req.body === 'object'
-          ? req.body
+          ? (req.body as WebhookEvent<unknown>)
           : JSON.parse(rawBody)
     } catch {
-      req.paystackEvent = req.body ?? rawBody
+      // If parsing fails, leave paystackEvent undefined
+      req.paystackEvent = undefined
     }
 
     next()
