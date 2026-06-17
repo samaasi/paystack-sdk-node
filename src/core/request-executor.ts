@@ -25,7 +25,7 @@ export class RequestExecutor {
     return this.client.put<T, B>(path, body, options)
   }
 
-  delete<T, B = unknown>(path: string, body?: B, options: RequestInit = {}): Promise<T> {
-    return this.client.delete<T, B>(path, body, options)
+  delete<T>(path: string, options: RequestInit = {}): Promise<T> {
+    return this.client.delete<T>(path, options)
   }
 }

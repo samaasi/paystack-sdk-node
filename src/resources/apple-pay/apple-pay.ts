@@ -20,12 +20,9 @@ export class ApplePayResource extends BaseResource {
   registerDomain(
     payload: RegisterApplePayDomainRequest,
   ): Promise<RegisterApplePayDomainApiResponse> {
-    return this.executor.execute<RegisterApplePayDomainApiResponse>(
+    return this.executor.post<RegisterApplePayDomainApiResponse>(
       this.basePath,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
+      payload,
     )
   }
 
@@ -36,12 +33,7 @@ export class ApplePayResource extends BaseResource {
    * @see https://paystack.com/docs/api/apple-pay/#list-domains
    */
   listDomains(): Promise<ListApplePayDomainsApiResponse> {
-    return this.executor.execute<ListApplePayDomainsApiResponse>(
-      this.basePath,
-      {
-        method: 'GET',
-      },
-    )
+    return this.executor.get<ListApplePayDomainsApiResponse>(this.basePath)
   }
 
   /**
@@ -54,10 +46,9 @@ export class ApplePayResource extends BaseResource {
   unregisterDomain(
     payload: UnregisterApplePayDomainRequest,
   ): Promise<UnregisterApplePayDomainApiResponse> {
-    return this.executor.execute<UnregisterApplePayDomainApiResponse>(
+    return this.executor.delete<UnregisterApplePayDomainApiResponse>(
       this.basePath,
       {
-        method: 'DELETE',
         body: JSON.stringify(payload),
       },
     )
