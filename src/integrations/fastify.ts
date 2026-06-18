@@ -116,7 +116,7 @@ export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
       reply
         .code(400)
         .send('Missing raw request body for Paystack webhook verification')
-      throw new Error('Missing raw request body')
+      return
     }
 
     const signature = getHeader(req.headers, headerName)
@@ -128,7 +128,7 @@ export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
 
     if (!valid) {
       reply.code(401).send('Invalid Paystack signature')
-      throw new Error('Invalid Paystack signature')
+      return
     }
 
     try {
