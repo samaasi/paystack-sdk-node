@@ -36,3 +36,30 @@ export interface FinalizeTransferRequest {
 }
 
 export type FinalizeTransferResponse = ApiResponse<Transfer>
+
+export interface ListTransfersQuery {
+  perPage?: number
+  page?: number
+  status?: TransferStatus
+  from?: string
+  to?: string
+  currency?: string
+  recipient?: string
+}
+
+export interface ListTransfersMeta {
+  total: number
+  skipped: number
+  perPage: number
+  page: number
+  pageCount: number
+}
+
+export interface ListTransfersResponse {
+  status: boolean
+  message: string
+  data: Transfer[]
+  meta: ListTransfersMeta
+}
+
+export type FetchTransferResponse = ApiResponse<Transfer>

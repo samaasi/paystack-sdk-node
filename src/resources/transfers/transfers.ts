@@ -1,12 +1,15 @@
 import { BaseResource } from '../base'
 import { stringifyQuery } from '../../utils/qs'
 import { AutoPaginator, type PaginatorOptions } from '../../utils/pagination'
-import type { Transfer } from './transfers.types'
 import type {
+  FetchTransferResponse,
   FinalizeTransferRequest,
   FinalizeTransferResponse,
   InitiateTransferRequest,
   InitiateTransferResponse,
+  ListTransfersQuery,
+  ListTransfersResponse,
+  Transfer,
 } from './transfers.types'
 import { withIdempotencyKey } from '../../utils/idempotency'
 
@@ -37,29 +40,32 @@ export class TransfersResource extends BaseResource {
       options.idempotencyKey,
     )
 
-    return this.executor.post<InitiateTransferResponse>(
-      this.basePath,
-      payload,
-      init,
-    )
+    return this.executor.execute<InitiateTransferResponse>(this.basePath, init)
   }
 
   /**
    * List transfers available on your integration.
+   *
+   * @param query - Optional query parameters for filtering
+   * @returns A promise resolving to the list of transfers
+   * @see https://paystack.com/docs/api/transfer/#list
    */
-  list(query: Record<string, unknown> = {}): Promise<any> {
+  list(query: ListTransfersQuery = {}): Promise<ListTransfersResponse> {
     const qs = stringifyQuery(query)
     const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
-    return this.executor.get<any>(path)
+    return this.executor.get<ListTransfersResponse>(path)
   }
 
   /**
    * List transfers via an async iterator.
+   *
+   * @param query - Optional query parameters for filtering
+   * @returns An async paginator that yields transfers page by page
    */
   listAll(
-    query: Record<string, unknown> = {},
-  ): AutoPaginator<Transfer, Record<string, unknown>> {
+    query: ListTransfersQuery = {},
+  ): AutoPaginator<Transfer, ListTransfersQuery> {
     return new AutoPaginator({
       fetchPage: (q) => this.list(q),
       initialQuery: query,
@@ -67,10 +73,14 @@ export class TransfersResource extends BaseResource {
   }
 
   /**
-   * Fetch a transfer.
+   * Fetch a transfer by ID or transfer code.
+   *
+   * @param idOrCode - The transfer ID or transfer code
+   * @returns A promise resolving to the transfer details
+   * @see https://paystack.com/docs/api/transfer/#fetch
    */
-  fetch(idOrCode: string | number): Promise<any> {
-    return this.executor.get<any>(
+  fetch(idOrCode: string | number): Promise<FetchTransferResponse> {
+    return this.executor.get<FetchTransferResponse>(
       `${this.basePath}/${encodeURIComponent(String(idOrCode))}`,
     )
   }
