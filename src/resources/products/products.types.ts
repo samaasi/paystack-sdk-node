@@ -36,12 +36,7 @@ export interface ListProductsQuery {
   to?: string
 }
 
-export interface ListProductsResponse {
-  data: Product[]
-  meta?: PaginationMetadata
-}
-
-export type ListProductsApiResponse = ApiResponse<ListProductsResponse>
+export type ListProductsApiResponse = ApiResponse<Product[]>
 
 export type GetProductApiResponse = ApiResponse<Product>
 
