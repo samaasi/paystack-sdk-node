@@ -1,13 +1,14 @@
 export function stringifyQuery(
-  obj: Record<string, unknown>,
+  obj: object,
   prefix?: string,
 ): string {
   const pairs: string[] = []
+  const record = obj as Record<string, unknown>
 
-  for (const key in obj) {
-    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue
+  for (const key in record) {
+    if (!Object.prototype.hasOwnProperty.call(record, key)) continue
 
-    const value = obj[key]
+    const value = record[key]
     const encodedKey = prefix
       ? `${prefix}[${encodeURIComponent(key)}]`
       : encodeURIComponent(key)
@@ -32,7 +33,7 @@ export function stringifyQuery(
             } else {
               pairs.push(
                 stringifyQuery(
-                  arrValue as Record<string, unknown>,
+                  arrValue as object,
                   `${encodedKey}[${i}]`,
                 ),
               )
@@ -44,7 +45,7 @@ export function stringifyQuery(
           }
         }
       } else {
-        pairs.push(stringifyQuery(value as Record<string, unknown>, encodedKey))
+        pairs.push(stringifyQuery(value as object, encodedKey))
       }
     } else {
       pairs.push(`${encodedKey}=${encodeURIComponent(String(value))}`)
