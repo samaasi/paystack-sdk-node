@@ -40,12 +40,7 @@ export interface ListPaymentPagesQuery {
   to?: string
 }
 
-export interface ListPaymentPagesResponse {
-  data: PaymentPage[]
-  meta?: PaginationMetadata
-}
-
-export type ListPaymentPagesApiResponse = ApiResponse<ListPaymentPagesResponse>
+export type ListPaymentPagesApiResponse = ApiResponse<PaymentPage[]>
 
 export type GetPaymentPageApiResponse = ApiResponse<PaymentPage>
 
