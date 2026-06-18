@@ -106,10 +106,6 @@ export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
       rawBody = req.rawBody.toString('utf8')
     } else if (typeof req.body === 'string') {
       rawBody = req.body
-    } else if (req.body && typeof req.body === 'object') {
-      // Last resort: stringify body. Warning: key order might differ from payload.
-      // Verification might fail if not exact match.
-      rawBody = JSON.stringify(req.body)
     }
 
     if (rawBody === undefined) {
