@@ -40,4 +40,11 @@ export type UpdateTransferRecipientResponse = ApiResponse<TransferRecipient>
 
 export type FetchTransferRecipientResponse = ApiResponse<TransferRecipient>
 
+export interface ListTransferRecipientsQuery {
+  perPage?: number
+  page?: number
+  from?: string
+  to?: string
+}
+
 export type ListTransferRecipientsResponse = ApiResponse<TransferRecipient[]>

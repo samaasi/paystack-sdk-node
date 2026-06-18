@@ -1,3 +1,6 @@
+import { stringifyQuery } from '../../utils/qs'
+import { AutoPaginator, type PaginatorOptions } from '../../utils/pagination'
+import type { Refund } from './refunds.types'
 import type {
   ListRefundsQuery,
   RetryRefundRequest,
@@ -20,10 +23,7 @@ export class RefundsResource extends BaseResource {
    * @see https://paystack.com/docs/api/refund/#create
    */
   create(payload: CreateRefundRequest): Promise<CreateRefundApiResponse> {
-    return this.executor.execute<CreateRefundApiResponse>(this.basePath, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<CreateRefundApiResponse>(this.basePath, payload)
   }
 
   /**
@@ -34,33 +34,18 @@ export class RefundsResource extends BaseResource {
    * @see https://paystack.com/docs/api/refund/#list
    */
   list(query: ListRefundsQuery = {}): Promise<ListRefundsApiResponse> {
-    const search = new URLSearchParams()
+    const qs = stringifyQuery(query as Record<string, unknown>)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
-    if (query.transaction !== undefined) {
-      search.set('transaction', String(query.transaction))
-    }
+    return this.executor.get<ListRefundsApiResponse>(path)
+  }
 
-    if (query.from !== undefined) {
-      search.set('from', query.from)
-    }
-
-    if (query.to !== undefined) {
-      search.set('to', query.to)
-    }
-
-    if (query.perPage !== undefined) {
-      search.set('perPage', String(query.perPage))
-    }
-
-    if (query.page !== undefined) {
-      search.set('page', String(query.page))
-    }
-
-    const path =
-      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
-
-    return this.executor.execute<ListRefundsApiResponse>(path, {
-      method: 'GET',
+  listAll(
+    query: ListRefundsQuery = {},
+  ): AutoPaginator<Refund, ListRefundsQuery> {
+    return new AutoPaginator({
+      fetchPage: (q) => this.list(q),
+      initialQuery: query,
     })
   }
 
@@ -72,12 +57,9 @@ export class RefundsResource extends BaseResource {
    * @see https://paystack.com/docs/api/refund/#fetch
    */
   get(idOrReference: number | string): Promise<GetRefundApiResponse> {
-    const identifier = String(idOrReference)
-    const path = `${this.basePath}/${encodeURIComponent(identifier)}`
-
-    return this.executor.execute<GetRefundApiResponse>(path, {
-      method: 'GET',
-    })
+    return this.executor.get<GetRefundApiResponse>(
+      `${this.basePath}/${encodeURIComponent(String(idOrReference))}`,
+    )
   }
 
   /**
@@ -91,14 +73,9 @@ export class RefundsResource extends BaseResource {
     id: number | string,
     payload: RetryRefundRequest,
   ): Promise<RetryRefundApiResponse> {
-    const identifier = String(id)
-    const path = `${this.basePath}/retry_with_customer_details/${encodeURIComponent(
-      identifier,
-    )}`
-
-    return this.executor.execute<RetryRefundApiResponse>(path, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    return this.executor.post<RetryRefundApiResponse>(
+      `${this.basePath}/retry_with_customer_details/${encodeURIComponent(String(id))}`,
+      payload,
+    )
   }
 }

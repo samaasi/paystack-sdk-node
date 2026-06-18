@@ -1,4 +1,5 @@
 import type {
+  Product,
   ListProductsQuery,
   CreateProductRequest,
   UpdateProductRequest,
@@ -8,6 +9,8 @@ import type {
   UpdateProductApiResponse,
 } from './products.types'
 import { BaseResource } from '../base'
+import { stringifyQuery } from '../../utils/qs'
+import { AutoPaginator } from '../../utils/pagination'
 
 export class ProductsResource extends BaseResource {
   private readonly basePath = '/product'
@@ -34,30 +37,16 @@ export class ProductsResource extends BaseResource {
    * @see https://paystack.com/docs/api/product/#list
    */
   list(query: ListProductsQuery = {}): Promise<ListProductsApiResponse> {
-    const search = new URLSearchParams()
-
-    if (query.perPage !== undefined) {
-      search.set('perPage', String(query.perPage))
-    }
-
-    if (query.page !== undefined) {
-      search.set('page', String(query.page))
-    }
-
-    if (query.from !== undefined) {
-      search.set('from', query.from)
-    }
-
-    if (query.to !== undefined) {
-      search.set('to', query.to)
-    }
-
-    const path =
-      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
+    const qs = stringifyQuery(query)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
     return this.executor.execute<ListProductsApiResponse>(path, {
       method: 'GET',
     })
+  }
+
+  listAll(query: ListProductsQuery = {}): AutoPaginator<Product, ListProductsQuery> {
+    return new AutoPaginator({ fetchPage: (q) => this.list(q), initialQuery: query })
   }
 
   /**

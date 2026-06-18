@@ -1,13 +1,17 @@
 import type {
+  TransferRecipient,
   CreateTransferRecipientRequest,
   CreateTransferRecipientResponse,
   FetchTransferRecipientResponse,
+  ListTransferRecipientsQuery,
   ListTransferRecipientsResponse,
   UpdateTransferRecipientRequest,
   UpdateTransferRecipientResponse,
 } from './recipients.types'
 import { BaseResource } from '../base'
 import { withIdempotencyKey } from '../../utils/idempotency'
+import { stringifyQuery } from '../../utils/qs'
+import { AutoPaginator } from '../../utils/pagination'
 
 export interface CreateTransferRecipientOptions {
   idempotencyKey?: string
@@ -47,16 +51,23 @@ export class TransferRecipientsResource extends BaseResource {
 
   /**
    * List transfer recipients
+   * @param query - Optional query parameters for filtering and pagination
    * @returns A promise resolving to the list of recipients
    * @see https://paystack.com/docs/api/transfer-recipient/#list
    */
-  list(): Promise<ListTransferRecipientsResponse> {
-    return this.executor.execute<ListTransferRecipientsResponse>(
-      this.basePath,
-      {
-        method: 'GET',
-      },
-    )
+  list(query: ListTransferRecipientsQuery = {}): Promise<ListTransferRecipientsResponse> {
+    const qs = stringifyQuery(query)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
+
+    return this.executor.execute<ListTransferRecipientsResponse>(path, {
+      method: 'GET',
+    })
+  }
+
+  listAll(
+    query: ListTransferRecipientsQuery = {},
+  ): AutoPaginator<TransferRecipient, ListTransferRecipientsQuery> {
+    return new AutoPaginator({ fetchPage: (q) => this.list(q), initialQuery: query })
   }
 
   /**

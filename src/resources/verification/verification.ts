@@ -6,6 +6,7 @@ import type {
   ResolveAccountResponse,
   ResolveBvnResponse,
 } from './verification.types'
+import { stringifyQuery } from '../../utils/qs'
 
 /**
  * Verification resource
@@ -23,11 +24,8 @@ export class VerificationResource extends BaseResource {
   resolveAccount(
     params: ResolveAccountRequest,
   ): Promise<ResolveAccountResponse> {
-    const search = new URLSearchParams()
-    search.set('account_number', params.account_number)
-    search.set('bank_code', params.bank_code)
-
-    const path = `${this.bankBasePath}/resolve?${search.toString()}`
+    const qs = stringifyQuery(params)
+    const path = `${this.bankBasePath}/resolve?${qs}`
 
     return this.executor.execute<ResolveAccountResponse>(path, {
       method: 'GET',
@@ -55,12 +53,8 @@ export class VerificationResource extends BaseResource {
    * @see https://paystack.com/docs/api/verification/#match-bvn
    */
   matchBvn(params: MatchBvnRequest): Promise<MatchBvnResponse> {
-    const search = new URLSearchParams()
-    search.set('account_number', params.account_number)
-    search.set('bank_code', params.bank_code)
-    search.set('bvn', params.bvn)
-
-    const path = `${this.bankBasePath}/match_bvn?${search.toString()}`
+    const qs = stringifyQuery(params)
+    const path = `${this.bankBasePath}/match_bvn?${qs}`
 
     return this.executor.execute<MatchBvnResponse>(path, {
       method: 'GET',

@@ -27,31 +27,39 @@ This project uses **[Bun](https://bun.sh/)** as the package manager and test run
 ## 💻 Development Workflow
 
 ### Building the SDK
+
 To build the project (using `tsup`):
+
 ```bash
 bun run build
 ```
 
 To run the build in watch mode during development:
+
 ```bash
 bun run dev
 ```
 
 ### Running Tests
+
 We use **Bun's built-in test runner**.
+
 ```bash
 bun test
 ```
 
 ### Formatting & Linting
+
 We use **Prettier** for formatting and **ESLint** for linting.
 
 To format your code:
+
 ```bash
 bun run format
 ```
 
 To check for linting errors:
+
 ```bash
 bun run lint
 ```
@@ -77,15 +85,16 @@ bun run lint
 
 ## 📝 Coding Guidelines
 
--   **Type Safety**: Ensure all new code is fully typed. Avoid using `any` unless absolutely necessary.
--   **Documentation**: Add JSDoc comments to new methods and interfaces.
--   **Tests**: Write clear and concise unit tests for your logic.
+- **Type Safety**: Ensure all new code is fully typed. Avoid using `any` unless absolutely necessary.
+- **Documentation**: Add JSDoc comments to new methods and interfaces.
+- **Tests**: Write clear and concise unit tests for your logic.
 
 ## 🐛 Reporting Bugs
 
 If you find a bug, please open an issue on GitHub with:
--   A clear title and description.
--   Steps to reproduce the issue.
--   Expected vs. actual behavior.
+
+- A clear title and description.
+- Steps to reproduce the issue.
+- Expected vs. actual behavior.
 
 Thank you for contributing!

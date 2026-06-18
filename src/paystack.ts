@@ -25,20 +25,24 @@ import { TransferRecipientsResource } from './resources/transfer-recipients/reci
 import { TransferControlResource } from './resources/transfer-control/transfer-control'
 import { PaymentRequestsResource } from './resources/payment-requests/payment-requests'
 import { ApplePayResource } from './resources/apple-pay/apple-pay'
+import type { Logger } from './core/api-client'
 
 export interface PaystackClientConfig {
   apiKey: string
   baseUrl?: string
   maxRetries?: number
   fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
+  logger?: Logger
 }
 
 export interface PaystackEnvOptions extends LoadConfigOptions {
   fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
+  logger?: Logger
 }
 
 export class PaystackClient {
   readonly config: PaystackConfig
+  readonly logger?: Logger
   readonly transactions: TransactionsResource
   readonly customers: CustomersResource
   readonly virtualAccounts: VirtualAccountsResource
@@ -72,6 +76,7 @@ export class PaystackClient {
     }
 
     this.config = normalized
+    this.logger = config.logger
 
     const executor = new RequestExecutor({
       apiKey: normalized.apiKey,
@@ -80,6 +85,7 @@ export class PaystackClient {
         maxRetries: normalized.maxRetries,
       },
       fetchImpl: config.fetchImpl,
+      logger: config.logger,
     })
 
     const resourceOptions = { executor }
@@ -123,5 +129,6 @@ export async function createPaystackClient(
     baseUrl: config.baseUrl,
     maxRetries: config.maxRetries,
     fetchImpl: options.fetchImpl,
+    logger: options.logger,
   })
 }

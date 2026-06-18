@@ -38,7 +38,7 @@ This library targets modern runtimes:
 ### Create a client
 
 ```ts
-import { PaystackClient } from 'paystack-sdk'
+import { PaystackClient } from 'paystack-sdk-node'
 
 const client = new PaystackClient({
   apiKey: process.env.PAYSTACK_SECRET_KEY!,
@@ -50,11 +50,26 @@ You can optionally override:
 - `baseUrl` (defaults to `https://api.paystack.co`)
 - `maxRetries` (defaults to `3`)
 - `fetchImpl` (custom fetch for environments without global `fetch`)
+- `logger` (custom logger to debug API requests/responses)
+
+```ts
+import { PaystackClient } from 'paystack-sdk-node'
+
+const client = new PaystackClient({
+  apiKey: process.env.PAYSTACK_SECRET_KEY!,
+  logger: {
+    debug: (msg, data) => console.debug(`[Paystack] ${msg}`, data),
+    info: (msg, data) => console.info(`[Paystack] ${msg}`, data),
+    warn: (msg, data) => console.warn(`[Paystack] ${msg}`, data),
+    error: (msg, data) => console.error(`[Paystack] ${msg}`, data),
+  },
+})
+```
 
 You can also create a client from environment variables using `createPaystackClient`, which reads standard config keys from your environment:
 
 ```ts
-import { createPaystackClient } from '@samaasi/paystack-sdk'
+import { createPaystackClient } from 'paystack-sdk-node'
 
 const client = await createPaystackClient()
 ```
@@ -95,6 +110,41 @@ const tx = await client.transactions.initialize({
 
 // Verify a transaction
 const verified = await client.transactions.verify(tx.data.reference)
+
+// Fetch a transaction
+const transaction = await client.transactions.fetch(12345)
+
+// List transactions (with pagination)
+const transactions = await client.transactions.list({ perPage: 20, page: 1 })
+
+// List all transactions (with auto-pagination using async iterator)
+for await (const tx of client.transactions.listAll()) {
+  console.log(tx.reference)
+}
+
+// Charge authorization
+const charged = await client.transactions.chargeAuthorization({
+  email: 'customer@example.com',
+  amount: 50000,
+  authorization_code: 'AUTH_xxxxxxxx',
+})
+
+// View transaction timeline
+const timeline = await client.transactions.timeline('TXN_xxxxxxxx')
+
+// Get transaction totals
+const totals = await client.transactions.totals({ from: '2024-01-01', to: '2024-12-31' })
+
+// Export transactions
+const exported = await client.transactions.export({ from: '2024-01-01', to: '2024-12-31' })
+
+// Partial debit
+const partialDebit = await client.transactions.partialDebit({
+  email: 'customer@example.com',
+  amount: 10000,
+  authorization_code: 'AUTH_xxxxxxxx',
+  currency: 'NGN',
+})
 ```
 
 ### Apple Pay
@@ -118,15 +168,24 @@ await client.applePay.unregisterDomain({
 
 ### Webhooks
 
-The SDK provides helper functions and an event enum to make handling webhooks type-safe and secure.
+The SDK provides helper functions and an exhaustive event enum to make handling webhooks type-safe and secure.
 
 ```ts
-import { PaystackEvent } from 'paystack-sdk/enums'
+import { PaystackEvent } from 'paystack-sdk-node'
 
 // Check if an event string matches a known Paystack event
 if (event === PaystackEvent.ChargeSuccess) {
   // Handle successful charge
 }
+
+// Many more events available:
+// - PaystackEvent.ChargePending
+// - PaystackEvent.ChargeFailed
+// - PaystackEvent.TransferSuccess
+// - PaystackEvent.TransferFailed
+// - PaystackEvent.SubscriptionCreate
+// - PaystackEvent.SubscriptionDisable
+// - etc.
 ```
 
 #### Framework Integrations
@@ -134,7 +193,7 @@ if (event === PaystackEvent.ChargeSuccess) {
 **Express**
 
 ```ts
-import { createPaystackExpressMiddleware } from 'paystack-sdk/express'
+import { createPaystackExpressMiddleware } from 'paystack-sdk-node/express'
 
 app.post(
   '/webhook',
@@ -152,7 +211,7 @@ app.post(
 **Next.js (App Router)**
 
 ```ts
-import { verifyPaystackNextjsRequest } from 'paystack-sdk/nextjs'
+import { verifyPaystackNextjsRequest } from 'paystack-sdk-node/nextjs'
 
 export async function POST(req: Request) {
   const { valid, event } = await verifyPaystackNextjsRequest(req, {
@@ -169,7 +228,7 @@ export async function POST(req: Request) {
 **Fastify**
 
 ```ts
-import { createPaystackFastifyHook } from 'paystack-sdk/fastify'
+import { createPaystackFastifyHook } from 'paystack-sdk-node/fastify'
 
 fastify.post(
   '/webhook',
@@ -184,6 +243,28 @@ fastify.post(
     return { status: 'success' }
   },
 )
+```
+
+**NestJS**
+
+```ts
+import { Controller, Post, Req, UseGuards } from '@nestjs/common'
+import { PaystackWebhookGuard } from 'paystack-sdk-node/nestjs'
+
+@Controller('webhooks/paystack')
+@UseGuards(
+  new PaystackWebhookGuard({
+    secretKey: process.env.PAYSTACK_SECRET_KEY!,
+  }),
+)
+export class PaystackWebhookController {
+  @Post()
+  handle(@Req() req: any) {
+    const event = req.paystackEvent
+    // handle event
+    return 'ok'
+  }
+}
 ```
 
 ### Transfers and recipients
@@ -262,10 +343,10 @@ The SDK provides low-level signature helpers and some framework-specific utiliti
 
 ### Signature verification
 
-Subpath: `paystack-sdk/webhooks`
+Subpath: `paystack-sdk-node/webhooks`
 
 ```ts
-import { verifyPaystackSignature } from 'paystack-sdk/webhooks'
+import { verifyPaystackSignature } from 'paystack-sdk-node/webhooks'
 
 const valid = await verifyPaystackSignature({
   payload: rawBody, // string or Uint8Array
@@ -279,7 +360,7 @@ const valid = await verifyPaystackSignature({
 Subpath: root resources
 
 ```ts
-import { isWebhookEvent, type WebhookEvent } from 'paystack-sdk'
+import { isWebhookEvent, type WebhookEvent } from 'paystack-sdk-node'
 
 if (isWebhookEvent(body)) {
   const event: WebhookEvent = body
@@ -296,11 +377,11 @@ if (isWebhookEvent(body)) {
 
 ### Express
 
-Subpath: `paystack-sdk/express`
+Subpath: `paystack-sdk-node/express`
 
 ```ts
 import express from 'express'
-import { createPaystackExpressMiddleware } from 'paystack-sdk/express'
+import { createPaystackExpressMiddleware } from 'paystack-sdk-node/express'
 
 const app = express()
 
@@ -321,11 +402,11 @@ Ensure your Express setup preserves the raw request body (for example by using a
 
 ### NestJS
 
-Subpath: `paystack-sdk/nestjs`
+Subpath: `paystack-sdk-node/nestjs`
 
 ```ts
 import { Controller, Post, Req, UseGuards } from '@nestjs/common'
-import { PaystackWebhookGuard } from 'paystack-sdk/nestjs'
+import { PaystackWebhookGuard } from 'paystack-sdk-node/nestjs'
 
 @Controller('webhooks/paystack')
 @UseGuards(
@@ -336,7 +417,7 @@ import { PaystackWebhookGuard } from 'paystack-sdk/nestjs'
 export class PaystackWebhookController {
   @Post()
   handle(@Req() req: any) {
-    const event = req.body
+    const event = req.paystackEvent
     // handle event
     return 'ok'
   }
@@ -345,12 +426,12 @@ export class PaystackWebhookController {
 
 ### Next.js (App Router)
 
-Subpath: `paystack-sdk/nextjs`
+Subpath: `paystack-sdk-node/nextjs`
 
 ```ts
 // app/api/webhooks/paystack/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyPaystackNextjsRequest } from 'paystack-sdk/nextjs'
+import { verifyPaystackNextjsRequest } from 'paystack-sdk-node/nextjs'
 
 export async function POST(req: NextRequest) {
   const { valid, event } = await verifyPaystackNextjsRequest(req, {
@@ -373,7 +454,7 @@ export async function POST(req: NextRequest) {
 The SDK includes helpers for idempotent requests via the `x-idempotency-key` header.
 
 ```ts
-import { generateIdempotencyKey, withIdempotencyKey } from 'paystack-sdk'
+import { generateIdempotencyKey, withIdempotencyKey } from 'paystack-sdk-node'
 
 const key = generateIdempotencyKey()
 

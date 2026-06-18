@@ -6,11 +6,19 @@ import {
 } from './error-handler'
 import { executeWithRetry, type RetryOptions } from './retry-strategy'
 
+export interface Logger {
+  debug: (message: string, data?: Record<string, unknown>) => void
+  info: (message: string, data?: Record<string, unknown>) => void
+  warn: (message: string, data?: Record<string, unknown>) => void
+  error: (message: string, data?: Record<string, unknown>) => void
+}
+
 export interface ApiClientOptions {
   apiKey: string
   baseUrl?: string
   fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
   retry?: RetryOptions
+  logger?: Logger
 }
 
 export class ApiClient {
@@ -18,12 +26,14 @@ export class ApiClient {
   private baseUrl: string
   private fetchImpl?: (input: string, init?: RequestInit) => Promise<Response>
   private retryOptions?: RetryOptions
+  private logger?: Logger
 
   constructor(options: ApiClientOptions) {
     this.apiKey = options.apiKey
     this.baseUrl = options.baseUrl ?? 'https://api.paystack.co'
     this.fetchImpl = options.fetchImpl
     this.retryOptions = options.retry
+    this.logger = options.logger
   }
 
   private getFetch() {
@@ -36,6 +46,12 @@ export class ApiClient {
     const fetchFn = this.getFetch()
 
     const operation = async () => {
+      this.logger?.debug('Making API request', {
+        method: init.method || 'GET',
+        url,
+        path,
+      })
+
       try {
         const extraHeaders =
           init.headers &&
@@ -53,6 +69,12 @@ export class ApiClient {
           },
         } as RequestInit)
 
+        this.logger?.debug('Received API response', {
+          method: init.method || 'GET',
+          url,
+          status: response.status,
+        })
+
         if (!response.ok) {
           const status = response.status
           let body: unknown
@@ -63,20 +85,39 @@ export class ApiClient {
             body = undefined
           }
 
-          throw mapPaystackHttpError(
+          const error = mapPaystackHttpError(
             status,
             body as PaystackErrorResponse | null | undefined,
           )
+
+          this.logger?.error('API request failed', {
+            method: init.method || 'GET',
+            url,
+            status,
+            error,
+          })
+
+          throw error
         }
 
         const data = await response.json()
+        this.logger?.debug('API request successful', {
+          method: init.method || 'GET',
+          url,
+        })
         return data as T
       } catch (error) {
         if (error instanceof PaystackError) {
           throw error
         }
 
-        throw mapNetworkError(error)
+        const networkError = mapNetworkError(error)
+        this.logger?.error('Network error occurred', {
+          method: init.method || 'GET',
+          url,
+          error: networkError,
+        })
+        throw networkError
       }
     }
 
@@ -86,7 +127,17 @@ export class ApiClient {
       }
 
       const status = error.status
-      return status === 502 || status === 503 || status === 504
+      const should = status === 502 || status === 503 || status === 504
+
+      if (should) {
+        this.logger?.warn('Retrying failed API request', {
+          method: init.method || 'GET',
+          url,
+          status,
+        })
+      }
+
+      return should
     }
 
     return executeWithRetry(operation, shouldRetry, this.retryOptions)

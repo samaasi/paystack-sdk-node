@@ -800,10 +800,11 @@ describe('Paystack Resources', () => {
     })
 
     test('listStates calls correct endpoint', async () => {
-      await client.misc.listStates()
+      await client.misc.listStates('NG')
       expect(mockFetch).toHaveBeenCalledTimes(1)
       const [url] = mockFetch.mock.calls[0]!
-      expect(url).toContain('/address/pyramid/states')
+      expect(url).toContain('/address_verification/states')
+      expect(url).toContain('country=NG')
     })
 
     test('resolveCardBin calls correct endpoint', async () => {

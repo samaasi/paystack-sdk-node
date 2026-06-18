@@ -1,7 +1,11 @@
 import { verifyPaystackSignature } from '../webhooks/verifier'
+import type { PaystackEvent } from '../enums/events'
+import type { WebhookEvent } from '../resources/webhooks/webhooks.types'
 
 export interface FastifyWebhookOptions {
+  /** Your Paystack secret key used to verify webhook signatures */
   secretKey: string
+  /** The header name to check for the signature (default: 'x-paystack-signature') */
   headerName?: string
 }
 
@@ -10,7 +14,7 @@ export interface FastifyLikeRequest {
   body: unknown
   headers: Record<string, unknown>
   rawBody?: string | Buffer
-  paystackEvent?: unknown
+  paystackEvent?: WebhookEvent<unknown>
   [key: string]: unknown
 }
 
@@ -39,8 +43,46 @@ function getHeader(
 /**
  * Creates a Fastify preValidation hook to verify Paystack webhooks.
  *
- * Usage:
- * fastify.addHook("preValidation", createPaystackFastifyHook({ secretKey: "..." }))
+ * **Important**: To use this hook, you should configure Fastify to parse the raw request body.
+ * Consider using the `fastify-raw-body` plugin or similar configuration.
+ *
+ * @param options - Configuration options for the hook
+ * @returns A Fastify preValidation hook that verifies webhook signatures
+ *
+ * @example
+ * ```typescript
+ * import fastify from 'fastify'
+ * import fastifyRawBody from 'fastify-raw-body'
+ * import { createPaystackFastifyHook } from 'paystack-sdk-node/fastify'
+ * import type { PaystackEvent, WebhookEvent } from 'paystack-sdk-node'
+ *
+ * const app = fastify()
+ *
+ * // Register raw body plugin
+ * app.register(fastifyRawBody, {
+ *   field: 'rawBody',
+ *   global: false,
+ *   encoding: 'utf8'
+ * })
+ *
+ * // Add Paystack webhook hook to specific route
+ * app.post('/paystack/webhook', {
+ *   preValidation: createPaystackFastifyHook({ secretKey: 'sk_test_your_secret_key' })
+ * }, async (req, reply) => {
+ *   const event = req.paystackEvent as WebhookEvent
+ *
+ *   switch (event.event) {
+ *     case PaystackEvent.ChargeSuccess:
+ *       // Handle successful charge
+ *       console.log('Charge successful!', event.data)
+ *       break
+ *   }
+ *
+ *   return { status: 'ok' }
+ * })
+ *
+ * app.listen({ port: 3000 })
+ * ```
  */
 export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
   const headerName = (
@@ -64,17 +106,13 @@ export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
       rawBody = req.rawBody.toString('utf8')
     } else if (typeof req.body === 'string') {
       rawBody = req.body
-    } else if (req.body && typeof req.body === 'object') {
-      // Last resort: stringify body. Warning: key order might differ from payload.
-      // Verification might fail if not exact match.
-      rawBody = JSON.stringify(req.body)
     }
 
     if (rawBody === undefined) {
       reply
         .code(400)
         .send('Missing raw request body for Paystack webhook verification')
-      throw new Error('Missing raw request body')
+      return
     }
 
     const signature = getHeader(req.headers, headerName)
@@ -86,14 +124,17 @@ export function createPaystackFastifyHook(options: FastifyWebhookOptions) {
 
     if (!valid) {
       reply.code(401).send('Invalid Paystack signature')
-      throw new Error('Invalid Paystack signature')
+      return
     }
 
     try {
       req.paystackEvent =
-        typeof req.body === 'object' ? req.body : JSON.parse(rawBody)
+        typeof req.body === 'object'
+          ? (req.body as WebhookEvent<unknown>)
+          : JSON.parse(rawBody)
     } catch {
-      req.paystackEvent = req.body ?? rawBody
+      // If parsing fails, leave paystackEvent undefined
+      req.paystackEvent = undefined
     }
   }
 }

@@ -1,4 +1,5 @@
 import type {
+  PaymentRequest,
   ListPaymentRequestsQuery,
   UpdatePaymentRequestRequest,
   CreatePaymentRequestRequest,
@@ -8,6 +9,8 @@ import type {
   GetPaymentRequestTotalsApiResponse,
 } from './payment-requests.types'
 import { BaseResource } from '../base'
+import { stringifyQuery } from '../../utils/qs'
+import { AutoPaginator } from '../../utils/pagination'
 
 export class PaymentRequestsResource extends BaseResource {
   private readonly basePath = '/paymentrequest'
@@ -38,34 +41,18 @@ export class PaymentRequestsResource extends BaseResource {
   list(
     query: ListPaymentRequestsQuery = {},
   ): Promise<ListPaymentRequestsApiResponse> {
-    const search = new URLSearchParams()
-
-    if (query.perPage !== undefined) {
-      search.set('perPage', String(query.perPage))
-    }
-
-    if (query.page !== undefined) {
-      search.set('page', String(query.page))
-    }
-
-    if (query.status !== undefined) {
-      search.set('status', query.status)
-    }
-
-    if (query.from !== undefined) {
-      search.set('from', query.from)
-    }
-
-    if (query.to !== undefined) {
-      search.set('to', query.to)
-    }
-
-    const path =
-      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
+    const qs = stringifyQuery(query)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
     return this.executor.execute<ListPaymentRequestsApiResponse>(path, {
       method: 'GET',
     })
+  }
+
+  listAll(
+    query: ListPaymentRequestsQuery = {},
+  ): AutoPaginator<PaymentRequest, ListPaymentRequestsQuery> {
+    return new AutoPaginator({ fetchPage: (q) => this.list(q), initialQuery: query })
   }
 
   /**

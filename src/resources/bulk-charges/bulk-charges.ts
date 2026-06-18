@@ -8,6 +8,7 @@ import type {
   ListBulkChargeBatchesApiResponse,
 } from './bulk-charges.types'
 import { BaseResource } from '../base'
+import { stringifyQuery } from '../../utils/qs'
 
 export class BulkChargesResource extends BaseResource {
   private readonly basePath = '/bulkcharge'
@@ -38,30 +39,8 @@ export class BulkChargesResource extends BaseResource {
   listBatches(
     query: ListBulkChargeBatchesQuery = {},
   ): Promise<ListBulkChargeBatchesApiResponse> {
-    const search = new URLSearchParams()
-
-    if (query.perPage !== undefined) {
-      search.set('perPage', String(query.perPage))
-    }
-
-    if (query.page !== undefined) {
-      search.set('page', String(query.page))
-    }
-
-    if (query.status !== undefined) {
-      search.set('status', query.status)
-    }
-
-    if (query.from !== undefined) {
-      search.set('from', query.from)
-    }
-
-    if (query.to !== undefined) {
-      search.set('to', query.to)
-    }
-
-    const path =
-      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
+    const qs = stringifyQuery(query)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
     return this.executor.execute<ListBulkChargeBatchesApiResponse>(path, {
       method: 'GET',
@@ -95,26 +74,9 @@ export class BulkChargesResource extends BaseResource {
     batchCode: string,
     query: ListBulkChargeItemsQuery = {},
   ): Promise<ListBulkChargeItemsApiResponse> {
-    const search = new URLSearchParams()
-
-    if (query.perPage !== undefined) {
-      search.set('perPage', String(query.perPage))
-    }
-
-    if (query.page !== undefined) {
-      search.set('page', String(query.page))
-    }
-
-    if (query.status !== undefined) {
-      search.set('status', query.status)
-    }
-
-    const path =
-      search.size > 0
-        ? `${this.basePath}/${encodeURIComponent(
-            batchCode,
-          )}/charges?${search.toString()}`
-        : `${this.basePath}/${encodeURIComponent(batchCode)}/charges`
+    const qs = stringifyQuery(query)
+    const basePath = `${this.basePath}/${encodeURIComponent(batchCode)}/charges`
+    const path = qs ? `${basePath}?${qs}` : basePath
 
     return this.executor.execute<ListBulkChargeItemsApiResponse>(path, {
       method: 'GET',
@@ -132,7 +94,7 @@ export class BulkChargesResource extends BaseResource {
     const path = `${this.basePath}/pause/${encodeURIComponent(batchCode)}`
 
     return this.executor.execute<GetBulkChargeBatchApiResponse>(path, {
-      method: 'GET',
+      method: 'POST',
     })
   }
 
@@ -147,7 +109,7 @@ export class BulkChargesResource extends BaseResource {
     const path = `${this.basePath}/resume/${encodeURIComponent(batchCode)}`
 
     return this.executor.execute<GetBulkChargeBatchApiResponse>(path, {
-      method: 'GET',
+      method: 'POST',
     })
   }
 }

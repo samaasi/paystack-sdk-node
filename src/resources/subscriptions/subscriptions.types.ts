@@ -21,6 +21,13 @@ export interface Subscription {
   updatedAt: string
 }
 
+export interface ListSubscriptionsQuery {
+  perPage?: number
+  page?: number
+  customer?: string | number
+  plan?: string | number
+}
+
 export interface CreateSubscriptionRequest {
   customer: string
   plan: string
