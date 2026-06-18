@@ -38,12 +38,7 @@ export interface ListDisputesQuery {
   amount?: number
 }
 
-export interface ListDisputesResponse {
-  data: Dispute[]
-  meta?: PaginationMetadata
-}
-
-export type ListDisputesApiResponse = ApiResponse<ListDisputesResponse>
+export type ListDisputesApiResponse = ApiResponse<Dispute[]>
 
 export type GetDisputeApiResponse = ApiResponse<Dispute>
 
