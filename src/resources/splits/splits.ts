@@ -1,4 +1,5 @@
 import type {
+  Split,
   ListSplitsQuery,
   CreateSplitRequest,
   UpdateSplitRequest,
@@ -12,6 +13,8 @@ import type {
   RemoveSubaccountApiResponse,
 } from './splits.types'
 import { BaseResource } from '../base'
+import { stringifyQuery } from '../../utils/qs'
+import { AutoPaginator } from '../../utils/pagination'
 
 export class SplitsResource extends BaseResource {
   private readonly basePath = '/split'
@@ -38,42 +41,16 @@ export class SplitsResource extends BaseResource {
    * @see https://paystack.com/docs/api/split/#list
    */
   list(query: ListSplitsQuery = {}): Promise<ListSplitsApiResponse> {
-    const search = new URLSearchParams()
-
-    if (query.name !== undefined) {
-      search.set('name', query.name)
-    }
-
-    if (query.active !== undefined) {
-      search.set('active', String(query.active))
-    }
-
-    if (query.sort_by !== undefined) {
-      search.set('sort_by', query.sort_by)
-    }
-
-    if (query.perPage !== undefined) {
-      search.set('perPage', String(query.perPage))
-    }
-
-    if (query.page !== undefined) {
-      search.set('page', String(query.page))
-    }
-
-    if (query.from !== undefined) {
-      search.set('from', query.from)
-    }
-
-    if (query.to !== undefined) {
-      search.set('to', query.to)
-    }
-
-    const path =
-      search.size > 0 ? `${this.basePath}?${search.toString()}` : this.basePath
+    const qs = stringifyQuery(query)
+    const path = qs ? `${this.basePath}?${qs}` : this.basePath
 
     return this.executor.execute<ListSplitsApiResponse>(path, {
       method: 'GET',
     })
+  }
+
+  listAll(query: ListSplitsQuery = {}): AutoPaginator<Split, ListSplitsQuery> {
+    return new AutoPaginator({ fetchPage: (q) => this.list(q), initialQuery: query })
   }
 
   /**
